@@ -1,0 +1,69 @@
+<div class="edit-profile referal-page">
+    <div class="referal-banner oval-social">
+        <div class="container">
+            <h3 class="text-center">{{'Get' | translate}} {{"$root.settings.AFFILIATE_REFERRAL_AMOUNT_FOR_AFFILIATE"| currency : currency_type}} {{'credit for every friend that signs up and books through your link' | translate}}</h3>
+            <p class="text-b text-18">{{'Share your link' | translate}}</p>
+            <!--<p class="label label-default">
+            {{referal_link}}
+            </p>-->
+            <input type="text" ng-model="referal_link" select-on-click readonly/>
+            <ul class="list-inline">
+                <li>
+                    <a href="#" class="btn btn-facebook" socialshare socialshare-provider="facebook" socialshare-title="" socialshare-description="{{referal_description}}" socialshare-media=""
+                        socialshare-via="{{facebook_provider}}" socialshare-display="popup" socialshare-quote="" socialshare-hashtags="" socialshare-caption="" socialshare-mobileiframe="true" socialshare-url="{{referal_link}}">
+                    <i class="fa fa-facebook fa-lg" aria-hidden="true"></i></a>
+                </li>
+                <li>
+                    <a href="#" class="btn btn-twitter" socialshare socialshare-provider="twitter" socialshare-text="{{referal_description}}" socialshare-description="{{referal_description}}" socialshare-hashtags="" socialshare-url="{{referal_link}}"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i> 
+                    </a>
+                </li>
+            </ul>
+        </div>       
+    </div>
+
+    <div class="container">
+        <div id="tourpackages-carousel" class="profile-content">
+            <form class="form-inline" name="referalForm" ng-submit="referalSend(data,referalForm.$valid)" novalidate>
+                <h4>{{'Or invite by email' | translate}}</h4>
+                <p class="text-muted">{{'See how the email will look' | translate}}
+                    <i class="fa fa-question-circle fa-fw" ng-click="value=true"></i>
+                </p>
+                <div ng-show="value" class="text-left">
+                    <p class="text-b text-16">{{'Message' | translate}}:</p>
+                    <h4 ng-bind="myText"></h4>
+                    <textarea rows="10" cols="50" name="translationTextAdd.english_text" ng-model="data.message" class="form-control" placeholder="Enter message">
+                    </textarea>
+                    <p class="top-space">{{'Use my personal link to get the credit' | translate}}: {{referal_link}}</p>
+                    <h4 class="text-b">{{'Regards' | translate}},</h4>
+                    <h4 class="text-b">{{$root.auth.user_profile.first_name}}</h4>
+                </div>  
+            
+                <div ng-repeat="element in elements" class="top-space">
+                    <div class="form-group">                            
+                        <input type="text" class="form-control" ng-model="element.name" placeholder="First name"  name="first_name{{$index}}" required="true">
+                        <span class="error" ng-show="referalForm.$submitted && referalForm.first_name{{$index}}.$error.required"> {{'Required'| translate }}
+                        </span>       
+                    </div>
+                    <div class="form-group">                           
+                        <input type="email" class="form-control" ng-model="element.email" placeholder="Email" name="email{{$index}}" required="true">
+                        <span class="error" ng-show="referalForm.$submitted && referalForm.email{{$index}}.$error.required"> {{'Required'| translate }}
+                        </span>       
+                    </div>
+                </div>
+                <p class="text-left"><a href="javascript:void(0)" ng-click="newItem()">+ {{'Add another friend' | translate}} </a></p> 
+                 <div class="form-group">
+                    <button type="submit" class="btn btn-info">{{'Invite'|translate}}</button>
+                 </div>              
+            </form> 
+        </div>
+    </div>
+
+    <div class="well text-center">
+        <div class="profile-content">
+            <div class="panel no-mar">
+                <p class="text-success">{{$root.auth.affiliate_pending_amount|currency: currency_type}}</p>
+                <p>{{'CURRENT CREDIT BALANCE TO SPEND' | translate}}</p>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,10 @@
+{
+	"name": "TopUser", 
+	"class": "fa fa-2x fa-user-o",
+	"description": "TopUser",
+	"dependencies": "",
+	"module_id": "",
+	"module_hash": "",
+	"display_order": "",
+	"plugin_name":"TopUser/TopUser"
+}

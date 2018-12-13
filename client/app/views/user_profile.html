@@ -1,0 +1,200 @@
+<section class="edit-profile">
+    <div class="container">
+        <div class="clearfix">
+            <div class="form-content">
+                <form enctype="multipart/form-data" name="userprofileEdit" ng-submit="userProfile(userprofileEdit.$valid,userprofileEdit)" novalidate>
+                    <div class="form-body">
+                        <div class="edit-profile-content profile-list" ng-show="type != 'personal' && type != 'description_and_details'">
+                            <div class="form-group text-center">
+                                <h3>{{'Account'| translate}}</h3>
+                                <div class="form-group">
+                                       <label for="inputFile" class="thumbnail center-block pointer">
+                                         <img ng-src="{{profile_image}}">
+                                       </label>  
+                                    <input class="input-file hide" type="file" ngf-select="uploading($file)" ng-model="file" name="file" ngf-pattern="'image/*'"
+                                        ngf-accept="'image/*'" ngf-max-size="2MB" ng-click="showUpdate()" id="inputFile">
+                                        <label for="inputFile">
+                                        <span  class="center-block btn btn-info">{{'Upload New Image' | translate}}</span>
+                                        </label>
+                                    <span class="error" ng-show="userprofileEdit.file.$error.required" class="text-danger help-block">{{'Allowed extensions: jpg, jpeg, gif, png'|translate}}</span>
+                                </div>
+                            </div>
+                            <ul class="list-unstyled">
+                                <li><a href="users/user_profile?type=personal">{{'Personal details' | translate}}<span class="pull-right"><i class="fa fa-2x fa-angle-double-right" aria-hidden="true"></i></span></a></li>
+                                <li><a href="users/change_password">{{'Password' | translate}}<span class="pull-right"><i class="fa fa-2x fa-angle-double-right" aria-hidden="true"></i></span></a></li>
+                                <li ng-show="auth.role_id != ConstUserType.Customer"><a href="users/money_transfer_account">{{'Payout details' | translate}}<span class="pull-right"><i class="fa fa-2x fa-angle-double-right" aria-hidden="true"></i></span></a></li>
+                                <li ng-show="auth.role_id != ConstUserType.Customer"><a href="users/cash_withdrawals">{{'Revenue withdrawals' | translate}}<span class="pull-right"><i class="fa fa-2x fa-angle-double-right" aria-hidden="true"></i></span></a></li>
+                                <li ng-show="auth.role_id != ConstUserType.ServiceProvider"><a href="credit_cards">{{'Saved credit cards' | translate}}<span class="pull-right"><i class="fa fa-2x fa-angle-double-right" aria-hidden="true"></i></span></a></li>
+                                <li><a href="transactions">{{'Transactions history' | translate}}<span class="pull-right"><i class="fa fa-2x fa-angle-double-right" aria-hidden="true"></i></span></a></li>
+                                <li><a href="users/notification">{{'Notifications' | translate}}<span class="pull-right"><i class="fa fa-2x fa-angle-double-right" aria-hidden="true"></i></span></a></li>
+                                <li><a href="close_account">{{'Close account' | translate}}<span class="pull-right"><i class="fa fa-2x fa-angle-double-right" aria-hidden="true"></i></span></a></li>
+                            </ul>
+                        </div>
+                        <!--profile-->
+                        <div class="profile-content personal-details">
+                            <div ng-show="pesonal_profile">
+                                <div class="personal-info" id="show_error">
+                                        <div class="pad-top-20" ng-if="errorData.length > 0">
+                                            <div class="alert alert-danger pad-top-20" >
+                                                <h5><i class="fa fa-warning" style="color:red"></i> {{"Missing information" | translate}} </h5>
+                                                &nbsp;&nbsp;<p ng-repeat="data in errorData"> {{$index+1}}. {{data.field}} - {{data.error| translate}} </p>
+                                            </div>    
+                                        </div>
+                                    
+                                    <h3 class="clearfix page-head">
+                                        <div class="alert alert-info" ng-show="auth.is_profile_updated == 0">
+                                           {{'Please complete your profile.' | translate}}
+                                        </div>
+                                        <div class="pull-left no-mar">
+                                            <a href="users/user_profile"><button class="btn btn-info btn-sm back-btn" title="{{'back to profile' | translate}}"><span><i class="fa fa-chevron-left fa-fw" aria-hidden="true"></i></span></button></a>
+                                            </div>
+                                        <div class="pull-left text-center">{{'Account - Personal Details'| translate}}</div>
+                                    </h3>
+                                    <h4>{{'General Information'| translate}}</h4>
+                                    <div>
+                                        <div class="clearfix">
+                                            <div class="form-group" ng-class="{ 'has-error' : (userprofileEdit.$submitted || userprofileEdit.email.$touched) && (userprofileEdit.email.$pristine || userprofileEdit.email.$invalid)}">
+                                                <input type="text" class="form-control" placeholder="{{'Email' | translate}}" name="email" ng-model="user_profile.user.email" ng-required="true">
+                                                <span ng-show="email_verified && profile_update"><a href="email_verification">{{'Verify now' | translate}}</a></span>
+                                                <span class="help-block" ng-show="!email_verified && profile_update">{{'Verified' | translate}}</span>
+                                                <span class="error" ng-show="(userprofileEdit.$submitted || userprofileEdit.email.$touched) && (userprofileEdit.email.$pristine || userprofileEdit.email.$invalid) && (userprofileEdit.email.$error.required)">{{'Please enter your mail' | translate }}</span>
+                                                <span class="error" ng-show="(userprofileEdit.$submitted || userprofileEdit.email.$touched) && (userprofileEdit.email.$pristine || userprofileEdit.email.$invalid) && (userprofileEdit.email.$error.email)">{{'Enter valid email' | translate }}</span>
+                                                <span class="error" ng-show="emailErr">{{emailErr}}</span>
+                                            </div>
+                                            <div class="form-group" ng-class="{ 'has-error' : (userprofileEdit.$submitted || userprofileEdit.first_name.$touched) && (userprofileEdit.first_name.$pristine || userprofileEdit.first_name.$invalid) && (userprofileEdit.first_name.$error.required)}">
+                                                <input type="text" class="form-control" name="first_name" id="first_name" placeholder="{{'First Name'| translate}}" ng-model="user_profile.first_name"
+                                                    ng-required="active" ng-minlength="3" ng-maxlength="25" ng-pattern="/^[a-z A-Z]*$/"
+                                                />
+                                                <span class="error" ng-show="(userprofileEdit.$submitted || userprofileEdit.first_name.$touched) && (userprofileEdit.first_name.$pristine || userprofileEdit.first_name.$invalid) && (userprofileEdit.first_name.$error.required)">{{'Enter first name'| translate }} </span>
+                                                <span class="error" ng-show="(userprofileEdit.$submitted || userprofileEdit.first_name.$touched) && (userprofileEdit.first_name.$pristine || userprofileEdit.first_name.$invalid) && (userprofileEdit.first_name.$error.minlength)">{{'Minimum length is 3'| translate}}</span>
+                                                <span class="error" ng-show="(userprofileEdit.$submitted || userprofileEdit.first_name.$touched) && (userprofileEdit.first_name.$pristine || userprofileEdit.first_name.$invalid) && (userprofileEdit.first_name.$error.maxlength)">{{'Maximum length is 25'| translate}}</span>
+                                                <span class="error" ng-show="(userprofileEdit.$submitted || userprofileEdit.first_name.$touched) && (userprofileEdit.first_name.$pristine || userprofileEdit.first_name.$invalid) && (userprofileEdit.first_name.$error.pattern)">{{'Enter valid name' | translate}}</span>
+                                            </div>
+                                            <div class="form-group" ng-class="{ 'has-error' : (userprofileEdit.$submitted || userprofileEdit.last_name.$touched) && (userprofileEdit.last_name.$pristine || userprofileEdit.last_name.$invalid) && (userprofileEdit.last_name.$error.required)}">
+                                                <input type="text" class="form-control" name="last_name" id="last_name" placeholder="{{'Last Name'| translate}}" ng-model="user_profile.last_name"
+                                                    ng-required="active" ng-minlength="1" ng-maxlength="20" ng-pattern="/^[a-z A-Z]*$/"
+                                                />
+                                                <span class="error" ng-show="(userprofileEdit.$submitted || userprofileEdit.last_name.$touched) && (userprofileEdit.last_name.$pristine || userprofileEdit.last_name.$invalid) && (userprofileEdit.last_name.$error.required)">{{'Enter last name'| translate }} </span>
+                                                <span class="error" ng-show="(userprofileEdit.$submitted || userprofileEdit.last_name.$touched) && (userprofileEdit.last_name.$pristine || userprofileEdit.last_name.$invalid) && (userprofileEdit.last_name.$error.minlength)">{{'Minimum length is 1'| translate}}</span>
+                                                <span class="error" ng-show="(userprofileEdit.$submitted || userprofileEdit.last_name.$touched) && (userprofileEdit.last_name.$pristine || userprofileEdit.last_name.$invalid) && (userprofileEdit.last_name.$error.maxlength)">{{'Maximum length is 20'| translate }} </span>
+                                                <span class="error" ng-show="(userprofileEdit.$submitted || userprofileEdit.last_name.$touched) && (userprofileEdit.last_name.$pristine || userprofileEdit.last_name.$invalid) && (userprofileEdit.last_name.$error.pattern)">{{'Enter valid name'| translate }} </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="clearfix">
+                                            <div class="form-group" ng-class="{ 'has-error' : (userprofileEdit.$submitted || userprofileEdit.gender_id.$touched) && (userprofileEdit.gender_id.$pristine || userprofileEdit.gender_id.$invalid) && (userprofileEdit.gender_id.$error.required)}">
+                                                <select class="form-control" name="gender_id" id="gender_id" ng-model="user_profile.gender_id" convert-to-number ng-required="active">  
+                                                <option value="">{{'Select Gender' | translate}}</option>
+                                                <option ng-repeat="gender in genderArray" value="{{gender.id}}" ng-selected="user_profile.gender_id == gender.id">{{gender.name | translate}}</option>	 </select>
+                                                <span class="error" ng-show="(userprofileEdit.$submitted || userprofileEdit.gender_id.$touched) && (userprofileEdit.gender_id.$pristine || userprofileEdit.gender_id.$invalid) && (userprofileEdit.gender_id.$error.required)">{{'Select Gender'| translate }} </span>
+                                            </div>
+
+                                            <div class="form-group" ng-show="user_profile.user_type == 'serviceProvider'">
+                                                <select class="form-control" name="notification_type_id" ng-model="user_profile.notification_type_id" convert-to-number>  
+                                                <option value="">{{'Select Notification Type' | translate}}</option>
+                                                <option ng-repeat="notification_type in notificationArray" value="{{notification_type.id}}" ng-selected="user_profile.notification_type_id == notification_type.id">{{notification_type.name}}</option>	                         
+                                            </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="location-info">
+
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <h4>{{'Location Information'| translate}}</h4>
+                                            <div class="form-group" ng-class="{ 'has-error' : (userprofileEdit.$submitted || userprofileEdit.address.$touched) && (userprofileEdit.address.$pristine || userprofileEdit.address.$invalid) && (userprofileEdit.address.$error.required)}">
+                                                <input type="text" g-places-autocomplete  options="options" name="address" ng-required="true" ng-model="user_profile.address" autocomplete="off" class="form-control" id="address" ng-change="addresslocation()" placeholder="{{'Search for an address'| translate}}" ng-required="true" ng-focus="makePlaceTrue()">
+                                                <span class="error" ng-show="IsAddressPlaceChange == true && ((userprofileEdit.$submitted || userprofileEdit.address.$touched) && (userprofileEdit.address.$pristine || userprofileEdit.address.$invalid) && (userprofileEdit.address.$error.required))">{{'Enter Address'| translate }} </span>
+                                                <div ng-show="allowedplace" class="error">{{'Enter Allowed Locations' | translate}}</div>
+                                                <div ng-show="IsAddressPlaceChange == false" class="error">{{'Please choose address from autocomplete.' | translate}}</div>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" id="address1" placeholder="{{'Street address, P.O. box, building/appartment name, floor, area, etc.'| translate}}" name="address1" ng-model="user_profile.user.address1">
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12">
+                                            <div class="form-group" ng-class="{ 'has-error' : (userprofileEdit.$submitted || userprofileEdit.city_id.$touched) && (userprofileEdit.city_id.$pristine || userprofileEdit.city_id.$invalid) && (userprofileEdit.city_id.$error.required)}">
+                                                <input type="text" autocomplete="off" class="form-control" id="city_id" placeholder="{{'City'| translate}}" name="city_id"
+                                                    ng-required="active" ng-model="user_profile.city.name">
+                                                <span class="error" ng-show="(userprofileEdit.$submitted || userprofileEdit.city_id.$touched) && (userprofileEdit.city_id.$pristine || userprofileEdit.city_id.$invalid) && (userprofileEdit.city_id.$error.required)">{{'Choose city'| translate }} </span>
+                                            </div>
+                                            <div class="form-group" ng-class="{ 'has-error' : (userprofileEdit.$submitted || userprofileEdit.state_id.$touched) && (userprofileEdit.state_id.$pristine || userprofileEdit.state_id.$invalid) && (userprofileEdit.state_id.$error.required)}">
+                                                <input type="text" autocomplete="off" class="form-control" name="state_id" id="state_id" placeholder="{{'State'| translate}}"
+                                                    ng-model="user_profile.state.name">
+                                            </div>
+                                            <div class="form-group" ng-class="{ 'has-error' : (userprofileEdit.$submitted || userprofileEdit.country_id.$touched) && (userprofileEdit.country_id.$pristine || userprofileEdit.country_id.$invalid) && (userprofileEdit.country_id.$error.required)}">
+                                                <select class="form-control" style="width:100%" name="country_id" ng-model="selectedCountry" ng-change="getCountryPhoneCode(selectedCountry)" ng-options="country.iso2 as country.name for country in countries" ng-selected="selectedCountry == country.iso2" placeholder="{{'Country'| translate}}" ng-required="active" ></select>
+                                                <span class="error" ng-show="(userprofileEdit.$submitted || userprofileEdit.country_id.$touched) && (userprofileEdit.country_id.$pristine || userprofileEdit.country_id.$invalid) && (userprofileEdit.country_id.$error.required)">{{'Enter country'| translate }} </span>
+                                            </div>
+                                            <div class="form-group" ng-class="{ 'has-error' : (userprofileEdit.$submitted || userprofileEdit.postal_code.$touched) && (userprofileEdit.postal_code.$pristine || userprofileEdit.postal_code.$invalid) && (userprofileEdit.postal_code.$error.required)}">
+                                                <input type="text" class="form-control" name="postal_code" id="postal_code" ng-model="user_profile.postal_code" placeholder="{{'Postal Code'| translate}}"
+                                                    ng-required="active">
+                                                <span class="error" ng-show="(userprofileEdit.$submitted || userprofileEdit.postal_code.$touched) && (userprofileEdit.postal_code.$pristine || userprofileEdit.postal_code.$invalid) && (userprofileEdit.postal_code.$error.required)">{{'Enter postal code'| translate }} </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                     <h4>{{'Contact Information'| translate}}</h4>
+
+                                    <div class="location-info">
+                                        <div class="form-group" ng-class="{ 'has-error' : (userprofileEdit.$submitted || userprofileEdit.phone.$touched) && (userprofileEdit.phone.$pristine || userprofileEdit.phone.$invalid) && (userprofileEdit.phone.$error.required)}">
+                                            <ul class="list-inline">
+                                                <li>
+                                                <select class="input-group-addon" name="phone_code" ng-model="user_profile.mobile_code" ng-required="active" ng-change="getCountryPhoneCode(user_profile.mobile_code)">
+                                                    <option ng-repeat="country in countries" value="{{country.iso2}}" ng-selected="user_profile.mobile_code == country.phone">{{country.iso2}} ({{country.phone}})</option>
+                                                </select>                                              
+                                                <input type="number" class="form-control mob-num" name="phone" id="phone" placeholder="{{'Mobile' | translate}}" ng-model="user_profile.phone_number"
+                                                ng-required="active" ng-minlength="8" ng-maxlength="12" ng-pattern="/^[0-9]*$/" />
+                                                <span class="error" ng-show="(userprofileEdit.$submitted || userprofileEdit.phone_code.$touched) && (userprofileEdit.phone_code.$pristine || userprofileEdit.phone_code.$invalid) && (userprofileEdit.phone_code.$error.required)">{{'select phone code'| translate }} </span>
+                                                </li>
+                                                <li class="verify">
+                                                    <span ng-show="mobile_no && $root.settings.SITE_ENABLED_PLUGINS.indexOf('SMS/SMS') > -1 && profile_update"><a href="mobile_number_verification">{{'Verify now' | translate}}</a></span>
+                                                    <span ng-show="!mobile_no && $root.settings.SITE_ENABLED_PLUGINS.indexOf('SMS/SMS') > -1 && profile_update">{{'Verified' | translate}}</span>
+                                                </li>
+                                            </ul>
+                                            <span class="error" ng-show="(userprofileEdit.$submitted || userprofileEdit.phone.$touched) && (userprofileEdit.phone.$pristine || userprofileEdit.phone.$invalid) && (userprofileEdit.phone.$error.required)">{{'Enter mobile number'| translate }} </span>
+                                            <span class="error" ng-show="(userprofileEdit.$submitted || userprofileEdit.phone.$touched) && (userprofileEdit.phone.$pristine || userprofileEdit.phone.$invalid) && (userprofileEdit.phone.$error.pattern)">{{'Enter valid mobile number Without Character'| translate }} </span>
+                                            <span class="error" ng-show="(userprofileEdit.$submitted || userprofileEdit.phone.$touched) && (userprofileEdit.phone.$pristine || userprofileEdit.phone.$invalid) && (userprofileEdit.phone.$error.minlength)">{{'Minimum length is 8'| translate }} </span>
+                                            <span class="error" ng-show="(userprofileEdit.$submitted || userprofileEdit.phone.$touched) && (userprofileEdit.phone.$pristine || userprofileEdit.phone.$invalid) && (userprofileEdit.phone.$error.maxlength)">{{'Maximum length is 12'| translate }} </span>
+                                        </div>
+
+                                        <div class="form-group" ng-class="{ 'has-error' : (userprofileEdit.$submitted || userprofileEdit.secondary_mobile_code.$touched) && (userprofileEdit.secondary_mobile_code.$pristine || userprofileEdit.secondary_mobile_code.$invalid) && (userprofileEdit.secondary_mobile_code.$error.required)}">
+                                            <ul class="list-inline">
+                                                <li>
+                                                    <select class="input-group-addon" name="secondary_mobile_code" ng-model="user_profile.secondary_mobile_code" ng-change="getCountryPhoneCode(user_profile.secondary_mobile_code)">
+                                                        <option ng-repeat="country in countries" value="{{country.iso2}}" ng-selected="user_profile.secondary_mobile_code == country.phone">{{country.iso2}} ({{country.phone}})</option>
+                                                    </select>  
+                                                    <input type="number" class="form-control mob-num" name="secondary_phone" placeholder="{{'Secondary Mobile'| translate}}" ng-model="user_profile.secondary_phone_number" /> 
+                                                </li>
+                                            </ul>
+                                            <span class="error" ng-show="(userprofileEdit.$submitted || userprofileEdit.secondary_phone.$touched) && (userprofileEdit.secondary_phone.$pristine || userprofileEdit.secondary_phone.$invalid) && (userprofileEdit.secondary_phone.$error.pattern)">{{'Enter valid mobile number without character'| translate }} </span>
+                                            <span class="error" ng-show="(userprofileEdit.$submitted || userprofileEdit.secondary_phone.$touched) && (userprofileEdit.secondary_phone.$pristine || userprofileEdit.secondary_phone.$invalid) && (userprofileEdit.secondary_phone.$error.minlength)">{{'Minimum length is 8'| translate }} </span>
+                                            <span class="error" ng-show="(userprofileEdit.$submitted || userprofileEdit.secondary_phone.$touched) && (userprofileEdit.secondary_phone.$pristine || userprofileEdit.secondary_phone.$invalid) && (userprofileEdit.secondary_phone.$error.maxlength)">{{'Maximum length is 12'| translate }} </span>
+                                        </div>
+                                    </div>
+                                    <div ng-show="auth.role_id != ConstUserType.Customer">
+                                     <h4>{{'Other Information'| translate}}</h4>
+                                     <div class="location-info">
+                                         <div class="form-group">
+                                            <input type="text" class="form-control" name="license" id="license" placeholder="{{'Driving license number'| translate}}" ng-model="user_profile.driving_license_information" />
+                                         </div>
+                                         <div class="form-group">
+                                            <textarea class="form-control" ng-model="user_profile.cv" name="cv" placeholder="{{'Curriculum Vitae'| translate}}"> </textarea>
+                                         </div>
+                                     </div>
+                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="professional-info text-center" ng-show="showSaveProfile == true">
+                            <button class="btn btn-info btn-animate" type="submit">
+                                <span ng-if="auth.is_profile_updated == 0"> {{'Create My Account'| translate }} </span>
+                                <span ng-if="auth.is_profile_updated == 1">{{'Save'| translate }} </span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+</section>
+

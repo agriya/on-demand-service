@@ -1,0 +1,60 @@
+<header  ng-class="{'afer-login': model.isAuthenticated()}">
+<!-- Navigation -->
+    <nav class="navbar header navbar-fixed-top">
+        <div class="top-header">
+            <div class="container">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header page-scroll header-logo">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" id="js-header-hide-section-btn">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="/">
+                        <img src="images/logo.png" alt="logo"/>
+                    </a>
+                </div>
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav navbar-right" id="js-header-hide-section">
+                        <li ng-if="isAuth && auth.role_id == ConstUserType.Admin"><a ng-click="gotoAdmin()">{{'Admin Dashboard' | translate}}</a></li>
+                        <li><a href="pages/5/how-it-works" title="how it works">{{'How it Works' | translate}}</a></li>                        
+                        <li ng-if="!isAuth" ui-sref-active="active"><a class="login" ui-sref="login" title="{{'Sign In' | translate}}"><i class="fa fa-sign-in fa-lg fa-fw"></i>{{'Login' | translate}}</a></li>
+                        <!--<li><a href="{{settings.SITE_HELP_LINK}}">{{'Help' | translate}}</a></li>             -->
+                        <li ng-if="!isAuth" ui-sref-active="active" class="dropdown head-register">
+                            <a class="signup" title="{{'Join Now' | translate}}" data-toggle="dropdown">
+                            <i class="fa fa-user fa-lg fa-fw"></i>{{'Register' | translate}}</a>  
+                            <ul class="dropdown-menu">  
+                                <li><a href="users/register/customer">{{'Sign up as Customer' | translate}}</a></li>
+                                <li ng-if="$root.settings.IS_ALLOW_TO_REGISTER_SERVICE_PROVIDER == 1"><a href="users/register/serviceprovider">{{'Sign up as Service Provider' | translate}}</a></li>
+                            </ul>
+                        </li>
+                        <li ng-if="isAuth" class="dropdown user-icon">
+                        <dashboard-settings></dashboard-settings>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.navbar-collapse -->
+            </div>
+        </div>
+         <div class="bottom-header">
+            <div class="container">
+                  <div class="navbar-header page-scroll header-logo">
+                    <a class="navbar-brand" href="/">
+                        <img src="images/logo.png" alt="logo"/>
+                    </a>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                     <ul class="nav navbar-nav navbar-right space" id="js-header-hide-section">
+                        <li><h5><a href="pages/2/about-us">{{'About Us' | translate}}</a></h5></li>
+                        <li><h5><a href="contactus" title="{{'Contact Us' | translate}}" class="whitec">{{'Contact Us' | translate}}</a></h5></li>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
+    <!--<div subscription-alert ></div>-->
+</header>

@@ -1,0 +1,1220 @@
+/**
+*    CSS for @Bookmydoc
+*
+* @author		ganesh_119at09 (Sridharan Team)
+* @copyright 	Copyright (c) 2012 {@link http://www.agriya.com Agriya Infoway}
+* @license 		http://www.agriya.com Agriya Infoway Licence
+* @version 		SVN: $Id: custom-responsive.less ganesh_119at09 $
+* @since 		2013-10-09
+*/
+
+@media(min-width:1601px) {
+	.banner {
+		//background:red;
+		background:url('@{images}banner-big.jpg') no-repeat center top;
+		background-size:cover;
+	}	
+}
+@media screen and (min-width:992px) and (max-width:1199px) {
+	.banner .home-search .form-group,
+	.doctor-search .search-block .form-search .form-group {
+		width:48% !important;
+		margin:(@margin - 15px) (@margin - 10px) (@margin);
+	}
+	.star-doctor {
+		padding-bottom:@padding + 98px;
+		.container {
+			img {
+				top:-34px;
+				right:0;
+			}
+		}
+	}
+	
+	.how-it-works {
+		ul {
+			&:before {
+				width:628px;
+				left:142px;
+			}
+			li {
+				&:before {
+					left:142px;
+				}
+			}
+			.doctor-list{
+				min-width:275px;
+			}
+		}
+	}
+	
+	.footer {
+		.get-app li, .social-link li {
+			margin-bottom:@margin;
+		}
+	}
+	
+	.login-page {
+		.choose-register {
+			.patient-block {
+				top:-235px;
+				right:32px;
+			}
+			.doctor-block {
+				bottom:-320px;
+				right:210px;
+			}
+		}
+	}
+	.register {
+		form {
+			.form-footer {
+				.btn {
+					min-width:185px;
+				}
+			}
+		}
+	}
+	
+	.doctor-search .search-result .search-result-header .search-week-ul > li {
+		min-width:80px;
+		&.search-right-arrow {
+			right:2px;
+		}
+		&.search-left-arrow {
+			left:-5px;
+		}
+		ul {
+			font-size:@font-size - 2px;
+		}
+	}
+	.doctor-search .search-result .doctor-booking-details ul {
+		min-width:77px;
+		ul li {
+			width:80px;
+			min-width:auto;
+			a {
+				min-width:77px;
+			}
+		}
+	}
+	.user-view {
+		.search-result .week-hender ul.search-week-ul > li {
+			min-width:70px;
+		}
+	}
+	
+	.subscription_block .subscription_plans {
+		.subscription_head span {
+			&:before, &:after {
+				width:55px;
+			}
+			&:before {
+				left:-65px;
+			}
+			&:after {
+				right:-65px;
+			}
+		}
+		.subs-content p {
+			min-height:330px;
+		}
+	}
+	.uil-ring-css {
+		margin-left:@margin - 15px;
+	}
+	
+	.user-view .search-result .doctor-list .search-week-ul {
+		width:590px;
+	}
+	.user-view .search-result .week-hender ul.search-week-ul > li {
+		min-width:83px;
+	}
+	
+	.user-view .search-result .doctor-list .search-week-ul ul li a {
+		min-width:77px;
+	}
+	.book-appmt ul .doctor-list{
+		min-width: 0 !important;
+	}
+	.book-appmt .recommend-service .doctor-list,.book-appmt .recommend-service li.col-sm-6 .doctor-list{
+		min-height:0;
+	}
+	.book-appmt .recommend-service p {
+		font-size: 13.9px;
+		padding: @padding - 3px;
+	}
+}
+@media(min-width:992px) and (max-width: 1199px) {
+	.making-day-worker .carousel {
+		.left {
+			left: -15%;
+		}
+		.right {
+			right: -15%;
+		}
+	}
+}
+@media screen and (max-width:991px) {
+	.service {
+		.panel-collapse {
+			.dropdown-menu {
+				max-height: 300px;
+				> li >a {
+					white-space: normal;
+				}
+			}
+		}
+	}
+	.search-block {
+		.contact-block {
+			margin: 0 15px - 30px;
+		}
+		.map-width {
+			padding: 0;
+		}
+	}
+	.search-page {
+		footer {
+			.row > div {
+				width: 100%;
+			}
+		}
+	}
+	.doctor-search {
+		.search-block {
+			.speciality, .insurance {
+				.form-control {
+					min-width: 100% !important;
+				}
+			}
+		}
+		.sub-list .pr > p {
+			max-width: 100% !important;
+		}	
+	}
+	.take-our-word .left-side {
+		padding: @padding + 15px;
+	}
+	.banner .home-search .form-group.form-btn {
+		.bor-rad(5px);
+	}
+	.making-day-worker .carousel {
+		.left {
+			left: 0;
+		}
+		.right {
+			right: 0;
+		}
+	}
+	.take-our-word {
+		.left-side {
+			margin-bottom: @margin + 5px;
+		}
+	}	
+	.paging-head {
+		h2 {
+			font-size:@font-size + 16px;
+		}	
+	}
+	.video-block {
+		padding-bottom:20px;
+	}
+	.related-practice, .how-it-works, .find-doctor, .contact-block {
+		padding:(@padding + 25px) (@padding - 15px);
+	}
+	
+	.how-it-works .carousel-indicators {
+		bottom:-30px;
+	}
+
+	.banner {
+		padding:90px 0 0;
+		min-height:auto;
+		h1 {
+			font-size:@font-size + 36px;			
+		}
+	}
+	
+	.home-search .form-group,
+	.doctor-search .search-block .form-search .form-group {
+		width:100% !important;
+		margin-bottom:@margin;
+	}
+	
+	.doctor-search .search-block .map-block form .form-group {
+		margin-right:@margin - 15px;
+		display:block;
+		margin-bottom:@margin;
+		.form-control {
+			width:100%;
+		}
+	}
+	
+	.star-doctor {
+		.star-doc-left {
+			padding-top:@padding - 15px;
+			h2 {
+				font-size:@font-size + 14px;
+			}
+			h3 {
+				font-size:@font-size + 8px;
+			}
+			.btn {				
+				margin-bottom:30px;
+			}
+		}
+		.container {
+			img {
+				position:static;
+				max-width:100%;
+			}
+		}
+	}
+	
+	.how-it-works {
+		ul {
+			&:before {
+				width:480px;
+				left:110px;
+			}
+			li {
+				margin-bottom:@margin + 10px;
+				&:before {
+					left:110px;
+				}
+			}
+		}
+	}	
+	.login-page {
+		padding-bottom:@padding + 5px;
+		.login-page-height { 
+			padding:(@padding + 75px) (@padding);
+			&.login-user { 
+				padding:(@padding + 75px) (@padding - 15px);
+			}
+		}
+		form {
+			margin-top:@margin + 25px;
+		}
+		.choose-register {
+			.patient-block {
+				.joinnow-block;
+			}
+			.doctor-block {
+				.joinnow-block;
+			}
+		}
+	}
+	
+	.register {
+		.form-login-heading {
+			text-align:center;
+			.btn {
+				float:none !important;
+				margin-top:@margin - 5px;
+				display:block;
+			}
+		}
+	}
+	
+	.appointment-block {
+		.appointment-header {
+			.appointment-list {
+				ul {
+					margin:(@margin - 15px) (@margin - 15px) (@margin + 10px);
+				}
+			}
+		}
+		.appmt-view {
+			padding:(@padding) (@padding - 15px) (@padding + 10px);
+		}
+	}
+	
+	.doctor-search .search-result {
+		.search-result-header .search-week-ul > li {
+			min-width:90px;
+			&.search-left-arrow {
+				left:-10px;
+			}
+			&.search-right-arrow {
+				right:0;
+			}
+		}
+		.doctor-booking-details ul ul li {
+			min-width:auto;
+			width:85px;
+		}
+	}
+	
+	.user-view {
+		.appmt-details {
+			> div {
+				float:none !important;
+				& + div {
+					float:left;
+				}
+			}
+		}
+		.user-profile {
+			.media {
+				text-align:center;
+				.media-left {
+					padding-right:@padding - 15px;
+					span.fav-list{
+						float:none;
+						display:block;
+					}
+				}
+				.media-left, .media-body {
+					display:block;
+					width:100%;
+				}
+			}
+			ul.bottom-list li a {
+				margin-bottom:@margin;
+			}
+		}
+		.qualify-exp {
+			margin-top:@margin + 30px;
+		}
+		.patient-reviews .profile-review .profile-review-author {
+			margin-bottom:@margin + 5px;
+		}
+		.patient-reviews .separate-reviews > div .angular-input-stars {
+			left:0 !important;
+		}
+		.user-profile ul.bottom-list li { 
+			float:none; 
+			display:block; 
+		}
+	}
+	.book-appmt-block {
+		.book-doctor-details {
+			text-align:center;
+			.media {
+				.media-left, .media-body {
+					display:block;
+					padding:@padding - 15px;
+					width:auto;
+				}
+			}
+			address {
+				display:inline-block;
+				margin-top:@margin + 5px;
+				margin-bottom:@margin + 5px;
+			}
+		}
+		.doctor-visit {
+			margin-top:(@margin + 10px);
+			margin-bottom:(@margin + 10px);
+		}
+		.doctor-visit {
+			.form-group {
+				margin-right:@margin - 15px;
+			}
+			.book-free {
+				padding:(@padding - 15px) (@padding);
+			}
+			.radio {
+				margin:(@margin - 5px) (@margin - 15px);
+			}
+			&.patient-info {
+				.form-group {
+					margin-right:@margin - 30px;
+				}
+			}
+		}
+		.appmt-finish {
+			padding:@padding - 15px;
+			.table-responsive {
+				margin:(@margin + 15px) (@margin - 15px);
+			}
+		}
+	}
+	.calendar-settings {
+		.date-section {
+			.form-group {
+				select {
+					max-width:none;
+				}
+			}
+			& + div {
+				.form-group {
+					padding:@padding - 15px;
+				}
+			}
+		}
+		.session-block {
+			padding:@padding - 15px;
+			label + div {
+				padding:@padding - 15px;
+			}	
+		}
+	}
+	.calendar-block .calendar-body .cal-cell1 {
+		min-height:60px;
+		.cal-month-day {
+			height:60px;
+		}
+	}
+	.uil-ring-css {
+		margin-left:@margin - 15px;
+	}
+	.user-profile ul.list-inline.text-left.social-btn{
+		text-align: center;
+	}
+	.how-it-work{
+		.video{
+			width:auto;
+			.embed-responsive{
+				left:0px;
+			}
+		}
+	}
+}
+@media(min-width:992px) {	
+	.doctor-search {
+		.sub-list {
+			> .list-inline > li {
+				float: none;
+				display: inline-block;
+				text-align: left;
+				width: 49%;
+				vertical-align: top;
+			}			
+		}
+	}
+	.search-block {
+		.container-fluid > div {
+			padding: 0;
+		}
+	}
+	.listing-details {
+		.btn-link {
+			margin-left: @margin + 35px;
+		}
+	}
+	.take-our-word .left-side:after {
+		content: '';
+		display: inline-block;
+		border: 10px solid #5c545c;
+		border-width: 20px 0 20px 20px;
+		border-color: transparent transparent transparent #5c545c;
+		position: absolute;
+		right: -20px;
+		top: auto;
+		bottom: 90px;
+	}
+	.header {
+		.navbar-brand {		
+    		margin-right: 50px;
+		}
+	}
+	.take-our-word {
+		.row {
+			> div {
+				padding: 0;
+			}
+		}
+	}
+	.book-appmt ul .doctor-list{
+		margin:@margin 0;
+	}
+}
+@media(min-width: 768px) {		
+	.assessment-details {
+		> .container {
+			max-width: 750px;
+			margin: auto;
+		}
+	}
+	.user-view {
+		.reviews {
+			.media {
+				.navbar-left {
+					padding-right: @padding + 15px;
+				}
+			}
+		}
+	}
+	.search-page {
+		footer {
+			margin-left: 40%;
+		}
+		.footer-below {
+			.col-sm-1,.col-sm-2,.col-sm-3,.col-sm-6{
+				width:100%;
+			}
+		}
+	}
+	.making-day-worker {
+		.carousel-caption {
+			left: 0;
+			right: 0;
+			bottom: 0;
+		}	
+		.carousel-indicators {
+			bottom: -60px;
+			text-align: right;
+			right: 0;
+			left: auto;
+		}
+	}
+	.doctor-search {
+		.search-block {
+			> .container-fluid {
+				padding: (@padding + 50px) 0 0 (40%);
+    			width: 100%;
+				position: relative;
+				> .map-width {
+					max-width: 40%;
+					position: fixed;
+					left: 0;
+					bottom: 0;
+				}				
+			}			
+		}
+	}
+}
+@media(min-width: 992px) and (max-width: 1024px) {
+	.search-page {
+		footer {
+			.row > .col-sm-6 {
+				width: 100%;
+			}			 
+			.footer-menu > .col-sm-6, .col-sm-3 {
+				width: 50%;
+			}
+		}
+	}
+}
+@media screen and (min-width:768px) and (max-width:991px) {
+	.user-dashboard {
+		.thumbnail {
+			.media {
+				text-align: center;
+			}
+			.media-left {
+				display: block;
+				padding-right: 0;
+			}
+		}
+	}
+	.user-dashboard .left-side .list-inline>li {
+		margin: @margin - 5px 0;
+	}
+	.doctor-search .search-result {
+		.search-result-header { 
+			& > div {
+				float:none !important;
+			}
+			.search-week-ul > li {
+				min-width:83px;
+				&.search-left-arrow {
+					left:0;
+				}
+				ul {
+					font-size:@font-size - 2px;
+				}
+			}
+		}
+		.doctor-booking-details ul {
+			min-width:auto;
+		}
+	}
+	.header .navbar-collapse {
+		li {
+			margin:0px 8px;
+		}
+	}
+	.how-it-work .col-sm-4{
+		width:100%;
+	}
+	.service-list ul li{
+		width:50%;
+	}
+	.book-appmt .recommend-service .doctor-list{
+		margin: 0px -5px;
+	}
+	.book-appmt .recommend-service li.col-sm-6 .doctor-list {
+		margin: 15px;
+	}
+}
+
+@media screen and (max-width:767px) {	
+	.search-page {
+		.daterangepicker {
+			width: auto;
+			right: auto !important;
+			left: auto!important;
+		}
+	}
+	.book-appmt {
+		.ui-carousel .slide{
+			width:100% !important;
+		}
+		h3{
+			&:before, &:after{
+				display: none;
+			}
+		}
+		.recommend-service {
+			.doctor-list{
+				margin:@margin 0 0 6px;
+				min-height:0;
+			}
+			li.col-sm-6 .doctor-list{
+				margin:@margin @margin + 5px @margin @margin + 10px;
+			} 
+		}
+		.owl-carousel {
+			.owl-drag .owl-item{
+				margin-left: 11px!important;
+			}
+			.owl-nav {
+				.owl-next{
+					right:-15px;
+				}
+				.owl-prev{
+					left:-15px;
+				}
+			}
+		}
+
+	}
+	.appoinments {
+		.thumbnail {
+			margin: auto;
+		}
+		.media, .dl-horizontal dt {
+			width: 100%;
+			text-align: center;
+		}
+		.dl-horizontal {
+			text-align: center;
+			dd {
+				margin: 0;
+			}
+		}
+	}	
+	.right-msg-block {
+		text-align: center;
+	}
+	.user-view {
+		.right-side {
+			text-align: center;
+		}
+	}
+	.contact-block {
+		padding-bottom: @padding  + 15px !important;
+	}
+	.edit-profile {		
+		.back-btn.btn {
+			padding: @padding - 13px;
+		}
+	}	
+	.banner-logo {
+		padding: @padding + 55px 0;
+	}
+	.name-field {
+		div {
+			margin: @margin - 5px 0;
+		}
+	}
+	.banner {
+		display: block;
+		height: 100%;
+		> div {
+			display: block;
+		}
+		.home-search .form-group.insurance {
+			min-width: 265px;
+		}	
+	}
+	.book-appmt ul .doctor-list {
+		margin: @margin @margin + 8px;	
+		min-height:0;
+	}
+	.making-day-worker {
+		.carousel-caption {
+			position: static;
+			.btn {
+				float: none;
+				margin: @margin;
+			}
+		}
+		.carousel-indicators {
+			bottom: 0;
+		}
+	}
+	.header {
+		background-color: #222;
+		min-height:60px;
+		.navbar-header {
+			background-color:@black;
+			.navbar-brand {
+			    left: 50px;
+				height:69px;
+				img{
+					margin: -5px 0 0 @margin + 5px;
+				}
+			}
+		}
+		.navbar-collapse {
+			li {
+				margin:(@margin - 5px)(@margin - 15px);
+				border-right:0;
+				a {
+					padding:(@padding - 8px) (@padding);
+					&:hover {
+						background-color: @gray;
+					}
+				}
+			}
+			.nav {
+				margin:@margin 0;
+			}
+			li.dropdown {
+				margin:@margin - 15px;
+				.dropdown-menu {
+					width:100%;
+					height:200px;
+					overflow:auto;
+					padding:10px;
+					top:210px;
+					border-bottom:@border;
+				}
+				&.open.arrow-icon:after {
+					border:none;
+				}
+			}
+		}
+		.navbar-header .navbar-toggle {
+			margin-top:@margin;
+			position: absolute;
+			right: 0;
+		}
+		.navbar-right>li:after {
+			display: none !important;
+		}
+		.bottom-header{
+			display:none;
+		}
+		.top-header{
+			padding:0;
+		}
+	}
+	.sub-pages, .scroll {
+		.navbar-collapse{
+			background:#545454;
+			li a:hover{
+				background:#7d7d7d;
+			}
+		}
+	}
+	.banner {
+		background-size:cover;
+		h4 {
+			font-size:32px;
+		}
+	}
+	.thumb-block {	 	
+		li {
+			display:block;
+		}		
+	}
+	.related-practice {
+		.carousel-control {
+			position:static;
+		}
+	}
+	.how-it-works {
+		ul:before, li:before {
+			display:none;
+		}
+	}	
+	.register {
+		form {
+			.form-group {
+				label.form-name + div {
+					margin-bottom:@margin + 13px;
+				}
+			}
+		}
+	}
+	.appointment-block {
+		.media {
+			text-align: center;
+			.navbar-left {
+				padding-bottom: @padding + 5px;
+			}
+		}
+		.appointment-header {
+			.pull-left {
+				float:none !important;
+			}
+			.appointment-list {
+				margin-left:@margin - 15px;
+			}
+		}
+		.appmt-view-btn {
+			text-align:center;
+			p {
+				display:inline-block;
+				margin-right:@margin - 15px;
+				margin-bottom:@margin;
+			}
+		}
+		.well{
+			text-align: center;
+			.col-sm-4{
+				border-left:none !important;
+			}
+		}
+	}
+	
+	.contact-block .footer-logo p {
+		margin-left:@margin - 15px;
+	}
+	
+	.doctor-search {
+		.search-result {
+			.search-result-header {
+				.search-week-ul {
+					.search-left-arrow, .search-right-arrow {
+						border-bottom:0;
+						top:50%;
+						left:0 !important;
+					}
+					.search-right-arrow {
+						left:auto !important;
+						right:0 !important;
+					}
+					& > li {
+						min-width:100%;
+						border-bottom:@border;
+						margin-bottom:@margin - 5px;
+						padding-bottom:@padding - 5px;
+					}
+				}
+			}
+			.doctor-booking-details {
+				padding-bottom:@padding;
+				overflow-x:auto;
+				overflow-y:hidden;
+				.search-week-ul {
+					width:720px;
+				}
+			}
+		}
+	}
+	.user-view {
+		.add-review {
+			.btn {
+				margin-bottom:@margin;
+			}
+		}
+		.search-responsive {
+			width:100%;
+			overflow-x:auto;
+			overflow-y:hidden;
+			border:@border;
+			.search-result {
+				width:630px;
+				margin:auto;
+				.week-hender {
+					border-left:0;
+					border-right:0;
+					& ul.search-week-ul > li {
+						padding-bottom:@padding - 5px;
+					}
+				}
+				.doctor-list {
+					border:0;
+					.doctor-booking-details {
+						width:635px;	
+						margin:auto;
+					}
+				}
+			}
+		}
+	}
+	.appmt-table  {
+		h1 {
+			.search-table-field {
+				float:none !important;
+				.input-group {
+					margin:(@margin) (@margin - 15px) (@margin) (@margin - 15px);
+				}
+				.btn {
+					width:100%;
+				}
+				.pull-left {
+					float:none !important;
+				}
+			}
+		}
+	}
+	
+	.book-appmt-block {
+		.appmt-steps {
+			li {
+				margin-bottom:@margin;
+			}
+		}
+		.appmt-finish {
+			.appmt-btn {
+				.btn {
+					min-width:100%;
+					margin-bottom:@margin;
+				}
+			}
+		}
+	}
+	.edit-profile form .form-group .pad-top,.calendar-additional-time .pad-top{
+		padding-top:@padding - 15px;
+		padding-left:@padding;
+	}
+	.register form .form-group div>label{
+		min-width:200px;
+		margin:10px 15px;
+	}
+	.register-btn{
+		text-align: center;
+	}
+	.job-post .rate-hour .col-sm-4{
+		width:50%;
+	}
+	.job-board .sub-list .btn-link {
+		margin-bottom: 10px;
+	}
+	.page-content{
+		margin:0px 15px;
+	}
+	.footer-below,.footer-below ul {
+		text-align: center;
+		float:none !important;
+	}
+	.how-it-work {
+		p:before{
+			left:0px;
+		}
+		.glyphicon-chevron-right{
+			margin-right:-50px;
+		}
+		.glyphicon-chevron-left{
+			margin-left:-50px;
+		}
+	}	
+	.service-list ul li{
+		width:100%;
+	}
+	.user-dashboard {
+		.left-side {
+			.media {
+				text-align: center;
+			}
+			.media-left {
+				display: block;
+				text-align: center;
+				padding-right: 0;
+			}
+			.media-middle.text-left {
+				text-align: center;
+			}
+		}
+	}
+	.booking-view .dl-horizontal {
+		dt {
+			width: 115px!important;
+			float:left
+		}
+		dd{
+			margin-left:130px;
+		}
+	}
+	.quick-link ~ .doctor-search .sub-list{
+		padding-top:90px !important;
+	}
+	.get-gateways.user-dashboard .radio{
+		padding-left: 15px;
+		padding-right: 15px;
+		float: left;
+		width: 100%;
+	}
+}
+@media screen and (max-width:639px) {	
+	.calendar-block {
+		.calendar-header {
+			& > div {
+				float:none !important;
+				margin-top:@margin + 5px;
+			}
+		}
+	}
+	.user-view {
+		.user-profile {
+			ul.bottom-list {
+				margin-left:@margin - 15px;
+				li {
+					margin:@margin - 15px;
+					display:block;
+				}
+				p {
+					margin-left:@margin - 15px;
+				}
+			}
+		}
+	}
+	.contact-block .btn {		
+		font-size:@font-size + 1px;
+	}
+}
+
+@media screen and (max-width:580px) {
+
+	.edit-profile form .location-info{
+		 .list-inline>li.verify span{
+			position:relative;
+			top:0px;
+		}
+		.list-inline>li{
+			width:300px;
+			.form-control{
+				min-width:100px;
+				width:187px;
+			}
+		}
+	}
+	.edit-profile form .form-group .pad-top,.calendar-additional-time .pad-top{
+		padding-top:@padding - 15px;
+		padding-left:@padding;
+	}
+	.branch-photos .form-control{
+		width:57% !important;
+	}
+	.register form .form-group div>label{
+		margin:(@margin - 10px) (@margin + 42px);
+	}
+	.edit-profile h3 {
+		font-size: @font-size + 4px;
+	}
+	.banner {
+		.shift-hrs {
+			li {
+				display: table;
+				padding: (@padding) (0);
+				&:after {
+					display: none;
+				}
+			}
+		}
+		.home-search{
+			margin: (@margin + 55px) 0px;
+		}
+	}
+	.book-appmt .ui-carousel .slide{
+		width:100% !important;	
+	}
+	.job-post{
+		h3{
+			margin-top:@margin + 5px;
+		}
+		.input-group{
+			width:100%;
+			margin-bottom:@margin - 5px;
+			.input-group-addon{
+				min-width:25%!important;
+			}
+			.form-control{
+				max-width:75%;
+			}
+		}
+		.rate-hour .col-sm-4{
+			width:100%!important;
+		}
+	}
+	.how-it-work .carousel {
+		.glyphicon-chevron-right{
+			margin-right:-30px;
+		}
+		.glyphicon-chevron-left{
+			margin-left:-30px;
+		}
+	}
+	.user-view .left-side .carousel .carousel-inner div{
+		min-height:0 !important;
+	}	
+}
+
+@media screen and (max-width:430px) {	
+	.growl-container.growl-fixed.top-center {
+		margin-left:@margin - 160px !important;
+	}
+	.user-view .appmt-details h2 {
+		font-size:@font-size + 7px;
+	}
+	.job-post li.checkbox-field{
+		width:14%;
+	}
+	.profile-content .well.pa,.profile-content .well.pr{
+		position:relative;
+		margin:@margin !important;
+		.bg{
+			margin:@margin 0;
+		}
+		.form-group{
+			margin-left:0;
+		}
+	}
+	.profile-content .well, .appoinments .get-gateways .well{
+		min-width:100px;
+		margin:10px;
+		min-height: 170px;
+		width:auto;
+		h5{
+			font-size:20px;
+		}
+	}
+	.listing-photos .listing-details .col-xs-6 {
+		width: 100%;
+	}
+	.user-dashboard .modal-content .panel-body .radio label:first-child span:before{
+		top:2px;
+	}
+	.user-dashboard .modal-content .panel-body .radio label span:before{
+		bottom:4px;
+	}
+	.account-payout .job-list .media-body{
+		display:unset;
+		.media-heading{
+			display:inline-block;
+		}
+	}
+	.doctor-search .search-block .search-responsive,.job-board .sub-list .list-inline>li.border-bottom{
+		padding:0;
+	}
+}
+
+@media screen and (max-width:375px) {
+	.user-view .search-result .week-hender .search-left-arrow,.user-view .search-result .week-hender .search-right-arrow {
+		top:36px;
+	}
+	.get-app li a {
+		display:block;
+		margin-bottom:@margin;
+	}
+	.how-it-work {
+		ul .doctor-list{
+			width:auto;
+			min-width:200px;
+		}
+		.video{
+			width:275px;
+			.embed-responsive{
+				left:0px;
+			}
+		}
+	}
+}

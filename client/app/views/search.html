@@ -1,0 +1,297 @@
+<div class="section quick-link dashboard-menus service-names" ng-show="category_page == true && categories.length > 1">
+    <div class="container">
+        <div class="text-center howHead border-bottom">
+            <h2 class="big-mspace bot-space-10 ng-binding Montserrat">{{'What you find?' | translate}}</h2>
+        </div>
+        <ul class="list-unstyled clearfix">
+            <li class="col-sm-6" ng-repeat="category in categories">
+                <h3 class="text-uppercase text-16">{{category.name | translate}}</h3>
+                <ul class="list-unstyled">
+                    <li ng-repeat="service in category.service">
+                        <i class="fa fa-angle-right"></i>
+                        <!--<a title="{{service.name}}" href="users?service_id={{service.id}}&zoom=1">{{service.name | translate}}</a>-->
+                        <a title="{{service.name}}" ng-click="getService(service.id)">{{service.name | translate}}</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="doctor-search edit-profile" ng-show="category_page == false || categories.length == 1">
+    <div class="search-block">
+        <div class="container-fluid no-pad">
+            <div class="col-sm-5 map-width">
+                <div class="form-group map-srach-blk">
+                    <div class="checkbox-field">
+                        <label for="maplabel">
+                            <input type="checkbox" class="hide" name="maplabel" ng-model="data.map_label" id="maplabel" ng-change="map_change(data.map_label)" ng-checked="data.map_label">
+                            <span class="custom-check"></span>    
+                            <span>{{'Search When I Move the Map' | translate}}</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="map-block">
+                    <div>
+                        <ng-map zoom="{{zoomLevel}}" on-zoom_changed="zoomChanged()" center="[{{center_lat}},{{center_lon}}]" class="map-height"
+                            on-dragend="getpos($event)">
+                            <marker ng-repeat="mapPosition in mappositions" id='{{mapPosition.id}}' position="{{mapPosition.lat}}, {{mapPosition.lon}}"
+                                animation="DROP" on-click="Goto($index)"></marker>
+                        </ng-map>
+                    </div>
+                </div>
+            </div>
+            <div class="search-responsive">
+                <div class="search-result clearfix">
+                    <section>
+                        <div class="sub-list">
+                            <div ng-if="categories.length >1">
+                                <a href="users"> <span><i class="fa fa-angle-double-left fa-fw"></i>{{'See all services' | translate}}</span></a>
+                            </div>
+                            <div class="navbar-btn hor-space-10" ng-if="isAuth && is_request_job != true">
+                                <ul class="nav nav-tabs cur text-center">
+                                    <!--All Tab-->
+                                    <li class='active col-sm-6 col-xs-6 no-pad' >
+                                        <a data-target="#all" data-toggle="tab" ng-click="searchUsers('')">
+                                            {{'All'}}
+                                        </a>
+                                    </li>
+                                    <!-- Favorite -->
+                                    <li class="col-sm-6 col-xs-6 no-pad">
+                                        <a data-target="#favorite" data-toggle="tab" ng-click="searchUsers('favorite')">
+                                            {{'Favorites'}}
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!--tab content-->
+                            <div class="tab-content">
+                                <div class="tab-pane active"  id="all">
+                                     <div ng-if="is_request_job">
+                                                <h4> {{'Interested service providers for'| translate}} {{service_name}} </h4>
+                                                <p>{{'Find a reliable service providers' | translate}} </p>
+                                     </div>
+                                    <form data-uk-scrollspy="{cls:'uk-animation-slide-bottom', delay:100}" class="clearfix home-search form-inline" name="homeSearchForm" ng-submit="homesearch(homeSearch.$valid)" ng-show="type == undefined || type == '' && !is_request_job" novalidate>
+                                        <div class="day-workers" ng-class="{'pad-top-20':isAuth}">
+                                            <h4 ng-show="user_search_id != null && user_search_id != undefined" ng-if="$root.settings.SITE_ENABLED_PLUGINS.indexOf('SaveSearchAndNotify/SaveSearchAndNotify')>-1 && isAuth">
+                                            {{edit_search.title | translate}} <i class="fa fa-pencil pointer" title="{{'Please update your saved preferences if you change your preferences.'| translate}}" aria-hidden="true"
+                                                    ng-click="edit_search.search_method='update';openSaveSearch()"></i></h4>
+                                            <div ng-if="searchplace != null && (user_search_id == null || user_search_id == undefined)">
+                                                <h4> {{'Service providers in'| translate}} {{searchplace}} </h4>
+                                                <p>{{'Find a reliable service providers' | translate}} </p>
+                                            </div>
+                                        </div>
+                                        <div class="form-group has-feedback speciality">
+                                            <geo-location entry="entry" entity="entity"></geo-location>
+                                            <input type="hidden" ng-model="form_latitude" />
+                                            <input type="hidden" ng-model="form_longitude" />
+                                            <span class="form-control-feedback"><i class="fa fa-map-marker"></i></span>
+                                            <span class="error" ng-show="(homeSearchForm.$submitted || homeSearchForm.address.$touched) && (homeSearchForm.address.$pristine || homeSearchForm.address.$invalid) && (homeSearchForm.address.$error.required)">{{'Enter Location'| translate }}</span>
+                                            <div ng-show="allowedplace" class="error">{{'Enter allowed locations'|translate}}</div>
+                                        </div>
+                                        <div class="form-group has-feedback speciality">
+                                            <select ng-model="data.selectedRadius" class="form-control" ng-disabled="!enableRadius">
+                                                <option ng-repeat="radius in radiusData" ng-selected="radius.value == data.selectedRadius" value="{{radius.value}}"> {{radius.text}} </option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group insurance">
+                                            <div class="has-feedback">
+                                                <input class="form-control" date-range-picker class="form-control date-picker" type="text" ng-model="datePicker" name="daterange"
+                                                    options="options" />
+                                                <span class="form-control-feedback"><i class="fa fa-calendar"></i></span>
+                                            </div>
+                                        </div>     
+                                        <div class="checkbox-field">
+                                            <div class="form-group speciality" ng-repeat="service in services">
+                                                <div class="checkbox-field right-space-10">
+                                                    <label for="{{$index}}">
+                                                        <input type="checkbox" class="hide" name="{{service.id}}" ng-model="service.checked" id="{{$index}}" ng-change="service_change($index)">
+                                                        <span class="custom-check"></span>
+                                                        <span class="right-space-10">{{service.name | translate}}</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="service">
+                                            <div class="panel-group" id="accordion">
+                                                <div class="panel panel-default">
+                                                    <div class="panel-heading text-right no-pad">
+                                                        <button class="btn btn-info" data-toggle="collapse" data-parent="#accordion" href="#more"><i class="fa fa-filter fa-fw"></i>{{'More Filters' | translate}}<i class="fa fa-angle-down fa-fw"></i> </button>
+                                                    </div>
+                                                    <div id="more" class="panel-collapse collapse out big-checkbox">
+
+                                                        <div class="panel-body">
+                                                            <div class="clearfix" ng-repeat="form_field_submissions in form_fields_all">
+                                                                <div name="form_field{{$index}}" ng-model="submission[$index]" fb-form="{{'default-'+($index+1)}}" fb-default="defaultValue"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div ng-show="showLoader">
+                                            <img ng-src="images/searchloader.gif" width="100" height="100">
+                                        </div> 
+                                        <span class="no-mar">
+                                            <button class="btn btn-info btn-animate" ng-disabled="homeSearchForm.$invalid" type="submit">{{'Search' | translate }}</button>
+                                        </span>                                       
+                                        <span class="float-right hor-space-10" ng-show="enableRadius && (user_search_id == undefined || user_search_id == null)" ng-if="$root.settings.SITE_ENABLED_PLUGINS.indexOf('SaveSearchAndNotify/SaveSearchAndNotify') > -1 && isAuth && (type == undefined || type == '')">
+                                            <a href="#" ng-click="saveSearch()" class="btn btn-primary"> {{'Save Search' | translate}} </a>
+                                        </span>
+                                    </form>
+                                    <div class="clearfix" ng-if="searchLists.length == 0">
+                                        <h5 class="empty-list">{{'Looks like we dont have any service providers in your area yet' | translate}}.</h5>
+                                    </div>
+                                    <div class="clearfix hor-space-10">
+                                        <div class="pull-right dropdown pad-top-20" ng-show="searchLists.length > 0" ng-if="(type == undefined || type == '')">
+                                            <a href="" class="btn btn-link" data-toggle="dropdown">{{'Sort by:' | translate}}
+                                                <temp ng-if="display_type == '' || display_type== undefined">{{'Suggested' | translate}}</temp>
+                                                <temp ng-if="display_type == 'distance'">{{'Distance' | translate}}</temp>
+                                                <temp ng-if="display_type == 'review'" ng-if="$root.settings.SITE_ENABLED_PLUGINS.indexOf('Review/Review') > -1">{{'Review' | translate}}</temp> <span class="caret"></span></a>
+                                            <ul class="dropdown-menu navbar-btn">
+                                                <li ng-class="{'active':display_type == '' || display_type == undefined}"><a href="" ng-click="displayType('')">{{'Suggested' | translate}}</a></li>
+                                                <li ng-show="searchplace != undefined && searchplace != null" ng-class="{'active':display_type === 'distance'}"><a href="" ng-click="displayType('distance')">{{'Distance' | translate}}</a></li>
+                                                <li ng-class="{'active':display_type === 'review'}" ng-if="$root.settings.SITE_ENABLED_PLUGINS.indexOf('Review/Review') > -1"><a href="" ng-click="displayType('review')">{{'Reviews' | translate}}</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <ul class="list-inline clearfix hor-space-10">
+                                        <li class="col-sm-6 col-xs-12 pad-top-20" ng-repeat="user in searchLists" id="user{{user.id}}" ng-mouseenter="toggleBounce(user.id)"
+                                            ng-mouseleave="clearTime()">
+                                            <div class="pr"> 
+                                                <a ng-if="!is_request_job" href="users/{{user.id}}/{{user.user_profile.first_name + user.user_profile.last_name| slugify}}" class="show">
+                                                    <p><img ng-src="{{user.userimage}}" alt="[Images: {{user.user_profile.listing_title}}]"
+                                                            class="img-responsive center-block"></p>
+                                                </a>
+                                                <!--if request id is present in query params needs to pass to user view page-->
+                                                <a ng-if="is_request_job" href="users/{{user.id}}/{{user.user_profile.first_name + user.user_profile.last_name| slugify}}?request_id={{request_id}}&service_id={{service_ids}}" class="show">
+                                                    <p><img ng-src="{{user.userimage}}" alt="[Images: {{user.user_profile.listing_title}}]"
+                                                            class="img-responsive center-block"></p>
+                                                </a>
+                                                <listing-favorites ng-if="$root.settings.SITE_ENABLED_PLUGINS.indexOf('ListingFavorites/ListingFavorites') > -1"></listing-favorites>
+                                            </div>
+                                            <a  ng-if="!is_request_job" href="users/{{user.id}}/{{user.user_profile.first_name + user.user_profile.last_name| slugify}}" class="show">
+                                                <div class="list-content" ng-class="(user.id == userClickedId)? 'userBackground' : 'list-content'">
+                                                    <div class="clearfix">
+                                                        <div class="col-sm-7 col-xs-6 no-pad">
+                                                            <h5 class="pull-left bluec">{{user.user_profile.first_name}} {{user.user_profile.last_name}}
+                                                                <span class="small"></span>
+                                                                <span ng-if="user.user_profile.pro_account_status_id == ConstProStatus.Approved" title="{{'Verified account' | translate}}" class="verified">
+                                                                    <span class="fa-stack text-12">
+                                                                        <i class="fa fa-circle fa-stack-2x"></i>
+                                                                        <i class="fa fa-check fa-stack-1x fa-inverse"></i>
+                                                                    </span>
+                                                                </span>
+                                                            </h5>
+                                                            <p class="text-13 badge"><temp ng-if="user.distance > 0"><i class="fa fa-tachometer fa-fw"></i> {{user.distance}}Km</temp></p>
+                                                        </div>
+                                                        <div class="col-sm-5 col-xs-6 no-pad" ng-if="$root.settings.SITE_ENABLED_PLUGINS.indexOf('Review/Review') > -1">
+                                                            <div class="clearfix top-space-8">
+                                                                <div class="col-sm-10 col-xs-10 text-right no-pad">
+                                                                    <ng-rate-it ng-model="user.average_rating_as_service_provider" read-only="true"></ng-rate-it>
+                                                                </div>
+                                                                <div class="col-sm-2 col-xs-2 no-pad">
+                                                                    <span ng-show="user.review_count_as_service_provider > 0">({{user.review_count_as_service_provider}})</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-12 col-xs-12">
+                                                            <p class="text-b no-mar">{{user.user_profile.listing_title}} </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row ver-space">
+                                                        <div class="col-sm-6 col-xs-6">
+                                                            <p class="label label-info" ng-if="user.user_profile.repeat_client_count > 0">{{'repeats client:' | translate}} {{user.user_profile.repeat_client_count}}</p>
+                                                        </div>
+                                                        <div class="col-sm-6 col-xs-6 text-right">
+                                                            <span ng-if="user.category.is_enable_common_hourly_rate_for_all_sub_services != 1" class="no-mar"><i class="fa {{service_user.service.icon_class}}" aria-hidden="true"></i>{{'From'|translate}} {{user.service_rate | currency : currency_type}} </span>
+                                                            <span ng-if="user.category.is_enable_common_hourly_rate_for_all_sub_services == 1" class="no-mar">{{'From'|translate}} {{user.service_rate | currency : currency_type}} / {{'hour' | translate}}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <div class="binding-pagination" ng-show="searchLists.length >= itemsPerPage">
+                                        <div class="pagnation-content">
+                                            <div class="clearfix pagnation-inner">
+                                                <div class="col-md-12 text-center">
+                                                    <uib-pagination previous-text="Prev" next-text="Next" total-items="totalRecords" num-pages="lastPage" ng-model="currentPage" max-size="maxSize" class="pagination-sm" boundary-link-numbers="true"
+                                                    rotate="false" items-per-page="itemsPerPage" ng-change="paginate_search(currentPage)"></uib-pagination>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>    
+                        </div>    
+                    </section>
+                </div>
+            </div>              
+        </div>
+    </div>
+    <script type="text/ng-template" id="editSearch.html">
+        <div class="user-dashboard">
+            <div class="modal-content panel-info">
+                <div class="modal-header panel-heading">
+                    <div class="col-md-11 col-xs-10">
+                        <h4 class="modal-title" id="modal-title">{{'Save Search' | translate}}</h4>
+                    </div>
+                    <div class="col-md-1 col-xs-1 text-right">
+                        <span class="pointer" ng-click="modalClose()"><i class="fa fa-close fa-2x"></i> </span>
+                    </div>    
+                </div>
+                <div class="panel-body row">
+                    <div class="col-sm-12 text-16 radio">
+                        <label>
+                            <input type="radio" name="search" ng-model="edit_search.search_method" value="update">{{"Update this search"|translate}}
+                            <span></span>
+                        </label>
+                        <label>
+                            <input type="radio" name="search" ng-model="edit_search.search_method" value="new">{{"Save as a new search"|translate}}
+                            <span></span>
+                        </label>
+                    </div>
+                    <div class="col-md-7">
+                        <form>
+                            <div class="form-group space">
+                                <label> {{'Name:' | translate}} </label>
+                                <input type="text" class="form-control" placeholder="{{'Enter name'|translate}}" ng-model="edit_search.title">
+                            </div>    
+                            <div class="form-group space">
+                                <h5> {{'Get notified of new matches' |translate}} </h5>
+                                <div class="form-group has-feedback speciality">
+                                    <select ng-model="edit_search.notify_type" class="form-control">
+                                        <option value="2" ng-selected="edit_search.notify_type == 2"> {{'Never'| translate}} </option>
+                                        <option value="1" ng-selected="edit_search.notify_type == 1"> {{'Instantly'| translate}} </option>
+                                    </select>    
+                                </div> 
+                            </div>
+                        </form>
+                        <div class="row mar-bot-20">
+                            <div class="col-sm-12 col-md-4 col-xs-12">
+                                <button class="btn btn-info btn-block bor-rad-0" ng-click="updateSaveSearch()"> {{"Save"| translate}} </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-5">
+                        <h4>{{'Applied Filters' | translate}}</h4>
+                        <dl class="">
+                            <dt>{{'Service:' | translate }}</dt>
+                            <dd>{{service_name}}</dd>
+                            <dt>{{'Location:' | translate }}</dt>
+                            <dd>{{form_address}}</dd>
+                            <dt>{{'Distance:' | translate }}</dt>
+                            <dd>{{data.selectedRadius}}</dd>
+                            <span ng-repeat="data in save_search_form_field_submissions">
+                                <dt>{{data.name:}}</dt>
+                                <dd>{{data.value}}</dd>
+                            </span>  
+                        </dl>
+                    </div> 
+                </div>
+            </div>   
+        </div>
+    </script>
+</div>

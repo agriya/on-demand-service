@@ -1,0 +1,232 @@
+<div class="booking-view">
+    <div class="container">
+        <div class="row">                                     
+            <div class="col-md-7 col-sm-6 col-xs-12"> 
+                <message-chat> </message-chat>
+            </div>
+            <div class="col-sm-6 col-md-5 col-xs-12">   
+                <div class="thumbnail">
+                    <h4 class="text-b">{{'Details' | translate }}</h4>
+                        <dl class="dl-horizontal">
+                            <dt>{{'Service you Requested for' | translate }}</dt>
+                                <dd>
+                                    <span ng-show="appointment.service_id == ConstService.Interview">{{'Interview' | translate}}</span>
+                                    <span ng-show="appointment.service_id != ConstService.Interview && appointment.service_id == service.id" ng-repeat="service in services">{{service.name | translate}}</span>
+                                </dd>
+                            <dt ng-if="auth.id == appointment.provider_user.id">{{'Customer' | translate }}</dt>
+                                <dd ng-if="auth.id == appointment.provider_user.id">
+                                    <div class="media">
+                                        <div class="media-left">
+                                            <img ng-src={{appointment.user_image}} class="img-circle" alt="{{appointment.user.user_profile.first_name}}" width="50" height="50">
+                                        </div>
+                                        <div class="media-body media-middle">
+                                            <span>{{appointment.user.user_profile.first_name}} {{appointment.user.user_profile.last_name}}</span>
+                                        </div>
+                                    </div>
+                                </dd>   
+                            <dt ng-if="auth.id == appointment.user.id">{{'Service Provider' | translate }}</dt>
+                                 <dd ng-if="auth.id == appointment.user.id">
+                                <div class="media">
+                                    <div class="media-left">
+                                        <img  ng-src={{appointment.provider_image}} class="img-circle" alt="{{appointment.provider_user.user_profile.first_name}}" width="50" height="50">
+                                    </div>
+                                    <div class="media-body media-middle">
+                                        <span> {{appointment.provider_user.user_profile.first_name}} {{appointment.provider_user.user_profile.last_name}}</span>
+                                    </div>
+                                </div>
+                            </dd> </br> 
+                            <dt ng-if="appointment.appointment_status_id == ConstAppointmentStatus.Confirmed || appointment.appointment_status_id == ConstAppointmentStatus.Present || appointment.appointment_status_id == ConstAppointmentStatus.Completed || appointment.appointment_status_id == ConstAppointmentStatus.Closed">{{ 'Mobile' | translate}} </dt>
+                                <dd ng-if="appointment.appointment_status_id == ConstAppointmentStatus.Confirmed || appointment.appointment_status_id == ConstAppointmentStatus.Present || appointment.appointment_status_id == ConstAppointmentStatus.Completed || appointment.appointment_status_id == ConstAppointmentStatus.Closed"> 
+                                    <span ng-if="auth.id == appointment.provider_user.id">{{appointment.provider_user.mobile_code}} {{appointment.provider_user.phone_number}} </span>
+                                    <span ng-if="auth.id == appointment.user.id">{{appointment.user.mobile_code}} {{appointment.user.phone_number}} </span>
+                                </dd>
+                            <dt ng-if="appointment.appointment_status_id == ConstAppointmentStatus.Confirmed || appointment.appointment_status_id == ConstAppointmentStatus.Present || appointment.appointment_status_id == ConstAppointmentStatus.Completed || appointment.appointment_status_id == ConstAppointmentStatus.Closed" ng-show="auth.id == appointment.provider_user.id && (appointment.provider_user.secondary_phone_number != null || appointment.provider_user.secondary_phone_number != undefined)">{{ 'Secondary Mobile' | translate}} </dt>
+                            <dt ng-if="appointment.appointment_status_id == ConstAppointmentStatus.Confirmed || appointment.appointment_status_id == ConstAppointmentStatus.Present || appointment.appointment_status_id == ConstAppointmentStatus.Completed || appointment.appointment_status_id == ConstAppointmentStatus.Closed" ng-show="auth.id == appointment.user.id && (appointment.user.secondary_phone_number != null || appointment.user.secondary_phone_number != undefined)">{{ 'Secondary Mobile' | translate}} </dt>
+                                <dd ng-if="appointment.appointment_status_id == ConstAppointmentStatus.Confirmed || appointment.appointment_status_id == ConstAppointmentStatus.Present || appointment.appointment_status_id == ConstAppointmentStatus.Completed || appointment.appointment_status_id == ConstAppointmentStatus.Closed"> 
+                                     <span ng-if="auth.id == appointment.provider_user.id && (appointment.provider_user.secondary_phone_number !=null && appointment.provider_user.secondary_phone_number !=undefined)"> {{appointment.provider_user.secondary_mobile_code}} {{appointment.provider_user.secondary_phone_number}} </span>
+                                     <span ng-if="auth.id == appointment.user.id && (appointment.user.secondary_phone_number !=null && appointment.user.secondary_phone_number !=undefined)"> {{appointment.user.secondary_mobile_code}} {{appointment.user.secondary_phone_number}}</span>
+                                </dd>
+                            <dt ng-if="appointment.appointment_status_id == ConstAppointmentStatus.Confirmed || appointment.appointment_status_id == ConstAppointmentStatus.Present || appointment.appointment_status_id == ConstAppointmentStatus.Completed || appointment.appointment_status_id == ConstAppointmentStatus.Closed">{{ 'Email' | translate}} </dt>
+                                <dd ng-if="appointment.appointment_status_id == ConstAppointmentStatus.Confirmed || appointment.appointment_status_id == ConstAppointmentStatus.Present || appointment.appointment_status_id == ConstAppointmentStatus.Completed || appointment.appointment_status_id == ConstAppointmentStatus.Closed">
+                                    <span ng-if="auth.id == appointment.provider_user.id">{{appointment.provider_user.email}} </span>
+                                    <span ng-if="auth.id == appointment.user.id"> {{appointment.user.email}}</span> 
+                                 </dd>  
+                            <span ng-if="appointment.form_field_submission.length > 0" ng-repeat="form_data in appointment.form_field_submission">
+                                <dt ng-if="form_data.response != null && form_data.response != undefined">{{form_data.form_field.label | translate }}</dt>
+                                    <dd ng-if="form_data.response != null && form_data.response != undefined">{{form_data.response | translate}}</dd>    
+                            </span>                   
+                            <dt>{{'Booking Status' | translate }}</dt>
+                                <dd>{{appointment.status | translate}}</dd>
+                            <dt ng-if="get_numberof_items">{{'Number of' | translate }} {{appointment.service.label_for_number_of_item | translate}}</dt>
+                                <dd ng-if="get_numberof_items">{{appointment.number_of_item}} </dd> 
+                            <dt>{{'Booking Amount' | translate }}</dt>
+                                <dd ng-if="appointment.is_paid_bonus_amount == 1">{{appointment.total_booking_amount  - appointment.bonus_amount|currency:currency_type}}</dd>
+                                <dd ng-if="appointment.is_paid_bonus_amount == 0">{{appointment.total_booking_amount|currency:currency_type}}</dd>
+                            <dt>{{'Booked for' | translate }}</dt>
+                                <dd>{{appointment.appointment_from_date | date: 'EEEE'}}, {{appointment.appointment_from_date | date: 'dd MMM yyyy'}} <temp ng-if="appointment.appointment_to_date != appointment.appointment_from_date && appointment.appointment_to_date != (null || undefined)">{{'to'| translate}} {{appointment.appointment_to_date | date: 'EEEE'}}, {{appointment.appointment_to_date | date: 'dd MMM yyyy'}}</temp>
+                                <span ng-show="appointment.appointment_from_time != null && appointment.appointment_from_time != undefined"> ({{appointment.appointment_from_time}}<span ng-if="appointment.appointment_to_time != null">-{{appointment.appointment_to_time}}</span>)</span>
+                                </dd>
+                            <dt>{{'Booked on' | translate }}</dt>
+                                <dd>{{appointment.booked_on}}</dd>         
+                        </dl>
+                    </dl>
+                    <p class="alert alert-danger" ng-if="auth.id == appointment.provider_user.id && appointment.service_id != ConstService.Interview && appointment.appointment_status_id == ConstAppointmentStatus.Completed">{{'Job has completed successfully, Payment will be credited to your account once customer accepted.'| translate}} </p>
+                    <div ng-if=" appointment.service_id == ConstService.Interview && auth.id != appointment.provider_user.id && (appointment.appointment_status_id == ConstAppointmentStatus.Confirmed || appointment.appointment_status_id == ConstAppointmentStatus.Present || appointment.appointment_status_id == ConstAppointmentStatus.Completed || appointment.appointment_status_id == ConstAppointmentStatus.Closed)">
+                        <h4 class="text-b">{{'Interview Details' | translate}}</h4>
+                        <div class="row ver-space">
+                            <p class="col-sm-12">{{'You and service provider can finilaze the convenient place and time through our internal message.' |translate}}</p>
+                        </div>
+                        <dl class="dl-horizontal">
+                            <dt ng-if="appointment.provider_user.user_profile.is_available_via_skype_interview">{{'Service provider Skype ID' | translate }}</dt>
+                                <dd ng-if="appointment.provider_user.user_profile.is_available_via_skype_interview">
+                                    <a href="skype:{{appointment.provider_user.user_profile.im_skype}}?chat"><span ng-show="appointment.service_id == ConstService.Interview">{{appointment.provider_user.user_profile.im_skype}}</span></a>
+                                </dd>
+                            <dt ng-if="appointment.provider_user.user_profile.is_available_via_phone_interview">{{ 'Mobile' | translate}}</dt>
+                                <dd ng-if="appointment.provider_user.user_profile.is_available_via_phone_interview"> 
+                                    <span>{{appointment.user.mobile_code}} {{appointment.user.phone_number}} </span>
+                                </dd>
+                            <dt ng-if="appointment.provider_user.user_profile.is_available_via_phone_interview">{{ 'Secondary Mobile' | translate}}</dt>
+                                <dd ng-if="appointment.provider_user.user_profile.is_available_via_phone_interview"> 
+                                    <span>{{appointment.user.secondary_mobile_code}} {{appointment.user.secondary_phone_number}} </span>
+                                </dd>
+                             <dt ng-if="appointment.provider_user.user_profile.is_available_via_in_person_interview">{{ 'Available for in person interview' | translate}}</dt>
+                                <dd ng-if="appointment.provider_user.user_profile.is_available_via_in_person_interview"> 
+                                    <span>{{'Yes' | translate}} </span>
+                                </dd>
+                        </dl>
+                    </div>
+                    <ul class="list-inline" ng-if="auth.id == appointment.provider_user.id">
+                        <li ng-if="(appointment.appointment_status_id == ConstAppointmentStatus.Confirmed || appointment.appointment_status_id == ConstAppointmentStatus.Present || appointment.appointment_status_id == ConstAppointmentStatus.Completed || appointment.appointment_status_id == ConstAppointmentStatus.Closed) && appointment.service_id == ConstService.Interview">
+                            <h4 class="text-b">{{'Interview Details' | translate}}</h4>
+                            <div class="row ver-space">
+                                <p class="col-sm-12">{{'You and service provider can finilaze the convenient place and time through our internal message.' |translate}}</p>
+                            </div>
+                        </li>
+                        <li ng-if="appointment.appointment_status_id==ConstAppointmentStatus.PendingApproval || appointment.appointment_status_id==ConstAppointmentStatus.Enquiry">
+                            <button ng-click="acceptLoader = false;deleteLoader = true;changeappointstatus( ConstAppointmentStatus.Rejected, appointment.total_booking_amount) " class="btn btn-danger btn-animate " ng-disabled="loader"> {{'Decline' | translate }} <span ng-show="loader && deleteLoader"><i class="fa fa-spinner fa-pulse fa-lg"></i></span></button> 
+                        </li>
+                        <!--Direct Booking-->
+                        <li ng-if="appointment.appointment_status_id==ConstAppointmentStatus.PendingApproval"> 
+                            <button ng-click="deleteLoader = false;acceptLoader = true;changeappointstatus( ConstAppointmentStatus.Confirmed,appointment.total_booking_amount) " class="btn btn-green btn-animate" ng-disabled="loader"> {{'Accept' | translate }} <span ng-show="loader && acceptLoader"><i class="fa fa-spinner fa-pulse fa-lg"></i></span></button> 
+                        </li>
+                        <!--Enquiry-->
+                        <li ng-if="appointment.appointment_status_id==ConstAppointmentStatus.Enquiry"> 
+                            <button class="btn btn-green btn-animate" ng-click="preapprove()"> {{'Pre-approve' | translate }}</button>
+                        </li>
+                        <!--Approved-->
+                        <li ng-if="appointment.appointment_status_id==ConstAppointmentStatus.Confirmed && appointment.service_id != ConstService.Interview"> 
+                            <button ng-click="changeappointstatus( ConstAppointmentStatus.Present,appointment.total_booking_amount) " class="btn btn-info btn-animate "> {{'Log My Attendance' | translate }} </button> 
+                        </li>
+                        <!--Present-->
+                        <li ng-if="appointment.appointment_status_id==ConstAppointmentStatus.Present && appointment.service_id != ConstService.Interview">
+                             <button ng-click="changeappointstatus( ConstAppointmentStatus.Completed,appointment.total_booking_amount) " class="btn btn-info btn-animate "> {{'Work Completed' | translate }} </button> 
+                        </li>
+                        <!--Approved status with interview -->
+                        <li ng-if="appointment.service_id == ConstService.Interview && appointment.appointment_status_id==ConstAppointmentStatus.Confirmed">
+                             <button ng-click="changeappointstatus( ConstAppointmentStatus.Completed, appointment.total_booking_amount) " class="btn btn-info btn-animate "> {{'Interview Completed' | translate }} </button> 
+                        </li>
+                    </ul>
+                    <div ng-if="auth.id == appointment.user.id">
+                        <!--Pre Approve-->
+                        <span ng-if="appointment.appointment_status_id==ConstAppointmentStatus.PreApproved"> <button ng-click="gotoPayment(appointment.id, appointment.total_booking_amount)" class="btn btn-info mar-bot-20"> {{'Pay and Confirm' | translate }} </button> </span>
+                        <!--Interview & Confirmed status -->
+                        <span ng-if="appointment.appointment_status_id==ConstAppointmentStatus.Confirmed && appointment.service_id == ConstService.Interview"> <button ng-click="changeappointstatus( ConstAppointmentStatus.Closed,appointment.total_booking_amount) " class="btn btn-info interview-btn mar-bot-20"> {{'Mark as Interview Completed and Release Amount' | translate }}
+                        </button> </span>                         
+                        <!--Approved-->
+                        <span ng-if="appointment.appointment_status_id==ConstAppointmentStatus.Confirmed || appointment.appointment_status_id==ConstAppointmentStatus.PendingApproval || appointment.appointment_status_id==ConstAppointmentStatus.PreApproved">
+                            <temp ng-if="appointment.appointment_status_id==ConstAppointmentStatus.Confirmed"> 
+                                <button ng-click="changeappointstatus( ConstAppointmentStatus.Cancelled,appointment.total_booking_amount)" class="btn btn-info mar-bot-20" tabindex="-1" class="pointer" uib-popover="{{appointment.cancellation_policy.description|translate}}" popover-placement="bottom" popover-trigger="mouseenter"> {{'Cancel' | translate }} </button> 
+                            </temp>
+                            <temp ng-if="appointment.appointment_status_id!=ConstAppointmentStatus.Confirmed"> 
+                                <button ng-click="changeappointstatus( ConstAppointmentStatus.Cancelled,appointment.total_booking_amount)" class="btn btn-info mar-bot-20"> {{'Cancel' | translate }} </button> 
+                            </temp>
+                            <temp ng-if="appointment.appointment_status_id==ConstAppointmentStatus.Confirmed">     
+                                <i class="fa fa-info-circle mar-bot-20" tabindex="-1" class="pointer" uib-popover="{{appointment.cancellation_policy.description|translate}}" popover-placement="bottom" popover-trigger="mouseenter"></i> 
+                            </temp>
+                        </span>  
+                        <!--Completed-->
+                        <span ng-if="appointment.appointment_status_id==ConstAppointmentStatus.Completed"> <button ng-click="changeappointstatus( ConstAppointmentStatus.Closed,appointment.total_booking_amount) " class="btn btn-info btn-animate "> {{'Accept as Completed and Release Amount' | translate }}
+                        </button> </span>                   
+                        <!--Closed-->                         
+                    </div>
+                    <a ng-click="toggleBonusForm()" ng-if="auth.id == appointment.user.id && appointment.bonus_amount <= 0 && (appointment.appointment_status_id==ConstAppointmentStatus.Present || appointment.appointment_status_id==ConstAppointmentStatus.Closed || appointment.appointment_status_id==ConstAppointmentStatus.Completed)">{{"Click here to give additional amount"| translate}} </a> 
+                    <a ng-click="toggleBonusForm()" ng-if="auth.id == appointment.provider_user.id && appointment.bonus_amount <= 0 && (appointment.appointment_status_id==ConstAppointmentStatus.Present || appointment.appointment_status_id==ConstAppointmentStatus.Closed || appointment.appointment_status_id==ConstAppointmentStatus.Completed)">{{"Click here to ask additional amount"| translate}} </a> 
+                    <div id="bonus" ng-if="appointment.appointment_status_id==ConstAppointmentStatus.Present || appointment.appointment_status_id==ConstAppointmentStatus.Closed || appointment.appointment_status_id==ConstAppointmentStatus.Completed" ng-style="bonusDisplay">
+                        <form name="BonusForm" ng-submit="PayBonus(BonusForm.$valid)" novalidate>
+                            <div ng-if="(appointment.bonus_amount <= 0 && appointment.is_paid_bonus_amount != 1 && auth.id == appointment.user.id) || (appointment.bonus_amount <= 0 && appointment.is_paid_bonus_amount != 1 && auth.id == appointment.provider_user.id)">
+                                <h4 ng-if="auth.id == appointment.user.id"> {{'Give additional amount' | translate}}  </h4>
+                                <h4 ng-if="auth.id == appointment.provider_user.id"> {{'Ask additional amount' | translate}}  </h4>
+                                <dl class="dl-horizontal">
+                                  <dt> {{'Amount' | translate}} </dt>
+                                    <dd>
+                                        <ul class="list-unstyled list-inline">
+                                            <li><input type="number" name="amount" class="form-control" ng-model="bonus_appointment.bonus_amount" required></li>
+                                            <li>{{currency_type}}</li>
+                                        </ul>
+                                        <div class="error" ng-show="(BonusForm.$submitted || BonusForm.amount.$touched) && (BonusForm.amount.$pristine || BonusForm.amount.$invalid) && (BonusForm.amount.$error.required)">{{'Required'| translate }} </div>
+                                    </dd>
+                                    <dt> {{'Note' | translate}} </dt>
+                                    <dd><textarea class="form-control" name="note" ng-model="bonus_appointment.bonus_amount_note" required> </textarea></dd>
+                                    <div class="error" ng-show="(BonusForm.$submitted || BonusForm.note.$touched) && (BonusForm.note.$pristine || BonusForm.note.$invalid) && (BonusForm.note.$error.required)">{{'Required'| translate }} </div>
+                                <div ng-show="bonus_appointment.bonus_amount > 0 && auth.id == appointment.user.id && site_commision > 0">
+                                    <dt> {{'Commission' | translate}} </dt>
+                                    <dd>{{site_commision | currency:currency_type}}</dd>
+                                </div>
+                                <div ng-if="bonus_appointment.bonus_amount > 0 && auth.id == appointment.user.id">
+                                    <dt> {{'Total'| translate}} </dt>
+                                    <dd class="form-class"> {{bonus_appointment.bonus_amount + site_commision | currency : currency_type}} </dd>
+                                
+                                <dt></dt>
+                                <dd class="pad-top-20"><button class="btn btn-info" type="submit">
+                                    <span ng-if="auth.id == appointment.user.id">{{'Pay Now' | translate}}</span> 
+                                    <span ng-if="auth.id == appointment.provider_user.id">{{'Submit'| translate}}</span>
+                                </button></dd>
+                                
+                            </div>
+                                </dl>
+                            <div ng-if="appointment.bonus_amount > 0 || appointment.is_paid_bonus_amount != 1">
+                                <h4>{{'Additional amount' | translate}}</h4>
+                                <dl class="dl-horizontal"> 
+                                    <dt>{{'Amount'| translate}}</dt>
+                                    <dd>{{appointment.bonus_amount | currency: currency_type}} </dd>
+                                    <dt ng-if="auth.id == appointment.user.id && site_commision">{{'Site fee' | translate}}</dt>
+                                    <dd ng-if="auth.id == appointment.user.id && site_commision">{{site_commision | currency: currency_type}} </dd>
+                                    <dt ng-if="appointment.bonus_amount_note != null">{{'Note' | translate}}</dt>
+                                    <dd ng-if="appointment.bonus_amount_note != null">{{appointment.bonus_amount_note}}</dd>
+                                    <dt>{{'Payment status' | translate}}</dt>
+                                    <dd ng-if="appointment.is_paid_bonus_amount == 1">{{'Paid' | translate}}</dd>
+                                    <dd ng-if="appointment.is_paid_bonus_amount == 0">{{'Payment Pending' | translate}}</dd>
+                                </dl>
+                                <button ng-if="appointment.is_paid_bonus_amount == 0 && auth.id == appointment.user.id" class="btn btn-info" type="submit"  ng-if="auth.id == appointment.user.id">
+                                    {{'Pay Now' | translate}} 
+                               </button>
+                            </div>
+                                  
+                    </div>  
+                    </form>   
+                 </div>
+                 <review-post ng-if="$root.settings.SITE_ENABLED_PLUGINS.indexOf('Review/Review') > -1"> </review-post>           
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+
+   <script type="text/ng-template" id="preapprovemodal.html">
+        <div class="modal-header">
+            <h3 class="modal-title" id="modal-title">{{'Preapprove Booking'}}</h3>
+        </div>
+        <form name="PreapproveForm" ng-submit="changeappointstatus(ConstAppointmentStatus.PreApproved,preorderAmount)"  novalidate>
+            <div class="modal-body" id="modal-body">
+               <div class="form-group">
+                    <label class="form-class">{{'Enter Amount' | translate}}</label>
+                    <input type="number" class="form-control" name="amount" ng-model="preorderAmount" ng-min="1" ng-required="true" >
+                    <span class="error" ng-show="(PreapproveForm.$submitted || PreapproveForm.amount.$touched) && (PreapproveForm.amount.$pristine || PreapproveForm.amount.$invalid)">{{'Please prvoide valid amount'| translate }}</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                 <button type="submit" class="btn btn-green btn-animate" ng-disabled="PreapproveFrom.$invalid">{{'Submit' | translate}}</button>
+            </div>
+        </form>    
+    </script>

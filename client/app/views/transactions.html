@@ -1,0 +1,139 @@
+<section class="edit-profile">
+    <div class="container">
+        <div class="profile-content">
+            <!--<p class="no-mar">{{'Total Earned Amount:' | translate}}<span class="text-18 text-b">
+                                    <temp>{{user.user_profile.earned_amount_as_service_provider | currency : currency_type}}</temp>
+                                </p>
+                                <p class="no-mar">{{'Available Earned Amount:' | translate}}<span class="text-18 text-b">
+                                    <temp>{{user.available_wallet_amount | currency : currency_type}}</temp>
+                                </p>       -->
+            <h3 class="clearfix page-head">
+                <div class="pull-left"><a href="users/user_profile"><button class="btn btn-info btn-sm back-btn" title="back to profile" ng-click="goBack()"><span><i class="fa fa-chevron-left fa-fw" aria-hidden="true"></i></span></button></a></div>
+                <div class="pull-left text-center">{{'Transactions History'| translate}}</div>
+            </h3>          
+           <!--<div class="panel-heading sep-bot">
+            <h3 class="no-mar">{{'Transactions'|translate}}<span class="pull-right trans-amount line-height-28 text-16">{{'Total Wallet Amount'|translate}} : <span class="greenc" ng-if="!loader">€{{wallet_amount}}</span></span></h3>
+            </div>-->
+
+            </div>
+             <div class="add-wallet-table">
+                 <!--<ul class="list-inline top-mspace text-center project-lists text-center" ng-if="transactions.length && !loader">
+                    <li class="cursor" ng-click="getTransactions('all','','')" title="All" ng-class="{active:value == 'all'}"
+    data-class="value"> 
+                        <p class="no-mar">{{'All'| translate}}</p>          
+                    </li>
+                    <li class="cursor" ng-click="getTransactions('today','','')" title="Today" ng-class="{active:value == 'today'}"
+    data-class="value">
+                        <p class="no-mar">{{'Today' | translate}}</p> 
+                    </li>
+                    <li class="cursor" ng-click="getTransactions('this_week','','')" title="This Week"  ng-class="{active:value == 'this_week'}"
+    data-class="value"> 
+                        <p class="no-mar">{{'This Week'| translate}}</p>          
+                    </li>
+                    <li class="cursor" ng-click="getTransactions('this_month','','')" title="This Month" ng-class="{active:value == 'this_month'}"
+    data-class="value">
+                        <p class="no-mar">{{'This Month' | translate}}</p>
+                    </li>
+                    <li class="cursor" ng-click="customDateForm('custom')" title="Custom Date" ng-class="{active:custom_date == 'custom'}"
+    data-class="custom_date">
+                        <p class="no-mar">{{'Custom Date' | translate}}</p>
+                    </li>
+                </ul>-->
+
+                <!--<div class="hide js-date row" ng-if="transactions.length && !loader">
+                    <form class="proj-form" role="form" name="customFilter" ng-submit="filterDate(customFilter.$valid)" novalidate>
+                        <div class="form-group col-sm-5 col-xs-6"> 
+                            <label>{{'From Date'|translate}}</label> 
+                            <input type="text" name="from_date" class="form-control" uib-datepicker-popup="{{format}}" ng-model="from_date" is-open="popup1.opened" datepicker-options="dateOptions"
+                            close-text="Close" alt-input-formats="altInputFormats" ng-focus="open1()" ng-required="true"/> 
+                            <span class="error" ng-show="(customFilter.$submitted || customFilter.from_date.$touched) && (customFilter.from_date.$pristine || customFilter.from_date.$invalid) && (customFilter.from_date.$error.required)">{{'Required' | translate }}</span>
+                            <span class="error" ng-show="error_message">{{'To date should be greater than from date' | translate }}</span>
+
+                        </div>
+                        <div class="form-group col-sm-5 col-xs-6"> 
+                            <label>{{'To Date'|translate}}</label> 
+                            <input type="text" name="to_date" class="form-control" uib-datepicker-popup="{{format}}" ng-model="to_date" is-open="popup2.opened" datepicker-options="dateOptions"
+                            close-text="Close" alt-input-formats="altInputFormats" ng-focus="open2()" ng-required="true" /> 
+                            <span class="error" ng-show="(customFilter.$submitted || customFilter.to_date.$touched) && (customFilter.to_date.$pristine || customFilter.to_date.$invalid) && (customFilter.to_date.$error.required)">{{'Required' | translate }}</span>
+                        </div>
+                        <div class="form-group col-sm-2 col-xs-12 date-filter"> 
+                            <button title="Filter" type="submit" class="btn btn-primary">{{'Filter'|translate}}</button>
+                        </div>
+                    </form>
+                </div>-->
+
+                <div class="table-responsive pg-table">
+                    <table class="table table-striped table-bordered no-mar table-center">
+                        <thead ng-if="transactions.length">
+                            <tr>
+                                <th width="105">{{'Date' | translate}}</th>
+                                <th class="data-left">{{'Description'| translate}}</th>
+                                <th width="80">{{'Credit'| translate}}  
+                                    <span ng-if="$root.settings.CURRENCY_SYMBOL !== ''">({{settings.CURRENCY_SYMBOL}})</span>
+                                        <span ng-if="$root.settings.CURRENCY_SYMBOL === ''">({{settings.CURRENCY_CODE}})</span>
+                                </th>
+                                <th width="75">{{'Debit'| translate}}
+                                    <span ng-if="$root.settings.CURRENCY_SYMBOL !== ''">({{settings.CURRENCY_SYMBOL}})</span>
+                                    <span ng-if="$root.settings.CURRENCY_SYMBOL === ''">({{settings.CURRENCY_CODE}})</span>
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr ng-repeat="transaction in transactions" ng-if="transactions.length">
+                                <td>{{transaction.created_at | date : 'MMM dd, yyyy'}}</td>
+                                <td class="data-left" ng-if="transaction.transaction_type == ConstTransactionTypes.CompletedAndAmountMovedToWallet && auth.id == transaction.to_user_id">{{transaction.user.user_profile.first_name}} {{transaction.user.user_profile.last_name}} {{'booked you for'| translate}} {{transaction.foreign_transaction.appointment_from_date}} 
+                                    <span ng-if="transaction.foreign_transaction.activity.service.booking_option_id == 3">{{'to'| translate}} {{transaction.foreign_transaction.appointment_to_date}}</span><br>
+                                    <span ng-if="transaction.site_revenue_from_freelancer != 0">{{'Site fee'|| translate}}: <span ng-if="$root.settings.CURRENCY_SYMBOL !== ''">{{settings.CURRENCY_SYMBOL}}</span>
+                                    <span ng-if="$root.settings.CURRENCY_SYMBOL === ''">{{settings.CURRENCY_CODE}}</span>{{transaction.site_revenue_from_freelancer}}</span>
+                                </td>
+                                <td class="data-left" ng-if="transaction.transaction_type == ConstTransactionTypes.BookingAcceptedAndAmountMovedToEscrow && auth.id == transaction.user_id">{{'You booked'| translate}} {{transaction.other_user.user_profile.first_name}} 
+                                    {{transaction.other_user.user_profile.last_name}} {{'for'| translate}} {{transaction.foreign_transaction.appointment_from_date}} 
+                                    <span ng-if="transaction.foreign_transaction.activity.service.booking_option_id == 3">{{'to'| translate}} {{transaction.foreign_transaction.appointment_to_date}}</span>
+                                    <br>
+                                    <span ng-if="transaction.site_revenue_from_employer != 0">{{'Site fee'|| translate}}: <span ng-if="$root.settings.CURRENCY_SYMBOL !== ''">{{settings.CURRENCY_SYMBOL}}</span>
+                                    <span ng-if="$root.settings.CURRENCY_SYMBOL === ''">{{settings.CURRENCY_CODE}}</span>{{transaction.site_revenue_from_employer}}</span>
+                                </td>
+                                <td class="data-left" ng-if="transaction.transaction_type == ConstTransactionTypes.BonusAmount && auth.id == transaction.user_id">{{'You paid additional amount to'| translate}} {{transaction.other_user.user_profile.first_name}}
+                                    
+                                    {{transaction.other_user.user_profile.last_name}} {{'for'| translate}} {{transaction.foreign_transaction.appointment_from_date}} 
+                                    <div ng-if="transaction.site_revenue_from_employer != 0">{{'Site fee'|| translate}}: {{transaction.site_revenue_from_employer|currency :currency_type}}</div>
+                                    </td>
+                                <td class="data-left" ng-if="transaction.transaction_type == ConstTransactionTypes.BonusAmount && auth.id == transaction.to_user_id">
+                                     {{transaction.user.user_profile.first_name}} {{transaction.user.user_profile.last_name}} {{'paid additional amount for'| translate}} {{transaction.foreign_transaction.appointment_from_date}}
+                                <div ng-if="transaction.site_revenue_from_freelancer != 0">{{'Site fee'|| translate}}: {{transaction.site_revenue_from_freelancer|currency :currency_type}}</div>
+                                </td>
+                                <td class="data-left" ng-if="transaction.transaction_type == ConstTransactionTypes.BookingCanceledAndRefunded && auth.id == transaction.to_user_id">{{'Your Booking'| translate}} ({{'ID'| translate}}: {{transaction.foreign_transaction.id}}) {{'canceled and refunded amount to your account'| translate}}.    
+                                </td>
+                                <td class="data-left" ng-if="transaction.transaction_type == ConstTransactionTypes.BookingCanceledAndCreditedCancellationAmount && auth.id == transaction.to_user_id">{{transaction.other_user.user.first_name}} {{transaction.user.user_profile.last_name}} {{'booked you and canceled the booking'| translate}}. ({{'ID'| translate}}: {{transaction.foreign_transaction.id}})    
+                                </td>
+                                <td class="data-left" ng-if="transaction.transaction_type == ConstTransactionTypes.PROPayment">{{'You have subscribed for PRO user'|translate}}</td>
+                                <td class="data-left" ng-if="transaction.transaction_type == ConstTransactionTypes.TopListed">{{'You have subscribed for top listed user'|translate}}</td>
+                                <td ng-if="auth.id == transaction.to_user_id && transaction.transaction_type != ConstTransactionTypes.BonusAmount ">{{transaction.amount}}</td>
+                                <td ng-if="auth.id == transaction.to_user_id && transaction.transaction_type == ConstTransactionTypes.BonusAmount ">{{transaction.amount - transaction.site_revenue_from_freelancer}}</td>
+                                <td ng-if="auth.id != transaction.to_user_id"> - </td>
+                                <td ng-if="auth.id == transaction.user_id">{{transaction.amount}}</td>
+                                <td ng-if="auth.id != transaction.user_id"> - </td>
+                            </tr>
+                            <div class="form-content top-mspace" ng-if="!transactions.length">
+                                <p> {{'You have no bookings due to be paid yet. Records update periodically. Please check back after work is completed'| translate}}. </p>
+                            </div>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="binding-pagination" ng-show="transactions.length >= itemsPerPage">
+                    <div class="pagnation-content">
+                        <div class="clearfix pagnation-inner">
+                            <div class="col-md-12 text-center">
+                                <uib-pagination previous-text="Prev" next-text="Next" total-items="totalRecords" num-pages="lastPage" ng-model="currentPage"
+                                    max-size="maxSize" class="pagination-sm" boundary-link-numbers="true" rotate="false" items-per-page="itemsPerPage"
+                                    ng-change="paginate_transaction(currentPage)"></uib-pagination>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+</section>
+

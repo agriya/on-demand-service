@@ -1,0 +1,74 @@
+<!--footer section start-->
+<footer id="js-footer-hide-section" ng-class="{'users-footer':is_service_class == true}">
+    <div class="footer">
+        <div class="container">
+       		<!-- bottom Banner start-->
+            <div banner position="bottomBanner"></div>
+            <!-- bottom Banner end-->
+            <div class="row">
+                <div class="col-sm-3">                   
+                    <div class="footer-menu">
+                        <ul class="list-unstyled">
+                            <li><a href="pages/5/how-it-works">{{'How it Works' | translate}}</a></li>
+                            <li ng-if="settings.IS_ENABLED_SWITCH_ACCOUNT_TYPE == 1 && (!isAuth || ($root.isAuth && ($root.auth.role_id == 3 && $root.auth.user_profile.services_user_count == 0) || ($root.auth.role_id == 2)))"><a href="become-a-service-provider">{{'Become a Service Provider' | translate}}</a></li>
+                            <li><a href="pages/4/press">{{'Press' | translate}}</a></li>
+                            <li><a href="contactus" class="whitec">{{'Contact Us' | translate}}</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="footer-menu">
+                        <ul class="list-unstyled">
+                            <li><a href="pages/2/about-us">{{'About Us' | translate}}</a></li>
+                            <li><a href="pages/3/privacy-policy">{{'Privacy & Policy' | translate}}</a></li>    
+                            <li><a target="_blank" href="pages/10/term-and-conditions">{{'Terms and Conditions' | translate}}</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-sm-3 footer-menu">
+                    <p class="no-mar">{{'We accept:' | translate }}</p>
+                    <img src="images/card_icon.png" alt="[Image: Card_icon]" class="ver-space">
+                    <ul class="list-unstyled row footer-menu hor-space-10">
+                        <li class="faq">
+                            <ul class="list-unstyled">
+                                <li><a href="{{settings.SITE_HELP_LINK}}">{{'Help & FAQs' | translate}}</a></li>                              
+                                <li>{{'Call us on: 0333 344 1993' | translate}}</li>
+                                <li>{{'Week days: 8am - 5:30pm' | translate}}</li>
+                                <li>{{'Week days: 9am - 6pm' | translate}}</li>                               
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-sm-3" ng-if="$root.settings.SITE_ENABLED_PLUGINS.indexOf('Translations/Translations') > -1 && $root.settings.USER_IS_ALLOW_USER_TO_SWITCH_LANGUAGE == 1"> 
+                    <ul class="clearfix insurance list-unstyled no-mar">
+                        <li ng-translate-language-select></li>
+                    </ul>
+                </div>            
+         	</div>
+        </div>
+    </div>
+    <div class="footer-below">     
+        <div class="container"> 
+            <div class="row">
+                <div class="col-sm-12">
+                    <p>{{'Copyright &copy; 2017 @ ' | translate}}{{$root.settings.SITE_NAME}} {{'- All Rights Reserved' | translate}}</p>
+                    <ul class="list-inline social-link pull-right">
+                        <li class="facebook">
+                            <a href="{{settings['FOLLOW_FACEBOOK_URL']}}" target="_blank" title="{{'Follow me on facebook'| translate}}" class="btn-social btn-fb"><i class="fa fa-fw fa-facebook"></i></a>
+                        </li>
+                        <li class="twitter">
+                            <a href="{{$root.settings['FOLLOW_TWITTER_URL']}}" target="_blank" title="{{'Follow me on twitter'| translate}}" class="btn-social btn-twitter"><i class="fa fa-fw fa-twitter"></i></a>
+                        </li>
+                        <li class="google-plus">
+                            <a href="{{$root.settings['FOLLOW_GOOGLE_PLUS_URL']}}" target="_blank" title="{{'Follow me on google plus'| translate}}" class="btn-social btn-gp"><i class="fa fa-fw fa-google-plus"></i></a>
+                        </li>
+                        <li class="linkedin">
+                            <a href="{{$root.settings['FOLLOW_LINKEDIN_URL']}}" target="_blank" title="{{'Follow me on linkedin'| translate}}" class="btn-social btn-linkedin"><i class="fa fa-fw fa-linkedin"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!--footer section end-->

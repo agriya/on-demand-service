@@ -1,0 +1,26 @@
+<section class="edit-profile upload-photo"> 
+    <div class="container"> 
+    	<div class="profile-content">	
+            <h3 class="text-center page-head">{{'Upload on file select' | translate }}</h3>
+            <div class="form-content">
+                <div class="form-body">
+                    <div class="form-group">
+                        <!--<button class="btn btn-info btn-animate btn-block" ngf-select="uploadFiles($files)" multiple   ngf-pattern="'.jpg,.png,.gif,.jpeg'">Select Files</button>-->
+                        <multi-image-upload form-name='CompanyEditTradeShowForm' type='Upload' data-method="Company_trade_show" max-size="5" required="true" object-name="attachment"> </multi-image-upload>
+                        <span class="help-block">{{'Allowed extensions: jpg, jpeg, gif, png'|translate}}</span>
+                    </div>
+                    <!--<ul class="list-inline">
+                        <li ng-show="files">Files:</li>
+                        <li ng-repeat="f in files" style="font:smaller">
+                            {{f.name}}
+                        </li>
+                    </ul>
+                    <div class="progress" ng-show="progress >= 0">
+                        <div class="progress-bar progress-bar-info" role="progressbar" style="width:{{progress}}%" ng-bind="progress + '%'"></div>
+                    </div>-->
+                    <button class="btn btn-info btn-animate btn-block" ng-click="UploadPhotos()">{{'Upload Files' | translate }}</button>
+                </div>
+            </div>
+      	</div>
+    </div>
+</section>

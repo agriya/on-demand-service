@@ -1,0 +1,41 @@
+<section class="clearfix appmt-form">
+    <div class="container">
+        <div> 
+            <a href="appointments/modifications" class="btn btn-link"> <span><i class="fa fa-angle-double-left"></i> {{'Back to Manage Unavailable Time' | translate}}</span></a>
+        </div>
+        <div class="col-md-5 col-md-offset-3 border">
+            <div class="page-head">
+                <h2>{{'Add Unavailable Time'| translate}}</h2>
+            </div>
+            <div class="form-content">
+                <form name="settingValue" method="post" ng-submit="appointmentModificationAdd(settingValue)" novalidate>
+                    <div class="form-body">
+                        <div class="form-group has-feedback">
+                            <!--<input class="form-control" ng-model="settingValue.unavailable_date" data-date-format="yyyy-MM-dd" data-start-date="{{date|date:'yyyy-MM-dd'}}"
+                                data-min-date="{{dateBlockeBefore}}" data-autoclose="1" name="date2" bs-datepicker type="unavailable_date"
+                                required="required" placeholder="{{'Date' | translate}}">-->
+                                <input class="form-control" date-range-picker class="form-control date-picker" type="text" ng-model="settingValue.datePicker" placeholder="{{placeHolder}}" options="options" name="daterange" ng-required="true" />
+                                    <span class="form-control-feedback"><i class="fa fa-calendar"></i></span>
+                        </div>
+                        <div class="form-group row" ng-hide="settingValue.type">
+                            <div class="col-md-6">
+                                <input type="text" class="form-control " size="8" ng-model="settingValue.unavailable_from_time" name="time" placeholder="{{'Start time'| translate}}"
+                                    bs-timepicker data-time-format="HH:mm" data-length="1" data-minute-step="{{calendar_slot}}" ng-if="loaded"
+                                    data-arrow-behavior="picker" ng-focus="showTimeError = false;getStartTime()" >
+                            </div>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control " size="8" ng-model="settingValue.unavailable_to_time" name="time" placeholder="{{'End time'| translate}}"
+                                    bs-timepicker data-time-format="HH:mm" data-length="1" data-minute-step="{{calendar_slot}}"
+                                    data-arrow-behavior="picker" ng-focus="showTimeError = false;getEndTime()" ng-if="loaded">
+                            </div>
+                          </div>
+                        <!-- Common Setting Completed Here -->
+                    </div>
+                    <div class="form-footer text-center">
+                        <button class="btn btn-info btn-lg" type="submit">{{'Add'| translate }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

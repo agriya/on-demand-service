@@ -1,0 +1,24 @@
+<div class="booking-view edit-profile page-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-8">    
+                <h2 class="no-mar mar-bot-20">{{'Become a Service Provider' | translate}}</h2>                                   
+                <p>{{'This on-demand service booking system enables the service provider and the host to get connected and mutually resolve their goals at ease. We can define the service provider lifecylce in three simple steps.' | translate}}</p>
+                <h4>{{'Register for free' | translate}}</h4>
+                <p>{{'Service provider can register themselves with the platform and define their skillsets and the charges they levy for the same.' | translate}}</p>
+                <h4>{{'Hire from host' | translate}}</h4>
+                <p>{{'As soon as the service provider caught to the host\'s visibility, service provider can get engaged to process the request.' | translate}}</p>
+                <h4>{{'Get paid' | translate}}</h4>
+                <p>{{'Once the job done, service provider get credited the amount.' | translate}}</p>
+            </div>
+            <div class="col-sm-4 text-center">
+                <div class="thumbnail">
+                    <h4>{{'Become a Service Provider Now' | translate}}</h4>
+                    <a href="users/register/serviceprovider" ng-if="!isAuth" class="btn btn-info">{{'Become a Service Provider Today' | translate }}</a>
+                    <a href="user/services" ng-if="$root.isAuth && ($root.auth.role_id == ConstUserType.ServiceProvider || $root.auth.role_id == ConstUserType.User) && $root.auth.user_profile.services_user_count == 0" class="btn btn-info">{{'Become a Service Provider Today' | translate }}</a>
+                    <button ng-if="$root.isAuth && $root.auth.role_id == ConstUserType.Customer" ng-click="changeStatus()" class="btn btn-info">{{'Become a Service Provider Today' | translate }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

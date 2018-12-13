@@ -1,0 +1,83 @@
+<div class="edit-profile container account-payout" ng-class="{'before-login':isAuth == false}">
+    <div class="job-board">
+        <div class="col-md-8 col-sm-12 col-xs-12 mar-bot-20">
+            <div class="job-list space">
+                <div class="media">
+                    <a class="pull-left show" href="users/{{job.user.id}}/{{job.user.user_profile.first_name + job.user.user_profile.last_name | slugify}}">
+                        <img ng-src="{{job.requestor_image}}" alt="[Images: {{job.user_profile.listing_title}}]" class="media-object img-responsive center-block" width="120px">
+                    </a>
+                    <div class="media-body bot-space-10">
+                        <h6 class="media-heading text-n text-18" ng-show="job.job_type_id == JobTypeId.OneTimeJob">{{job.service.name | translate}} {{'for' | translate}} {{job.appointment_from_date | date: 'EEEE, MMM dd'}} <span ng-show="job.appointment_from_date != job.appointment_to_date"> - {{job.appointment_to_date | date: 'EEEE, MMM dd'}}</span> <span ng-show="job.appointment_from_time != null && job.appointment_from_time != undefined">({{job.appointment_from_time}} <span ng-show="job.appointment_to_time != null && job.appointment_to_time != undefined && job.appointment_from_time != job.appointment_to_time">- {{job.appointment_to_time}}</span>) </span> </h6>      
+                        <h6 class="media-heading text-n text-18" ng-show="job.job_type_id == JobTypeId.PartTime">{{"Part Time, starting"| translate}} {{job.appointment_from_date | date: 'EEEE, MMM dd'}} <span ng-show="job.appointment_from_date != job.appointment_to_date"> - {{job.appointment_to_date | date: 'EEEE, MMM dd'}}</span> </h6>
+                        <h6 class="media-heading text-n text-18"p ng-show="job.job_type_id == JobTypeId.FullTime">{{"Full Time, starting"| translate}} {{job.appointment_from_date | date: 'EEEE, MMM dd'}} <span ng-show="job.appointment_from_date != job.appointment_to_date"> - {{job.appointment_to_date | date: 'EEEE, MMM dd'}}</span></h6>
+                        <p class="no-mar text-13"> {{job.work_location_address}} </p>
+                        <span ng-repeat="data in job.form_field_submission">
+                            <dl class="dl-horizontal no-mar">
+                                <dt>{{data.form_field.label | translate}}</dt> <dd>{{data.response}}</dd>
+                            </dl>
+                        </span>
+                        <ul class="mar-bot-20 no-pad list-inline sub-list hidden-xs" ng-if="job.appointment_timing_type_id == AppointmentTimingType.SpecifyTimes">
+                            <li class="checkbox-field right-space-10"  ng-repeat="day in job.list_of_days">
+                                <label for="{{day.id}}">
+                                    <span class="text-13"> {{day.text| translate}} </span>
+                                    <input type="checkbox" class="hide" id="{{day.id}}" ng-model="day.checked">
+                                    <span class="custom-check"></span>
+                                </label>
+                            </li>
+                        </ul>                   
+                    </div>
+                </div>
+                <ul class="mar-bot-20 no-pad list-inline sub-list visible-xs" ng-if="job.appointment_timing_type_id == AppointmentTimingType.SpecifyTimes">
+                    <li class="checkbox-field right-space-10"  ng-repeat="day in job.list_of_days">
+                        <label for="{{day.id}}">
+                            <span class="text-13"> {{day.text | translate}} </span>
+                            <input type="checkbox" class="hide" id="{{day.id}}" ng-model="day.checked">
+                            <span class="custom-check"></span>
+                        </label>
+                    </li>
+                </ul> 
+                <p ng-show="job.appointment_timing_type_id == AppointmentTimingType.SpecifyTimes"> {{'various times'| translate}} </p>
+                <p ng-show="job.appointment_timing_type_id == AppointmentTimingType.DuringDay"> {{'during the day'| translate}} </p>
+                <p ng-show="job.appointment_timing_type_id == AppointmentTimingType.DuringNight"> {{'evening or night-time'| translate}} </p>
+                <span ng-repeat="day in job.list_of_days" ng-show="job.appointment_timing_type_id == AppointmentTimingType.SpecifyTimes">
+                    <p ng-if="day.checked">{{day.text}} : {{day.start}} - {{day.end}}</p>
+                </span>                
+                <p class="text-b text-15"> {{'posted' | translate}} {{job.created_at | timeago}} {{'by'|translate}} <a href="users/{{job.user.id}}/{{job.user.user_profile.first_name+job.user.user_profile.last_name | slugify}}">{{job.user.user_profile.first_name}} {{job.user.user_profile.last_name}}</a></p>
+                <p class="text-b">{{'Member since:' | translate}} {{job.user.created_at | date: 'MMM, yyyy'}}
+                <p class="text-13"> {{job.description}}</p>      
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-12 col-xs-12 text-center sub-list">
+            <div class="thumbnail space bor-rad-0">
+                <h5 class="text-b text-20 top-space">{{job.price_per_hour | currency : currency_type}} / {{'hour' | translate}}</h5>
+                <div ng-if="job.user.id == auth.id && RequestStatusId.Open == job.request_status_id" class="job-board row">
+                    <div class="col-sm-6 col-xs-12">
+                        <button class="btn btn-link btn-block bor-rad-0" ng-click="editJob()"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> {{'Edit job'| translate}}</button>
+                    </div>
+                    <div class="col-sm-6 col-xs-12">
+                        <button class="btn btn-link btn-block bor-rad-0" ng-click="closeJob(job.id)"><i class="fa fa-eye-slash" aria-hidden="true"></i> {{'Close job'| translate}}</button>
+                    </div>
+                </div>    
+               <div ng-if="!isAuth" class="top-space">           
+                    <p class="top-space"><button class="btn btn-info btn-block bor-rad-0"><a href="users/login" style="color:white">{{'Express Interest' | translate}}</a></button></p>
+                </div>  
+                <div ng-if="isAuth && auth.id != job.user.id && !job.current_user_interest" class="top-space">           
+                    <p ng-click="ExpressInterest(job.id)" class="top-space"><button class="btn btn-info btn-block bor-rad-0"><span >{{'Express Interest' | translate}}</span></button></p>
+                </div>
+                <div ng-if="isAuth && auth.id != job.user.id && job.current_user_interest != (null || undefined)" class="top-space" ng-mouseenter="ChangeButtonText('Enter')" ng-mouseleave="ChangeButtonText('Leave')">          
+                    <p class="top-space" ng-click="RemoveInterest(job.current_user_interest.id)"><button class="btn btn-info btn-block bor-rad-0"><span>{{ buttonText | translate}}</span></button></p>
+                </div>
+                <div ng-if="auth.id == job.user.id" class="row">
+                    <h5 class="text-16 no-mar pad-top-20"> {{'Interested service providers' | translate}} ({{job.requests_user_count}})</h5>
+                    <ul class="text-center list-inline no-mar">{{}}
+                        <li ng-repeat="interested_user in job.requests_users | limitTo :6">
+                            <temp ng-if = "interested_user.id != 0">    
+                                <a href="users/{{interested_user.user.id}}/{{interested_user.user.user_profile.first_name+interested_user.user.user_profile.last_name}}?request_id={{job.id}}&service_id={{job.service_id}}"><img src="{{interested_user.interestor_image}}" class="center-block img-responsive" style="width:100%;height:100%" />
+                            </temp>    
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div> 
+    </div> 
+</div>

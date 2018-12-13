@@ -1,0 +1,71 @@
+<section class="edit-profile">
+    <div class="container">
+        <div class="clearfix">
+            <div class="form-content">
+<form enctype="multipart/form-data" name="AdditionalInfo" ng-submit="submit_form_data(AdditionalInfo)" novalidate>
+                    <div class="form-body">
+                        <div class="listing-details">
+                            <h3 class="text-center">{{' Additional Information' | translate}} {{'for' | translate}} {{user.user_profile.first_name}} {{user.user_profile.last_name}}</h3>              
+                            <div class="text-center">
+                                <a href="users/{{user.id}}/{{user.user_profile.first_name + user.user_profile.last_name}}" title="{{user.user_profile.first_name}} {{user.user_profile.last_name}}">
+                                    <img src="{{user.userimage}}" class="img-circle img-responsive img-thumbnail" width="100px" height="100px">
+                                </a>
+                                <h4 class="text-22">{{'Booked for' | translate}} {{servicename}}</h4>
+                                <p class="text-muted text-13">{{diffDays + 1}} <temp ng-if="(diffDays+1) > 1">days</temp> <temp ng-if="(diffDays+1) < 2">day</temp> </p>
+                                <p class="text-muted text-13">{{from_date}}
+                                    <temp ng-if="from_date != to_date"> to {{to_date}}</temp>
+                                    <temp ng-if="booking == ConstBookingType.MultiHours" >({{from_time}}-{{to_time}})</temp>
+                                    <temp ng-if="booking == ConstBookingType.TimeSlot">({{from_time}})</temp>
+                                </p>
+                                <p class="text-15" ng-show="type != 'enquiry'">{{'Total booking amount :' | translate}} <span class="text-b text-18"> {{ amount| currency : currency_type}}</span></p> 
+                            </div>
+                            <div class="location-info enquiry-info" ng-if="need_location">
+                                <div class="form-group" ng-class="{ 'has-error' : (AdditionalInfo.$submitted || AdditionalInfo.additional_address.$touched) && (AdditionalInfo.additional_address.$pristine || AdditionalInfo.additional_address.$invalid) && (AdditionalInfo.additional_address.$error.required)}">
+                                    <h4>{{'Location Info' | translate}}</h4>
+                                    <input type="text" g-places-autocomplete  options="options" name="additional_address" ng-required="true" ng-model="userInfo.address" autocomplete="off" class="form-control" id="inputLocation" ng-change="addresslocationChanged()" placeholder="{{'Search for an address'| translate}}" ng-required="true" ng-focus="makePlaceTrue()">
+                                    <span class="error" ng-show="IsplaceChange == true && ((AdditionalInfo.$submitted || AdditionalInfo.additional_address.$touched) && (AdditionalInfo.additional_address.$pristine || AdditionalInfo.additional_address.$invalid) && (AdditionalInfo.additional_address.$error.required))"> {{'Enter Address' | translate }} </span>
+                                    <div ng-show="allowedplace" class="error">{{'Enter Allowed Locations' | translate}}</div>
+                                    <div ng-show="no_address_available" class="error">{{'Please choose address from autocomplete.' | translate}}</div>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="address1" placeholder="{{'Street address, P.O. box, building/appartment name, floor, area, etc.'| translate}}" name="address1" ng-model="userInfo.address1">
+                                </div>
+                                <div class="form-group" ng-class="{ 'has-error' : (AdditionalInfo.$submitted || AdditionalInfo.additional_city.$touched) && (AdditionalInfo.additional_city.$pristine || AdditionalInfo.additional_city.$invalid) && (AdditionalInfo.additional_city.$error.required)}">
+                                    <input type="text" autocomplete="off" class="form-control" id="additional_city" placeholder="{{'City' | translate}}" name="additional_city" ng-required="true" ng-model="userInfo.city.name">
+                                    <span class="error" ng-show="(AdditionalInfo.$submitted || AdditionalInfo.additional_city.$touched) && (AdditionalInfo.additional_city.$pristine || AdditionalInfo.additional_city.$invalid) && (AdditionalInfo.additional_city.$error.required)">{{'Choose City' | translate }} </span>
+                                </div>
+                                <div class="form-group" ng-class="{ 'has-error' : (AdditionalInfo.$submitted || AdditionalInfo.additional_state.$touched) && (AdditionalInfo.additional_state.$pristine || AdditionalInfo.additional_state.$invalid) && (AdditionalInfo.additional_state.$error.required)}">
+                                    <input type="text" class="form-control" name="additional_state" id="additional_state" ng-model="userInfo.state.name" placeholder="{{'State' | translate}}" ng-required="true">
+                                    <span class="error" ng-show="(AdditionalInfo.$submitted || AdditionalInfo.additional_state.$touched) && (AdditionalInfo.additional_state.$pristine || AdditionalInfo.additional_state.$invalid) && (AdditionalInfo.additional_state.$error.required)">{{'Enter State' | translate }} </span>
+                                </div>
+                                <div class="form-group" ng-class="{ 'has-error' : (AdditionalInfo.$submitted || AdditionalInfo.additional_country.$touched) && (AdditionalInfo.additional_country.$pristine || AdditionalInfo.additional_country.$invalid) && (AdditionalInfo.additional_country.$error.required)}">
+                                    <select class="form-control" style="width:100%" name="additional_country" ng-model="selectedAddtionalCountry" ng-options="country.iso2 as country.name for country in countries" ng-selected="selectedAdditionalCountry == country.iso2" placeholder="{{'Country' | translate}}" ng-required="true" ></select>
+                                    <span class="error" ng-show="(AdditionalInfo.$submitted || AdditionalInfo.additional_country.$touched) && (AdditionalInfo.additional_country.$pristine || AdditionalInfo.additional_country.$invalid) && (AdditionalInfo.additional_country.$error.required)">{{'Enter Country'| translate }} </span>
+                                </div>
+                                <div class="form-group" ng-class="{ 'has-error' : (AdditionalInfo.$submitted || AdditionalInfo.postal_code.$touched) && (AdditionalInfo.postal_code.$pristine || AdditionalInfo.postal_code.$invalid) && (AdditionalInfo.postal_code.$error.required)}">
+                                    <input type="text" class="form-control" name="postal_code" id="postal_code" ng-model="userInfo.postal_code" placeholder="{{'Postal Code'| translate}}" ng-required="true" />
+                                    <span class="error" ng-show="(AdditionalInfo.$submitted || AdditionalInfo.postal_code.$touched) && (AdditionalInfo.postal_code.$pristine || AdditionalInfo.postal_code.$invalid) && (AdditionalInfo.postal_code.$error.required)">{{'Enter Postal Code' | translate }} </span>
+                                </div>
+                            </div>
+                            <div ng-repeat="data in form_data" class="location-info enquiry-info" >
+                                <h4> {{data.name| translate}}</h4>
+                                <div class="clearfix" ng-repeat="form_field_submissions in form_fields_all">
+                                    <div ng-if="data.name == form_field_submissions.title" name="form_field{{$index}}" ng-model="userInfo.submission[$index]" fb-form="{{'default-'+($index+1)}}" fb-default="defaultValue"></div>
+                                </div>
+                            </div> 
+                            <div class="location-info enquiry-info" ng-show="type == 'enquiry'">
+                                <div class="form-group">
+                                    <label class="text-18">{{'Your Message' | translate}}</label>
+                                    <textarea class="form-control" ng-model="userInfo.enquiry_message"></textarea>
+                                </div>
+                            </div>   
+                            <div class="text-center space">
+                                <button class="btn btn-info btn-animate" type="submit">{{'Book' | translate }}</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

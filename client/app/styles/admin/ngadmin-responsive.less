@@ -1,0 +1,180 @@
+/**
+*    CSS for @Bookmydoc
+*
+* @author		ganesh_119at09 (Sridharan Team)
+* @copyright 	Copyright (c) 2012 {@link http://www.agriya.com Agriya Infoway}
+* @license 		http://www.agriya.com Agriya Infoway Licence
+* @version 		SVN: $Id: custom.less ganesh_119at09 $
+* @since 		2013-10-09
+*/
+
+@media screen and (min-width:1200px) and (max-width:1343px) {
+	.ng-admin-entity-sms_templates table {
+		tbody tr {
+			width:440px;
+		}
+	}
+}
+
+@media screen and (max-width:1199px) {
+	ma-datagrid {
+		width:100%;
+		float:left;
+		overflow-x:auto;
+		overflow-y:hidden;
+		border-bottom:@border;
+		padding-bottom:@padding + 5px;
+	}
+	
+	.table {
+		max-width:1095px;
+		width:1095px;
+	}
+	
+	.ng-admin-entity-appointment_statuses {
+		.table {
+			max-widtrh:none;
+			width:auto;
+			text-align:center;
+		}
+	}
+}
+
+@media screen and (min-width:992px) and (max-width:1199px) {
+	.ng-admin-entity-sms_templates {
+		table {
+			width:auto;
+			tbody {
+				tr {
+					width:338px;
+					min-height:368px;
+				}
+			}
+		}
+	}
+	.list-view.ng-admin-entity-setting_categories table {
+		width:auto;
+		tbody tr {
+			width:46%;
+			min-height:202px;
+			margin:(@margin - 3px);
+		}
+	}
+	.ng-admin-entity-subscriptions table {
+		width:auto;
+		tbody tr {
+			width:45%;
+		}
+	}
+}
+
+@media screen and (max-width:991px) {
+	.ng-admin-entity-sms_templates {
+		ma-datagrid {
+			overflow:visible;
+		}
+		table {
+			width:auto;
+			tbody {
+				tr {
+					width:100%;
+					display:block;
+					padding:@padding - 15px;
+					margin:(@margin - 8px) (@margin - 15px);
+				}
+			}
+		}
+	}
+	.list-view.ng-admin-entity-setting_categories table, .ng-admin-entity-subscriptions table {
+		width:auto;
+		tbody tr {
+			width:100%;
+			margin:(@margin - 3px) (@margin - 15px);
+		}
+	}
+}
+
+@media screen and (max-width:767px) {
+	.navbar {
+		.navbar-toggle {
+			border:0;
+			margin-top:@margin;
+			margin-right:@margin - 15px;
+			&:hover, &:focus, &:active {
+				background:none;
+			}
+			.icon-bar {
+				background-color:@white;
+			}
+		}
+		.sidebar {
+			margin-top:@margin - 15px;
+			border-bottom:1px solid #d3d3d3;
+			border-right:1px solid #d3d3d3;
+			&:before {
+				display:none;
+			}
+			.navbar-collapse {
+				padding:@padding - 15px;
+				overflow:visible;
+				ul ul {
+					top:45px;
+					left:0;
+					z-index:9;
+				}
+			}
+		}
+		z-index:99999;
+		min-height:0;
+		.navbar-brand {
+			img {
+				margin-top:@margin - 15px;
+			}
+		}
+	}
+	#page-wrapper {
+		padding:(@padding - 15px) (@padding);
+		margin:(@margin - 15px);
+	}
+	
+	.dashboard_summary {
+		.dashboard_grid {
+			.list-group {
+				.list-group-item {
+					width:100%;
+					margin:(@margin - 15px) (@margin - 15px) (@margin);
+				}
+			}
+		}
+	}
+	
+	.admin-content {
+		#edit-view, #create-view {
+			form {
+				.control-label {
+					width:100%;
+					& + div {
+						width:100%;
+					}
+				}
+				ma-submit-button {
+					margin-left:@margin - 15px;
+				}
+			}
+		}
+		#create-view {
+			padding:(@padding - 15px) (@padding);
+			form {
+				& > .row {
+					margin:@margin - 15px;
+				}
+				.form-group {
+					margin:(@margin - 15px) (@margin - 15px) (@margin);
+				}
+				.btn-primary {
+					margin-left:@margin - 15px;
+				}
+			}
+		}
+	}
+}

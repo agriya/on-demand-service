@@ -1,0 +1,73 @@
+<div class="edit-profile settings-page">
+    <div class="container">                
+        <div class="trnsfr-accont" ng-show="!loader">
+            <div class="profile-content">
+                <div class="panel clearfix">
+                    <div class="panel-heading">
+                        <h3 class="clearfix page-head">
+                            <div class="pull-left"><a href="users/user_profile"><button class="btn btn-info btn-sm back-btn" title="back to profile" ng-click="goBack()"><span><i class="fa fa-chevron-left fa-fw" aria-hidden="true"></i></span></button></a></div>
+                            <div class="pull-left text-center">{{'Money Transfer Account'| translate}}</div>
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <form role="form" class="form-horizontal" name="MoneyTransferAccAdd" ng-submit="MoneyTransferAccSubmit(MoneyTransferAccAdd.$valid)" novalidate>
+                            <div class="form-group">
+                                <div class="col-sm-4"> <label class="control-label pro-font-semi-bold text-16" for="account">{{'Account Details' | translate}}</label> </div>
+                                <div class="col-sm-8"> 
+                                    <textarea cols="5" rows="5" class="form-control" name="account" id="account" placeholder="{{'Account Details' | translate}}" ng-model='account' ng-required="true"></textarea> <span class="error" ng-show="(MoneyTransferAccAdd.$submitted || MoneyTransferAccAdd.account.$touched) && (MoneyTransferAccAdd.account.$pristine || MoneyTransferAccAdd.account.$invalid) && (MoneyTransferAccAdd.account.$error.required)">{{'Enter Account Details' | translate}}</span>
+                                    <div class="text-muted text-12">
+                                        <p class="navbar-btn">{{'e.g., Bank: HDFC, Account No: XXXXXX, IFSC Code: XXXXX' | translate }}</p>
+                                        <p>{{'(or)' | translate}}</span></p>
+                                        <p>{{'PayPal Account: example@domain.com' | translate}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-4 col-sm-8"> 
+                                    <button ng-disabled="money_transfer_submit" type="submit" class="btn btn-info">{{'Submit' | translate}}</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+                
+            <div class="user-accoumt-blk">
+                <div class="primary-account">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>{{'Account' |translate}}</th>
+                                    <th class="text-center">{{'Action' |translate}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="moneyTransferAccList in moneyTransferAccLists">
+                                    <td>{{moneyTransferAccList.account}}</td>
+                                    <td class="text-center"><a class="usr-account-delete text-danger" title="{{'Delete' | translate}}" ng-click='MoneyTransferAccDelete(moneyTransferAccList.id)'><i class="fa fa-trash-o cur"></i></a></td>
+                                </tr>
+                                <tr ng-if="!moneyTransferAccLists.length && !loader" class="text-center">
+                                    <td colspan="8" class="text-danger"> {{'No records available' |translate}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p ng-show="_metadata.total_records === 0">{{'No records found' | translate}}</p>
+                </div>
+                <div class="binding-pagination" ng-hide="currentPage == lastPage || !moneyTransferAccLists.length">
+                    <div class="pagnation-content">
+                        <div class="clearfix pagnation-inner">
+                            <div class="col-md-12 text-center">
+                                <uib-pagination previous-text="Prev" next-text="Next" total-items="totalRecords" num-pages="lastPage" ng-model="currentPage"
+                                    max-size="maxSize" class="pagination-sm" boundary-link-numbers="true" rotate="false" items-per-page="itemsPerPage"
+                                    ng-change="paginate_transaction(currentPage)"></uib-pagination>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--<div ng-include="'views/loader.html'"></div>-->                   
+        </div> 
+    </div>
+</div>

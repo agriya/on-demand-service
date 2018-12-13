@@ -1,0 +1,24 @@
+<li class="dropdown arrow-icon">
+	<a href="javascript:void(0);" title="{{auth.user_profile.first_name}} {{auth.user_profile.last_name}}" class="dropdown-toggle" data-toggle="dropdown">
+        <img ng-src="{{auth.userimage}}" alt="{{auth.user_profile.first_name}} {{auth.user_profile.last_name}}" />
+        <span class="fa fa-angle-down"></span>
+	</a>
+    <ul class="dropdown-menu arrow arrow-right">
+    	<li>
+            <ul class="list-unstyled">
+                <li ><a href="user_dashboard" title="{{'Dashboard' | translate}}"><i class="fa fa-home fa-fw"></i>{{'Dashboard' | translate}}</a></li>
+                <li ><a href="booking/all" title="{{'Bookings & messages' | translate}}"><i class="fa fa-ticket fa-fw"></i>{{'Bookings & messages'| translate}}</a></li>
+                <li ng-if="auth.role_id != ConstUserType.Customer"><a href="users/{{auth.id}}/{{auth.user_profile.first_name+auth.user_profile.last_name | slugify}}" title="{{'My Profile' | translate}}"><i class="fa fa-user-circle-o fa-fw"></i>{{'My Profile'| translate}}</a></li>
+                <li ng-show="auth.role_id != ConstUserType.ServiceProvider"><a href="users" title="{{'Search' | translate}}"><i class="fa fa-search fa-fw"></i>{{'Search' | translate}}</a></li>
+                <li ng-if="auth.role_id != ConstUserType.Customer"><a href="users/listing" title="{{'Listing' | translate}}"><i class="fa fa-list fa-fw"></i>{{'Listing' | translate}}</a></li>
+                <li ng-if="auth.role_id != ConstUserType.Customer"><a href="user/calendar" title="{{'Calendar' | translate}}"><i class="fa fa-calendar fa-fw"></i>{{'Calendar' | translate}}</a></li>
+                <li ng-show="auth.role_id != ConstUserType.ServiceProvider && $root.settings.SITE_ENABLED_PLUGINS.indexOf('SaveSearchAndNotify/SaveSearchAndNotify') > -1" title="{{'Saved Searches' | translate}}"><a href="saved-searches"><i class="fa fa-search fa-fw"></i>{{'Saved searches' | translate}}</a></li>
+                <li ng-show="auth.role_id != ConstUserType.ServiceProvider && $root.settings.SITE_ENABLED_PLUGINS.indexOf('Request/Request') > -1" title="{{'Post a job' | translate}}"><a href="my_jobs"><i class="fa fa-pencil-square-o fa-fw"></i>{{'Post a job' | translate}}</a></li>
+                <li ng-show="auth.role_id != ConstUserType.Customer && $root.settings.SITE_ENABLED_PLUGINS.indexOf('Request/Request') > -1" title="{{'Job board' | translate}}"><a href="jobs"><i class="fa fa-pencil-square-o fa-fw"></i>{{'Job board' | translate}}</a></li>
+                <li><a href="contacts" title="{{'Contacts' | translate}}"><i class="fa fa-address-book fa-fw" ></i>{{'Contacts' | translate}}</a></li>
+                <li><a href="users/user_profile" title="{{'Account' | translate}}"><i class="fa fa-pencil-square-o fa-fw"></i>{{'Account' | translate}}</a></li>
+                <li><a href="users/logout" title="{{'Sign out' | translate}}"><i class="fa fa-sign-out fa-fw"></i>{{ 'Sign out' | translate }}</a></li>
+            </ul>
+        </li>
+    </ul>
+</li>

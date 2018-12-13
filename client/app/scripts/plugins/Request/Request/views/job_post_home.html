@@ -1,0 +1,280 @@
+<div class="edit-profile job-post text-center">
+    <!--<div ng-show="home">
+        <h3 class="text-center">{{'When do you need a service provider?'|translate}} </h3>
+        <div class="row space">
+            <div class="col-sm-5 col-sm-offset-1 col-xs-12 space">
+                <button class="btn btn-info btn-block mar-bot-20" ng-click="oneTime = true;regular = false;home = false;showService = true;request_details.job_type_id = JobTypeId.OneTimeJob"> {{'One time on a specific date' | translate}} </button>
+            </div>
+            <div class="col-sm-5 col-xs-12 space">
+                <button class="btn btn-info btn-block mar-bot-20" ng-click="oneTime = false;regular = true;home = false;showService = true;"> {{'On a regular basis' | translate}} </button>
+            </div>
+        </div>
+    </div>-->
+    <p ng-show="oneTime && serviceSelected" class="text-left">
+        <span class="float-left"><span class="text-b">{{'Selected Service:' | translate}}</span> {{selectedServiceName}}<button class="btn btn-link" ng-click="showService = true;serviceSelected = false;">{{'change'|translate}}</button> </span>    
+    </p>
+    <p ng-show="regular && serviceSelected" class="text-left">
+        <span class="float-right">{{'Selected Service:' | translate}} {{selectedServiceName}}<button class="btn btn-link" ng-click="showService = true;serviceSelected = false;">{{'change'|translate}}</button> </span>
+    </p>
+    <div ng-show="showService">
+        <!--<div class="text-left" ng-show="oneTime">{{'One time on a specific date'| translate}} <button class="btn btn-link" ng-click="oneTime = false;regular = false;home = true;showService = false;serviceSelected = false;">{{'change'|translate}}</button> </div>
+        <div class="text-left" ng-show="regular">{{'On a regular basis' | translate}} <button class="btn btn-link" ng-click="oneTime = false;regular = false;home = true;showService = false;serviceSelected = false;">{{'change'|translate}}</button></div>-->
+        <h3 class="text-center">{{'What type of service you need?'|translate}}</h3>
+    <!--<ul class="list-unstyled clearfix">
+                <li class="col-md-6" ng-repeat="category in categories">
+                    <h3 class="text-uppercase text-16">{{category.name}}</h3>
+                    <ul class="list-unstyled">
+                        <li ng-repeat="service in category.service">
+                            <i class="fa fa-angle-right"></i>
+                            <a title="{{service.name}}" href="#" ng-click="get_service(service.id,category.id)">{{service.name}}</a>
+                        </li>
+                    </ul>
+                </li>
+
+            </ul>-->
+        <div class="row">
+            <select class="form-control mar-bot-20" style="width:50%" ng-model="request_details.selected_service_id" ng-options="service.id as service.name for service in services" ng-change=""></select>
+        </div>
+        <button class="btn btn-info" ng-click="get_service(request_details.selected_service_id)"> {{'Continue'|translate}} </button>
+    </div>
+    <div ng-show="oneTime && serviceSelected">
+        <h3 class="text-center">{{'What date?'|translate}} </h3>
+        <ul class="row form-group has-feedback text-center list-unstyled">
+            <li class="form-group has-feedback datepicker">
+                <label> {{'Select date' | translate}}</label>
+                <input class="form-control date-picker" date-range-picker type="text" ng-model="fromDate" name="daterange" options="options" placeholder="{{placeholder}}"/>
+                <span class="form-control-feedback"><i class="fa fa-calendar"></i></span>
+            </li>
+            <li class="form-group has-feedback" ng-if="BookingType.MultiHours == booking || BookingType.TimeSlot == booking">
+                <label> {{'Select time' | translate}}</label>
+                <input type="text"  class="form-control" size="8" ng-model="booking_time.start" name="time" placeholder="{{timeplaceholder}}" bs-timepicker data-time-format="hh:mm a" data-length="1" data-minute-step="15" data-arrow-behavior="picker">
+            </li>
+            <li class="form-group has-feedback datepicker" ng-show="BookingType.MultiHours == booking">
+                <label> {{'Select date' | translate}}</label>
+                <input date-range-picker class="date-picker form-control" type="text" ng-model="toDate" name="daterange" options="options" placeholder="{{'Select end date' | translate}}"/>
+                <span class="form-control-feedback"><i class="fa fa-calendar"></i></span>
+            </li>
+            <li class="form-group has-feedback" ng-if="BookingType.MultiHours == booking">
+                <label> {{'Select time' | translate}}</label>
+                <input class="form-control" type="text"  size="8" ng-model="booking_time.end" name="time" placeholder="{{'End time'| translate}}" bs-timepicker data-time-format="hh:mm a" data-length="1" data-minute-step="15" data-arrow-behavior="picker" ng-blur="validate_time()">
+            </li>
+            <div ng-show="showDateError" class="error">{{'Please select valid date'|translate}} </div>
+            <div ng-show="timeError" class="error">{{'Please select valid time'|translate}} </div>
+        </ul>
+            <!--<div class="dropdown">
+                <input  date-range-picker class="date-picker" type="text" ng-model="toDate" name="daterange" options="options" ng-show="overnight_booking"/>
+                <button class="btn btn-link dropdown-toggle" type="button" data-toggle="dropdown">{{'options'|translate}}<span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li ng-show="overnight_booking" ><a href="#" ng-click="overnight_booking =false;same_day_booking = true;booking_time.end='';">{{'Same day booking'|translate}}</a></li>
+                    <li ng-show="same_day_booking"><a href="#" ng-click="overnight_booking =true;same_day_booking = false;">{{'Overnight booking'|translate}}</a></li>
+                </ul>
+            </div>-->
+        <button class="btn btn-info" ng-click="get_time_details()"> {{'Continue'|translate}} </button>
+    </div>
+    <div ng-show="regular && serviceSelected">
+        <h3 class="text-center">{{'Describe your schedule'|translate}} </h3>
+        <form name="ScheduleForm" ng-submit="about_schedule()" class="form-horizontal">
+            <div class="row form-group has-feedback">
+                <label class="col-sm-3 col-xs-12 control-label">{{"Time Commitment"| translate}} </label>
+                <div class="col-sm-8 col-xs-12">
+                    <select class="form-control"  ng-model="request_details.job_type_id" ng-options="tc.id as tc.name for tc in time_commitment" required></select>
+                </div>
+            </div>
+            <div class="row form-group has-feedback">
+                <label class="col-sm-3 col-xs-12 control-label">{{"Starting"| translate}} </label>
+                <div class="col-sm-8 col-xs-12">
+                    <input class="form-control" date-range-picker class="date-picker" type="text" ng-model="fromDate" placeholder="{{'Start date'}}" name="daterange" options="regular_options"/>
+                    <span class="form-control-feedback"><i class="fa fa-calendar"></i></span>
+                </div>
+            </div>
+            <div class="row form-group has-feedback">
+                <label class="col-sm-3 col-xs-12 control-label">{{"Ending"| translate}} </label>
+                <div class="col-sm-8 col-xs-12">
+                    <input class="form-control" date-range-picker class="date-picker" type="text" ng-model="toDate" placeholder="{{'End date (optional)'}}" name="daterange" options="regular_options"/>
+                    <span class="form-control-feedback"><i class="fa fa-calendar"></i></span>
+                </div>
+            </div>
+            <div class="row form-group has-feedback custom_calender">
+                <label class="col-sm-3 col-xs-12 control-label">{{"On what days will the job occur?"| translate}} </label>
+                <div class="col-sm-8 col-xs-12 text-left">
+                    <div>
+                        <ul class="mar-bot-20 no-pad">
+                            <li class="checkbox-field right-space-10" ng-repeat="day in request_details.list_of_days">
+                                <label for="{{day.id}}">
+                                    <span> {{day.text| translate}} </span>
+                                    <input type="checkbox" class="hide" id="{{day.id}}" ng-model="day.checked">
+                                    <span class="custom-check"></span>
+                                </label>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="flex-check no-pad">
+                        <div class="checkbox-field right-space-10 ">
+                            <label for="flexible_day">
+                                <input type="checkbox" class="hide" ng-model="request_deatails.flexible_day" id="flexible_day" ng-change="service_change($index)">
+                                <span class="custom-check"></span>
+                                <span class="right-space-10  text-12">{{'These days are flexible' | translate}}</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group has-feedback top-space">
+                <label class="col-sm-3 col-xs-12 control-label">{{'At what times?'| translate}} </label>
+                <div class="col-sm-8 col-xs-12">
+                    <select class="form-control" style="width:100%" ng-model="request_details.time_type" name="timetype" ng-options="type.id as type.name for type in time_type" ng-change=""></select>
+                    <span class="error" ng-show="(ScheduleForm.$submitted || ScheduleForm.timetype.$touched) && (ScheduleForm.timetype.$pristine || ScheduleForm.timetype.$invalid) && request_details.time_type == 0">{{'Please select times the job will occur.' | translate }}</span>
+                </div>
+            </div>
+            <div ng-if="request_details.time_type == 1">
+                <div ng-repeat="day in request_details.list_of_days">
+                    <div ng-if="day.checked">
+                        <div class="row form-group has-feedback">
+                            <label class="col-sm-3 col-xs-12 control-label">{{day.text}}</label>
+                            <div class="col-sm-4 col-xs-12">
+                                <input  class="form-control" type="text"  size="8" ng-model="day.start" name="time" placeholder="{{'Start time'| translate}}" bs-timepicker data-time-format="hh:mm a" data-length="1" data-minute-step="15" data-arrow-behavior="picker">
+                            </div>
+                            <div class="col-sm-4 col-xs-12">
+                                <input  class="form-control" type="text"  size="8" ng-model="day.end" name="time" placeholder="{{'End time'| translate}}" bs-timepicker data-time-format="hh:mm a" data-length="1" data-minute-step="15" data-arrow-behavior="picker" ng-blur="validate_time($index)">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p class="error" ng-show="dayTimeError"> {{'Please select valid time'|translate}} </p>
+            </div>
+            <button class="btn btn-info" type="submit"> {{'Continue'|translate}} </button>
+        </form>
+    </div>
+    <div ng-if="about_user">
+        <!--<div class="row pad-top-20 dashed-border-bottom">
+            <div class="col-sm-4 mar-bot-20">
+                <div class="media">
+                    <a class="pull-left" href="#"><i class="fa fa-calendar fa-3x"></i></a>
+                    <div class="media-body text-left">
+                        {{request_details.from_date | date :'EEEE MMM dd'}}
+                        <temp ng-show="request_details.show_from_time != null && request_details.show_from_time != undefined">{{request_details.show_from_time | date :'hh:mm a'}}  </temp><temp ng-show="booking != bookingType.TimeSlot">-</temp><span ng-if="request_details.from_date != request_details.to_date"> {{request_details.to_date | date :'EEEE MMM dd'}}<temp ng-show="request_details.show_to_time != null && request_details.show_to_time != undefined"> {{request_details.show_to_time | date :'hh:mm a'}}</temp> </span>
+                        <span ng-if="request_details.from_date == request_details.to_date && request_details.show_to_time != request_details.show_from_time"> {{request_details.show_to_time | date :'hh:mm a'}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>-->
+        <div class="row pad-top-20 hor-space-10 dashed-border-bottom text-left">
+            <div ng-if="is_oneTime">
+                <i class="fa fa-calendar fa-3x"></i> {{request_details.from_date | date :'EEEE MMM dd'}}
+                <temp ng-show="request_details.show_from_time != null && request_details.show_from_time != undefined">{{request_details.show_from_time | date :'hh:mm a'}}  </temp><temp ng-show="booking != bookingType.TimeSlot">-</temp><span ng-if="request_details.from_date != request_details.to_date"> {{request_details.to_date | date :'EEEE MMM dd'}}<temp ng-show="request_details.show_to_time != null && request_details.show_to_time != undefined"> {{request_details.show_to_time | date :'hh:mm a'}}</temp> </span>
+                <span ng-if="request_details.from_date == request_details.to_date && request_details.show_to_time != request_details.show_from_time"> {{request_details.show_to_time | date :'hh:mm a'}}</span>
+                <button class="btn btn-link" ng-click="changeTiming()"> {{'Change'|translate}} </button>
+            </div>
+            <div ng-if="is_regular">
+                <i class="fa fa-calendar fa-3x"></i> {{request_details.from_date | date :'EEEE MMM dd'}} <temp ng-if="request_details.from_date != request_details.to_date"> - {{request_details.to_date | date :'EEEE MMM dd'}} </temp>
+                <form class="ver-space">
+                    <div ng-show="is_day_checked" class="custom-calendar form-group">
+                        <ul class="mar-bot-20 no-pad">
+                            <li class="checkbox-field right-space-10" ng-repeat="day in request_details.list_of_days">
+                                <label for="{{day.id}}">
+                                    <span> {{day.text| translate}} </span>
+                                    <input type="checkbox" class="hide" id="{{day.id}}" ng-model="day.checked">
+                                    <span class="custom-check"></span>
+                                </label>
+                            </li>
+                        </ul>
+                        <p ng-show="is_various" class="pad-top-20"> {{'various times' | translate}} </p>
+                        <p ng-show="!is_various" class="pad-top-20">{{regular_start | date}}-{{regular_end}} </p>
+                        <button class="btn btn-link no-pad" ng-click="changeRegularTiming()"> {{'Change'|translate}} </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!--<button class="btn btn-link pull-left" ng-click="changeTiming()"> {{'change'|translate}} </button>-->
+        <h3 class="text-center no-mar">{{'Introduce yourself and set a rate'|translate}} </h3>
+        <form enctype="multipart/form-data" name="RequestDetails" ng-submit="submit_form_data(RequestDetails.$valid)" novalidate>
+            <div ng-if="get_numberof_items" class="row form-group has-feedback">
+                <label class="col-sm-3 col-xs-12 control-label">{{'Number of'|translate}} {{label_value}}</label>
+                <div class="col-sm-8 col-xs-12">
+                    <select class="form-control" style="width:100%" name="countId" ng-model="request_details.count" ng-options="count.id as count.text for count in totalCounts" ng-change="countChanged(selectedCount)"></select>
+                </div>
+            </div>
+            <div class="location-info enquiry-info">
+                <div class="row form-group has-feedback" ng-class="{ 'has-error' : (RequestDetails.$submitted || RequestDetails.additional_address.$touched) && (RequestDetails.additional_address.$pristine || RequestDetails.additional_address.$invalid) && (RequestDetails.additional_address.$error.required)}">
+                    <label class="col-sm-3 col-xs-12 control-label">{{'Location Info' | translate}}</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <div class="form-group has-feedback">
+                            <input type="text" g-places-autocomplete options="address_options" name="additional_address" ng-required="true" ng-model="request_details.address"
+                                autocomplete="off" class="form-control" id="inputLocation" ng-change="addresslocationChanged()" placeholder="{{'Search for an address'| translate}}"
+                                ng-required="true" ng-focus="makePlaceTrue()">
+                            <span class="error" ng-show="IsplaceChange == true && ((RequestDetails.$submitted || RequestDetails.additional_address.$touched) && (RequestDetails.additional_address.$pristine || RequestDetails.additional_address.$invalid) && (RequestDetails.additional_address.$error.required))"> {{'Enter Address' | translate }} </span>
+                            <div ng-show="allowedplace" class="error">{{'Enter Allowed Locations' | translate}}</div>
+                            <div ng-show="no_address_available" class="error">{{'Please choose address from autocomplete.' | translate}}</div>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="address1" placeholder="{{'Street address, P.O. box, building/appartment name, floor, area, etc.'| translate}}"
+                                name="address1" ng-model="request_details.address1">
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error' : (RequestDetails.$submitted || RequestDetails.additional_city.$touched) && (RequestDetails.additional_city.$pristine || RequestDetails.additional_city.$invalid) && (RequestDetails.additional_city.$error.required)}">
+                            <input type="text" autocomplete="off" class="form-control" id="additional_city" placeholder="{{'City' | translate}}" name="additional_city"
+                                ng-required="true" ng-model="request_details.city.name">
+                            <span class="error" ng-show="(RequestDetails.$submitted || RequestDetails.additional_city.$touched) && (RequestDetails.additional_city.$pristine || RequestDetails.additional_city.$invalid) && (RequestDetails.additional_city.$error.required)">{{'Choose City' | translate }} </span>
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error' : (RequestDetails.$submitted || RequestDetails.additional_state.$touched) && (RequestDetails.additional_state.$pristine || RequestDetails.additional_state.$invalid) && (RequestDetails.additional_state.$error.required)}">
+                            <input type="text" class="form-control" name="additional_state" id="additional_state" ng-model="request_details.state.name" placeholder="{{'State' | translate}}"
+                                ng-required="true">
+                            <span class="error" ng-show="(RequestDetails.$submitted || RequestDetails.additional_state.$touched) && (RequestDetails.additional_state.$pristine || RequestDetails.additional_state.$invalid) && (RequestDetails.additional_state.$error.required)">{{'Enter State' | translate }} </span>
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error' : (RequestDetails.$submitted || RequestDetails.additional_country.$touched) && (RequestDetails.additional_country.$pristine || RequestDetails.additional_country.$invalid) && (RequestDetails.additional_country.$error.required)}">
+                            <select class="form-control" style="width:100%" name="additional_country" ng-model="selectedAddtionalCountry" ng-options="country.iso2 as country.name for country in countries"
+                                ng-selected="selectedAdditionalCountry == country.iso2" placeholder="{{'Country' | translate}}" ng-required="true"></select>
+                            <span class="error" ng-show="(RequestDetails.$submitted || RequestDetails.additional_country.$touched) && (RequestDetails.additional_country.$pristine || RequestDetails.additional_country.$invalid) && (RequestDetails.additional_country.$error.required)">{{'Enter Country'| translate }} </span>
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error' : (RequestDetails.$submitted || RequestDetails.postal_code.$touched) && (RequestDetails.postal_code.$pristine || RequestDetails.postal_code.$invalid) && (RequestDetails.postal_code.$error.required)}">
+                            <input type="text" class="form-control" name="postal_code" id="postal_code" ng-model="request_details.postal_code" placeholder="{{'Postal Code'| translate}}"
+                                ng-required="true" />
+                            <span class="error" ng-show="(RequestDetails.$submitted || RequestDetails.postal_code.$touched) && (RequestDetails.postal_code.$pristine || RequestDetails.postal_code.$invalid) && (RequestDetails.postal_code.$error.required)">{{'Enter Postal Code' | translate }} </span>
+                        </div>
+                    </div>
+                </div>
+                <div ng-repeat="data in form_data" class="location-info enquiry-info mar-bot-20">
+                    <h4> {{data.name| translate}}</h4>
+                    <div class="clearfix" ng-repeat="form_field_submissions in form_fields_all">
+                        <div ng-if="data.name == form_field_submissions.title" name="form_field{{$index}}" ng-model="request_details.submission[$index]"
+                            fb-form="{{'default-'+($index+1)}}" fb-default="defaultValue"></div>
+                    </div>
+                </div>
+                <div class="row form-group has-feedback rate-hour">
+                    <label class="col-sm-3 col-xs-12 control-label"> {{'Rate per hour'| translate}}</label>
+                    <div class="col-sm-4 col-xs-12">
+                        <div class="input-group">
+                            <span class="input-group-addon"><temp>{{$root.currency_type}} </temp> </span>
+                            <input min="1.0" type="number" name="rate" ng-model="request_details.rate" class="form-control" ng-required="true">
+                        </div>
+                        <span>
+                            <span class="error text-left" ng-show="(RequestDetails.$submitted || RequestDetails.rate.$touched) && (RequestDetails.rate.$pristine || RequestDetails.rate.$invalid) && (RequestDetails.rate.$error.required)">{{'Enter hourly rate' | translate }}</span>
+                            <span class="error text-left" ng-show="(RequestDetails.$submitted || RequestDetails.rate.$touched) && (RequestDetails.rate.$pristine || RequestDetails.rate.$invalid) && (RequestDetails.rate.$error.min)">{{'Enter valid hourly rate' | translate }}</span>
+                        </span>
+                    </div>
+                    <!--<div class="col-sm-4 col-xs-12">
+                        <select class="form-control"  ng-model="request_details.payment_type" ng-options="type.id as type.name for type in paymenttype" required></select>
+                    </div>-->
+                </div>
+                <div class="row form-group has-feedback">
+                    <label class="col-sm-3 col-xs-12 control-label"> {{'More details'| translate}}</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <textarea class="form-control" rows="3" name="more_detials" ng-model="request_details.more_details" ng-required="true"></textarea>
+                        <span class="error text-left" ng-show="(RequestDetails.$submitted || RequestDetails.more_detials.$touched) && (RequestDetails.more_detials.$pristine || RequestDetails.more_detials.$invalid) && (RequestDetails.more_detials.$error.required)">{{'Required' | translate }} </span>
+                        <span class="help-block text-left">{{'For your own privacy and security, please do not include contact information above.'|translate}}</span>
+                    </div>
+                </div>
+                <button ng-show ="!is_job_edit" class="btn btn-info" ng-click="get_requestor_info(RequestDetails.$valid,'new')" ng-disabled="show_submit"> {{'Continue' | translate}} </button>
+                <button ng-show ="is_job_edit" class="btn btn-info" ng-click="get_requestor_info(RequestDetails.$valid,'update')" ng-disabled="show_submit"> {{'Update' | translate}} </button>
+            </form>
+            
+        </div>
+        <div class="pad-top-20" ng-if="errorData.length > 0">
+            <div class="alert alert-danger pad-top-20">
+                <h5><i class="fa fa-warning" style="color:red"></i> {{"Missing information" | translate}} </h5>
+                &nbsp;&nbsp;<p ng-repeat="data in errorData"> {{$index+1}}. {{data| translate}} </p>
+            </div>    
+        </div>
+    </div>
+</div>
+
+

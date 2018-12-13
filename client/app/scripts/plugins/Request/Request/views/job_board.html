@@ -1,0 +1,145 @@
+<div class="doctor-search edit-profile job-board">
+    <div class="search-block">
+        <div class="container-fluid no-pad">
+            <div class="col-sm-5 col-sm-12 map-width">
+                <div class="form-group map-srach-blk">
+                    <div class="checkbox-field">
+                        <label for="maplabel">
+                            <input type="checkbox" class="hide" name="maplabel" ng-model="data.map_label" id="maplabel" ng-change="map_change(data.map_label)" ng-checked="data.map_label">
+                            <span class="custom-check"></span>    
+                            <span>{{'Search When I Move the Map' | translate}}</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="map-block">
+                    <div>
+                        <ng-map zoom="{{zoomLevel}}" on-zoom_changed="zoomChanged()" center="[{{center_lat}},{{center_lon}}]" class="map-height"
+                            on-dragend="getpos($event)">
+                            <marker ng-repeat="mapPosition in mappositions" id='{{mapPosition.id}}' position="{{mapPosition.lat}}, {{mapPosition.lon}}"
+                                animation="DROP" on-click="Goto($index)"></marker>
+                        </ng-map>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12" style="padding-top:80px">
+                <form data-uk-scrollspy="{cls:'uk-animation-slide-bottom', delay:100}" class="clearfix home-search form-inline" name="homeSearchForm"
+                    ng-submit="homesearch(homeSearch.$valid)" novalidate>
+                    <div class="form-group speciality"> 
+                        <div class="has-feedback" ng-class="{ 'has-error' : (SearchForm.$submitted || SearchForm.service_id.$touched) && (SearchForm.service_id.$pristine || SearchForm.service_id.$invalid) && (SearchForm.service_id.$error.required)}">                            
+                            <select class="form-control" ng-model="service_id" name="service_id" ng-required="true">
+                                <option value="">{{'-- Select Service --' | translate}}</option>
+                                <option ng-repeat="service in services" value="{{service.id}}">{{service.name | translate}}</option>
+                            </select>                               
+                            <span class="error" ng-show="(SearchForm.$submitted || SearchForm.service_id.$touched) && (SearchForm.service_id.$pristine || SearchForm.service_id.$invalid) && (SearchForm.service_id.$error.required)">{{'Select service'| translate }} </span>
+                        </div>              
+                    </div>
+                    <div class="form-group has-feedback speciality">
+                        <geo-location entry="entry" entity="entity"></geo-location>
+                        <input type="hidden" ng-model="form_latitude" />
+                        <input type="hidden" ng-model="form_longitude" />
+                        <span class="form-control-feedback"><i class="fa fa-map-marker"></i></span>
+                        <span class="error" ng-show="(homeSearchForm.$submitted || homeSearchForm.address.$touched) && (homeSearchForm.address.$pristine || homeSearchForm.address.$invalid) && (homeSearchForm.address.$error.required)">{{'Enter Location'| translate }}</span>
+                        <div ng-show="allowedplace" class="error">{{'Enter allowed locations' | translate}}</div>
+                    </div>
+                    <div class="form-group has-feedback speciality">
+                        <select ng-model="data.selectedRadius" class="form-control" ng-disabled="!enableRadius">
+                            <option ng-repeat="radius in radiusData" ng-selected="radius.value == data.selectedRadius" value="{{radius.value}}"> {{radius.text}} </option>
+                        </select>    
+                    </div> 
+                    <div class="form-group form-btn">
+                        <button class="btn btn-block btn-info btn-animate" ng-disabled="homeSearchForm.$invalid" type="submit">{{'Search' | translate }}</button>
+                    </div>
+                </form>
+                <div class="search-responsive">
+                    <div class="search-result clearfix">
+                        <!--Search Result -->
+                        <section>
+                            <div ng-show="showLoader">
+                                <img ng-src="images/searchloader.gif" width="100" height="100">
+                            </div>
+                            <div class="sub-list search-result no-pad">
+                                <div class="clearfix">
+                                    <!--<p ng-show="searchLists.length > 0" class="navbar-left no-mar">{{searchLists.length}} {{'results for home assistants' | translate}}</p>-->
+                                    <h5 ng-if="searchLists.length == 0" class="empty-list">{{'Looks like we dont have any jobs' | translate}}.</h5>
+                                </div>
+                                <ul class="list-inline clearfix">
+                                    <li class="row border-bottom" style="width:100%" ng-repeat="user in searchLists" id="user{{user.id}}" ng-mouseenter="toggleBounce(user.id)" ng-mouseleave="clearTime()">
+                                        <div class="col-md-8 col-sm-12 col-xs-12">
+                                            <div class="media">
+                                                <a class="pull-left show" href="job/{{user.id}}">
+                                                    <img ng-src="{{user.requestor_image}}" alt="[Images: {{user.user_profile.fist_name}}]"
+                                                            class="img-responsive center-block media-object" style="width:125px;height:125px">
+                                                </a>
+                                                <div class="media-body">
+                                                    <h4 ng-show="user.job_type_id == JobTypeId.OneTimeJob" class="media-heading"><a href="job/{{user.id}}">{{user.service.name | translate}} {{"starting"| translate}} {{user.appointment_from_date | date: 'EEEE, MMM dd'}}</a></h4>
+                                                    <h4 ng-show="user.job_type_id == JobTypeId.PartTime" class="media-heading"><a href="job/{{user.id}}">{{"Part Time, starting"| translate}} {{user.appointment.appointment_from_date | date: 'EEEE, MMM dd'}}</a></h4>
+                                                    <h4 ng-show="user.job_type_id == JobTypeId.FullTime" class="media-heading"><a href="job/{{user.id}}">{{"Full Time, starting"| translate}} {{user.appointment_from_date | date: 'EEEE, MMM dd'}}</a></h4>
+                                                    <p> {{user.work_location_address}} </p>
+                                                    <span ng-repeat="data in user.form_field_submission">
+                                                        <dl class="row dl-horizontal no-mar">
+                                                            <dt>{{data.form_field.label | translate}}</dt> <dd>{{data.response}}</dd>
+                                                        </dl>
+                                                    </span>    
+                                                    <ul class="mar-bot-20 no-pad list-inline hidden-xs" ng-if="user.appointment_timing_type_id == AppointmentTimingType.SpecifyTimes">
+                                                        <li class="checkbox-field right-space-10"  ng-repeat="day in user.list_of_days">
+                                                            <label for="{{day.id}}">
+                                                                <span class="text-13"> {{day.text | translate}} </span>
+                                                                <input type="checkbox" class="hide" id="{{day.id}}" ng-model="day.checked">
+                                                                <span class="custom-check"></span>
+                                                            </label>
+                                                        </li>
+                                                    </ul>
+                                                    <p ng-show="user.appointment_timing_type_id == AppointmentTimingType.SpecifyTimes"> {{'various times'| translate}} </p>
+                                                    <p ng-show="user.appointment_timing_type_id == AppointmentTimingType.DuringDay"> {{'during the day'| translate}} </p>
+                                                    <p ng-show="user.appointment_timing_type_id == AppointmentTimingType.DuringNight"> {{'evening or night-time'| translate}} </p>
+                                                </div>
+                                            </div>
+                                            <ul class="mar-bot-20 no-pad list-inline visible-xs" ng-if="user.appointment_timing_type_id == AppointmentTimingType.SpecifyTimes">
+                                                <li class="checkbox-field right-space-10"  ng-repeat="day in user.list_of_days">
+                                                    <label for="{{day.id}}">
+                                                        <span class="text-13"> {{day.text | translate}} </span>
+                                                        <input type="checkbox" class="hide" id="{{day.id}}" ng-model="day.checked">
+                                                        <span class="custom-check"></span>
+                                                    </label>
+                                                </li>
+                                            </ul>
+                                            <h5 class="text-n"> {{'Updated' | translate}} {{user.created_at | timeago}} {{'by' | translate}} <a href="users/{{user.user.id}}/{{user.user.user_profile.first_name+user.user.user_profile.last_name| slugify}}">{{user.user.user_profile.first_name}} {{user.user.user_profile.last_name}}</a></h5>
+                                            <p> {{user.description | translate}}</p>
+                                        </div>
+                                        <div class="col-md-4 col-sm-12 col-xs-12 text-center mar-bot-20"> 
+                                        	<h5 class="text-b text-18 mar-bot-20">{{user.price_per_hour | currency : currency_type}} / {{'hour' | translate}} </h5>
+                                            <div ng-if="user.user.id == auth.id && RequestStatusId.Open == job.request_status_id" class="job-board row">
+                                                <div class="col-sm-6 col-xs-12">
+                                                    <button class="btn btn-link btn-block bor-rad-0" ng-click="editJob(user.id)"><i class="fa fa-pen" aria-hidden="true"></i> {{'Edit job'| translate}}</button>
+                                                </div>
+                                                <div class="col-sm-6 col-xs-12">
+                                                    <button class="btn btn-link btn-block bor-rad-0" ng-click="closeJob(user.id, $index)"><i class="fa fa-eye-slash" aria-hidden="true"></i> {{'Close job'| translate}}</button>
+                                                </div>
+                                            </div> 
+                                            <div ng-if="user.current_user_interest != (null || undefined) && user.user.id != auth.id" class="pad-top-20" ng-mouseenter="ChangeButtonText('Enter', $index)" ng-mouseleave="ChangeButtonText('Leave', $index)">
+                                                <p> <button class="btn btn-link btn-block bor-rad-0" ng-click="RemoveInterest(user.current_user_interest.id, $index)" ng-bind-html="user.buttonText"></button> </p>
+                                            </div>
+                                            <div ng-show="user.current_user_interest == (null || undefined) && user.user.id != auth.id" class="pad-top-20">
+                                                <p><button class="btn btn-info btn-block bor-rad-0" ng-click="ExpressInterest(user.id, $index)">{{'Express Interest' | translate}}</button></p>
+                                            </div>
+                                        </div>    
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="binding-pagination" ng-show="searchLists.length >= itemsPerPage && searchLists.length > 0">
+                                        <div class="pagnation-content">
+                                            <div class="clearfix pagnation-inner">
+                                                <div class="col-md-12 text-center">
+                                                    <uib-pagination previous-text="Prev" next-text="Next" total-items="totalRecords" num-pages="lastPage" ng-model="currentPage" max-size="maxSize" class="pagination-sm" boundary-link-numbers="true"
+                                                    rotate="false" items-per-page="itemsPerPage" ng-change="paginate_search(currentPage)"></uib-pagination>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

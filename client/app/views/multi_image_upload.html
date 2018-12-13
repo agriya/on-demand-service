@@ -1,0 +1,11 @@
+<div> <input id="file-upload" type="file" name="s3_image" name="file" ngf-select="upload(file)" ng-model="file" multiple="multiple" class="ng-pristine ng-untouched ng-empty ng-invalid ng-invalid-required"> </div>
+<div class="error" ng-show="({{formName}}.$submitted || {{formName}}.s3_image.$touched) && ({{formName}}.s3_image.$pristine || {{formName}}.s3_image.$invalid) && ({{formName}}.s3_image.$error.required)">{{'Required' | translate}}</div> <img ng-if="!multiple_attachment_files.length && loader" ng-src="images/contest_loader.gif" alt="loading " title="{{'loading' | translate}} ">
+<ul class="list-unstyled attchmentsblk clearfix  list-inline">
+    <li ng-repeat="images in multiple_attachment_files track by $index" ng-if="multiple_attachment_files.length && !loader">
+        <div class="img-upload">
+            <div class="img-iner"> <img ngf-src="images.image" height="70" width="100" class="thumb"> </div> 
+            <!--<a href="" ng-click="removeImage($index)">Remove</a> -->
+            </div>
+    </li>
+</ul>
+</div>

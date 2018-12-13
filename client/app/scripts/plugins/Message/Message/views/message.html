@@ -1,0 +1,84 @@
+<div class="messages-block">
+    <h4>{{'Conversations' | translate}}</h4>        
+    <div class="right-msg-block">
+        <div class="getAllMessage" id="bottom">           
+            <ul class="list-unstyled builtin-list mar-bot-20" ng-show="messageTotal > 0">
+                <li>
+                    <a href="" class="btn btn-default btn-sm load-more pull-right" ng-click='message_pagination()'>{{'Load more'| translate}}...  ( {{remainingMessage}} )</a>
+                </li>
+            </ul>
+
+            <div ng-repeat="message in showSingleMessage | reverse" ng-if="showSingleMessage.length>0">
+                <div class="pad-top-20">
+                    <div ng-if="loginUserId==message.user_id && message.is_sender == 0" class="media">
+                        <div class="navbar-left">
+                            <a href="users/{{message.user_id}}/{{message.other_user.user_profile.first_name +message.other_user.user_profile.last_name| slugify}}">
+                            <img ng-src="{{message.other_user_avatar_url}}" class="img-circle" width="40" height=40 alt="{{message.other_user.user_profile.first_name + message.other_user.user_profile.last_name}}"></a>
+                        </div>
+
+                        <div class="media-body">
+                            <div class="message-content">
+                                <p class="text-info text-16 no-mar" ng-bind-html="message.message_content.message">
+                                    <!--{{message.message_content.message}}-->
+                                </p>
+                                <p class="no-mar text-muted text-12 hor-space-10">                                
+                                    {{message.message_content.created_at | timeago}}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="media" ng-if="loginUserId == message.user_id && message.is_sender == 1">
+                        <div class="navbar-right">
+                            <a href="users/{{message.user_id}}/{{message.user.user_profile.first_name +message.user.user_profile.last_name | slugify}}">
+                                <img ng-src="{{message.users_avatar_url}}" class="img-circle" width="40" height=40 alt="{{message.user.user_profile.first_name + message.user.user_profile.last_name}}"></a>
+                        </div>
+                        <div class="media-body text-right">
+                            <div class="message-content">
+                                <p class="text-16 no-mar" ng-bind-html="message.message_content.message">
+                                    <!--{{message.message_content.message}}-->
+                                </p>
+                                <p class="no-mar text-muted text-12 right-space-10">
+                                    {{message.message_content.created_at | timeago}}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div ng-if="showSingleMessage.length<=0 && loaderStart">
+                <div align="center">--{{'Start Conversation'|translate}}--</div>
+            </div>  
+
+        </div>
+    </div>    
+
+    <div align="center" ng-if='messages.length<=0'>
+        <h3> {{'No Messages Found'| translate}} </h3>
+    </div>
+
+    <form class="form-horizontal top-mspace-10">
+        <div class="form-group pad-top-20">
+            <div class="col-xs-9 col-md-10">
+                <textarea class="form-control" id="inputEmail3" ng-model="getUserMessage" placeholder="{{'Type a message'|translate}}..."
+                    rows="3" cols="50">
+                </textarea>
+                <!--<input type="text" class="form-control" id="inputEmail3" ng-model="getUserMessage" placeholder="{{'Type a message'|translate}}...">-->
+            </div>
+
+            <div class="col-xs-3 col-md-1 no-pad"> 
+                <button type="submit" class="btn btn-info send-icon" ng-click="sendMessage()">
+                    <i class="fa fa-fw fa-send rotate-1"></i>
+                </button>
+            </div>
+            <!--<input class="input-file hide" type="file" ngf-select="uploading($file)" ng-model="file" name="file" ngf-pattern="'image/*'"
+                ngf-accept="'image/*'" ngf-max-size="2MB" ng-click="showUpdate()" id="inputFile">
+            <label for="inputFile">
+                    <i class="fa fa-camera-retro fa-2x send-icon"></i> 
+            </label>-->
+
+        </div>
+    </form>
+</div>

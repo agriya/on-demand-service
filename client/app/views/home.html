@@ -1,0 +1,175 @@
+<div class="homePage">
+	<!-- Start: Banner -->
+    <div class="banner">
+        <div class="container">
+            <div class="home-search text-center">
+                <h1 data-uk-scrollspy="{cls:'uk-animation-slide-top', delay:100}"  class="text-b">{{'Your Service Expert' | translate}}</h1>
+                <h3 data-uk-scrollspy="{cls:'uk-animation-slide-top', delay:100}">{{'Get instant access to reliable and affordable services' | translate}}</h3>
+                <form data-uk-scrollspy="{cls:'uk-animation-slide-bottom', delay:100}" class="clearfix form-inline" name="homeSearchForm" ng-submit="homesearch(homeSearchForm)" novalidate>
+                    <div class="form-group speciality"> 
+                        <div class="has-feedback">                            
+                            <select class="form-control" ng-model="service_id" name="servicename">
+                                <option value="">{{'Service' | translate}}</option>
+                                <option ng-repeat="service in services" value="{{service.id}}">{{service.name | translate}}</option>
+                            </select>                               
+                        </div>              
+                    </div>
+                    <div class="form-group insurance">
+                        <div class="has-feedback">
+                            <geo-location entry="entry" entity="entity"></geo-location>
+                            <input type="hidden" ng-model="form_latitude" />
+                            <input type="hidden" ng-model="form_longitude" />
+                            <span class="error" ng-show="(homeSearchForm.$submitted || homeSearchForm.address.$touched) && (homeSearchForm.address.$pristine || homeSearchForm.address.$invalid) && (homeSearchForm.address.$error.required)">{{'Enter Location' | translate }}</span>
+                            <div ng-show="allowedplace" class="error">{{'Enter Allowed Locations' | translate}}</div>
+                        </div>
+                    </div>
+                    <div class="form-group form-btn">
+                        <button class="btn btn-block btn-sblue btn-animate"  type="submit">{{'Search' | translate }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- End: Banner -->
+    <!--Listing Featured Categories-->
+    <div class="service-list">  
+        <ul class="list-inline space no-mar text-center">
+            <li class="text-center" ng-repeat="category in categories | limitTo : 5">
+                <a href="users">
+                <div class="">
+                    <temp ng-if="category.is_image">
+                        <img src="{{category.category_image}}" alt="{{category.name | translate}}">
+                    </temp>
+                    <temp ng-if="!category.is_image">
+                        <span><i class="fa {{category.icon_class}} fa-2x"></i></span>
+                    </temp>
+                </div>
+                <h5 class="text-center text-b no-mar">{{category.name | translate}}</h5>
+                </a>
+            </li>
+            <li ng-if="categories.length > 5">
+                <a href="users">
+                    <div class="">
+                        <temp><span><i class="fa fa-plus-circle fa-2x"></i></span></temp>
+                        <h5 class="text-15 let-space">{{'More' | translate}}</h5>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!--End: Category-->
+
+    <!--Listing Featured Services-->
+    <div class="book-appmt space">
+        <div class="container recommend-service">
+            <h3 class="text-center"><span>{{'Recommended Services' | translate}}</span></h3>
+            <div class="row">
+                <ul class="list-unstyled col-sm-12 col-md-6 col-xs-12">
+                    <li class="text-center" ng-repeat="service in featured_service | limitTo : 1 ">
+                        <a href="users?service_id={{service.id}}">
+                            <div class="doctor-list bor-rad-0 pr">
+                                <temp ng-if="service.is_image">
+                                    <img src="{{service.service_image}}" alt="{{service.name | translate}}" class="center-block img-responsive"/>
+                                    <p class="text-left text-b no-mar">{{service.name | translate }}</p>
+                                </temp>
+                                <temp ng-if="!service.is_image">
+                                    <span><i class="fa {{service.icon_class}} fa-2x" style="line-height:320px"></i></span>
+                                </temp>
+                            </div>  
+                        </a>
+                    </li>
+                </ul>
+                <ul class="col-sm-12 col-md-6 list-unstyled">
+                    <div class="row">
+                        <li class="text-center slide col-sm-6 col-md-6 col-xs-12 no-pad"  ng-repeat="service in featured_service | limitTo:4:1">
+                            <a href="users?service_id={{service.id}}">
+                                <div class="doctor-list bor-rad-0 pr">
+                                    <temp ng-if="service.is_image">
+                                        <img src="{{service.service_image}}" alt="{{service.name}}" class="center-block img-responsive" />
+                                        <p class="text-left text-b no-mar">{{service.name | translate }}</p>
+                                    </temp>
+                                    <temp ng-if="!service.is_image">
+                                        <span><i class="fa {{service.icon_class}} fa-2x"></i></span>
+                                    </temp>
+                                </div>  
+                            </a>
+                        </li>
+                    </div>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--End: Services-->
+
+    <!--Listing Featured Categories & Services -->
+    <div class="">
+        <ul class="list-unstyled no-mar row">
+            <li class="col-sm-12 no-pad" ng-repeat="category in categories">
+                <div class="book-appmt" id="book-appmt">
+                    <div class="{{category.name}}">
+                        <div class="" data-uk-scrollspy="{cls:'uk-animation-fade', delay:100}">
+                            <h3 class="text-center">
+                                <span>{{category.name | translate}} </span>
+                            </h3>
+                        </div>          
+                        <ul class="list-unstyled container">
+                            <data-owl-carousel class="list-unstyled owl-carousel owl-theme">
+                                <div owl-carousel-item="" class="item ng-scope col-md-12 no-pad" ng-repeat="item in ::category.service">
+                                    <a href="users?service_id={{item.id}}">
+                                        <li class="text-center doctor-list"> 
+                                            <temp ng-show="item.is_image == true">
+                                                <img src="{{item.service_image}}" alt="{{item.name}}">
+                                            </temp>
+                                            <temp ng-show="item.is_image == false">
+                                                <span><i class="fa {{item.icon_class}} fa-2x"></i></span>
+                                            </temp>    
+                                        </li>
+                                        <p class="text-center hor-space-10">{{item.name | translate }} </p>
+                                    </a>    
+                                </div>
+                            </data-owl-carousel>
+                        </ul>
+                    </div>
+                </div>   
+            </li>
+        </ul>
+    </div>
+    <!--End: Categories & Services-->
+    <!-- Start: Book Appointment -->
+    <div class="book-appmt text-center" id="book-appmt">
+    	<div class="container">
+        
+        </div>
+    </div>	
+    <!-- End: Book Appointment -->
+    <!-- How It Works -->
+    <div class="how-it-work book-appmt" id="how-it-works">
+        <div class="container">
+            <h3 class="text-uppercase"><span>{{'Customer Reviews' | translate }}</span></h3>
+            <h4>{{'Join the 6,00,000+ happy users of Agriya and see why they love it so much' | translate}}</h4>
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <div id="carousel-id" class="carousel slide" data-ride="carousel">
+                       <!-- <ol class="carousel-indicators">
+                            <li data-target="#carousel-id" data-slide-to="0" class=""></li>
+                            <li data-target="#carousel-id" data-slide-to="1" class=""></li>
+                            <li data-target="#carousel-id" data-slide-to="2" class="active"></li>
+                        </ol>-->
+                        <div class="carousel-inner">
+                            <div class="item active">
+                                <p>{{'I was blinded before starting my project, Simply i initiated with Agriya sales support team to get know the trending businesses. They suggested on moving with car rental business like Uber. I analyzed with my comrades and friends then given customization to Agriya. Design & Development were so good . Now i am rich & happy with my auto-rental business.' | translate}}</p>
+                                <h5>{{'Gally Rain' | translate}} <span> {{'Bahrain' | translate}}</span></h5>
+                            </div>
+                            <div class="item">
+                                <p>{{'Customization & responsive mode development are so good with Agriya team. Its best to reach them for startup and trending business.I got my project with dynamic viewing experience for easy reading and navigation, Supports in all level of platforms.And its running successfully.' | translate}}</p>
+                                <h5>{{'Mark Chris' | translate}} <span> {{'Albania' | translate}}</span></h5>
+                            </div>
+                        </div>
+                        <a class="left carousel-control" data-target="#carousel-id" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
+                        <a class="right carousel-control" data-target="#carousel-id" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

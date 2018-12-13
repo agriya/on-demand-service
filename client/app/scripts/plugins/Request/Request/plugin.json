@@ -1,0 +1,10 @@
+{
+	"name": "Request", 
+	"class": "fa fa-2x fa-paper-plane fa-class",
+	"description": "Request",
+	"dependencies": "",
+	"module_id": "",
+	"module_hash": "",
+	"display_order": "",
+	"plugin_name":"Request/Request"
+}

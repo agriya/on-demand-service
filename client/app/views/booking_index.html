@@ -1,0 +1,72 @@
+<!-- TABLE -->
+<div class="appointment-block edit-profile">   
+    <div class="container">       
+        <div role="navigation">
+            <div class="appointment-header clearfix">
+                <h3 class="text-center">{{'Bookings & Messages' | translate}}</h3>
+                <div class="navbar-right no-mar mar-bot-20">
+                    <select ng-model="doctor_id" ng-click="getAppointmentDoctorList(doctor_id)" class="form-control" name="doctor">
+                        <option value="">{{'All Status' | translate}}</option>
+                        <option ng-repeat="appointment_status in appoinment_status" value="{{appointment_status.id}}">{{appointment_status.name | translate}}</option>
+                    </select>
+                </div>
+             </div>
+        </div>
+        <div class="pad-top-20">
+            <ul class="list-unstyled" ng-repeat="booking in appointments" ng-show="appointments.length > 0">
+                <li><a href="booking/{{booking.id}}">
+                    <div class="well">
+                        <div class="row">
+                            <div class="col-sm-1 col-xs-12">
+                                <div ng-if="auth.id == booking.provider_user.id">
+                                        <img ng-src={{booking.user_image}} class="img-circle" alt="{{booking.User.username}}" width="50" height="50">
+                                </div>
+                                <div ng-if="auth.id == booking.user.id">
+                                        <img  ng-src={{booking.provider_image}} class="img-circle" alt="{{booking.provider_user.username}}" width="50" height="50">
+                                </div>
+                            </div>
+                            <div class="col-sm-3 col-xs-12">
+                                <div>
+                                    <h4 class="text-20" ng-if="auth.id == booking.provider_user.id">{{booking.user.user_profile.first_name}} {{booking.user.user_profile.last_name}}</h4>
+                                    <h4 class="text-20" ng-if="auth.id == booking.user.id"> {{booking.provider_user.user_profile.first_name}} {{booking.provider_user.user_profile.last_name}}</h4>
+                                    <p class="text-13">{{"Booked on:" |translate}}&nbsp;{{booking.created_date}}</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-xs-12" style="border-left: thin solid #d6d4d4;" >
+                                <div>
+                                <h4 ng-if="ConstService.Interview == booking.service_id">{{'Interview' | translate}}</h4>
+                                <h4 ng-if="ConstService.Interview != booking.service_id && booking.service_id == service.id" ng-repeat="service in services">{{service.name | translate}}</h4>
+                                <p>{{booking.customer_note}}</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-xs-12" style="border-left: thin solid #d6d4d4;">
+                                <div>
+                                    <p class="text-b text-22" ng-if="booking.is_paid_bonus_amount == 1">{{booking.total_booking_amount - booking.bonus_amount| currency:currency_type}}</p>
+                                    <p class="text-b text-22" ng-if="booking.is_paid_bonus_amount == 0">{{booking.total_booking_amount | currency:currency_type}}</p>
+                                    <h4 class="text-16 {{booking.status}}">{{booking.status | translate}}</h4>
+                                    <p class="text-12 no-mar">{{booking.appointment_from_date | date: 'yyyy-MM-dd'}} <span ng-if="booking.appointment_to_date != booking.appointment_from_date && booking.appointment_to_date != (null || undefined)">{{'to'|translate}} {{booking.appointment_to_date |  date: 'yyyy-MM-dd'}}</span>
+                                    </p><span class="text-12" ng-if="booking.appointment_from_time != null && booking.appointment_from_time != undefined"> ({{booking.appointment_from_time}}<span ng-if="booking.appointment_to_time != null">-{{booking.appointment_to_time}}</span>)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div></a>
+                </li>
+            </ul>
+            <ul class="list-unstyled" ng-show="appointments.length <= 0">
+                <li class="text-center"><h5> {{'No Records Found' | translate}} </h5></li>
+            </ul>    
+
+        </div>
+        <div class="binding-pagination" ng-show="appointments.length >= itemsPerPage">
+            <div class="pagnation-content">
+                <div class="clearfix pagnation-inner">
+                    <div class="col-md-12 text-center">
+                        <uib-pagination previous-text="Prev" next-text="Next" total-items="totalRecords" num-pages="lastPage" ng-model="currentPage"
+                            max-size="maxSize" class="pagination-sm" boundary-link-numbers="true" rotate="false" items-per-page="itemsPerPage"
+                            ng-change="paginate(currentPage)"></uib-pagination>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

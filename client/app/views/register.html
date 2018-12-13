@@ -1,0 +1,110 @@
+<div class="register">
+    <div class="container">
+        <div class="user-login">
+            <div class="user-signup">
+                <div class="form-heading">
+                    <h2 class="form-login-heading clearfix">
+                        <span class="navbar-left right-space-10">{{'Create a new account' | translate }} </span>
+                         <span ng-if="$root.settings.IS_ALLOW_TO_REGISTER_SERVICE_PROVIDER == 1">
+                          <a ng-click="userType('serviceprovider')" ng-show="user_type == 'customer'" class="btn btn-white pull-right">{{'Not a Customer? Click Here' | translate}}</a>
+                          <a ng-click="userType('customer')" ng-show="user_type == 'serviceprovider'" class="btn btn-white pull-right">{{'Not a Service Provider? Click Here' | translate}}</a>
+                          </span>
+                    </h2>
+                </div>
+                <form name="registerForm" class="form-horizontal" ng-show = "(user_type != 'customer') && (user_type == 'serviceprovider') && (categories.length > 1) && !show" ng-submit="providerSignUp(registerForm.$valid,object)" novalidate>
+                    <fieldset>
+                      <div class="form-group">
+                            <label class="col-md-4 control-label col-xs-12 col-sm-4 top-space text-18">{{'Choose your category' |translate}} <span class="text-danger"></span></label>
+                            <div class="col-md-8 col-xs-12 col-sm-8">
+                                <div class="row">
+                                <label class="radio-inline text-left col-md-5 col-sm-4 no-mar" ng-repeat="category in categories">
+                                    <input type="radio" name="test" value="{{category.id}}" ng-model="object.user"  ng-required="true">
+                                    <span class="custom-check text-15">{{category.name | translate}}</span> 
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="error" ng-show="(registerForm.$submitted) && (registerForm.test.$error.required)">{{'Please select category' | translate }}</span>
+                    <div class="space edit-profile col-sm-offset-4 col-sm-8 text-left register-btn">
+                        <button class="btn btn-info" type="submit">{{'Next' | translate }}</button>
+                    </div>
+                    </fieldset>
+                </form>
+                <form class="form-login form-horizontal" name="signupForm" ng-submit="signup(signupForm.$valid)" novalidate ng-show="(user_type == 'customer') || ((user_type == 'serviceprovider') && ((categories.length <= 1) ||show))">
+                    <div class="form-body">
+                        <div class="facebook text-center">
+                            <ul class="social-btn list-unstyled no-mar">
+                                <li class="facebook" ng-repeat="provider in providers">
+                                    <a ng-if="provider.name=='Facebook'" data-provider="{{provider.name}}" ng-click="authenticate(provider.slug)" class="btn btn-facebook btn-block {{provider.button_class}}"> 
+                                    <i class="fa fa-facebook fa-fw fa-lg {{provider.icon_class}}"></i> <span>{{'Sign up with ' | translate}} {{provider.name}}</span> 
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                            <div class="sep-top reg-or-blk"><span>{{'or' | translate}}</span></div>
+                            <div class="form-group" ng-class="{ 'has-error' : (signupForm.$submitted || signupForm.email.$touched) && (signupForm.email.$pristine || signupForm.email.$invalid)}">
+                            	<div class="col-xs-12">
+                                    <label>{{'Email' | translate}}</label>
+                                    <input type="email" class="form-control" placeholder="{{'Email' | translate}}" name="email" ng-model="user.email" ng-required="true">
+                                    <span class="error" ng-show="(signupForm.$submitted || signupForm.email.$touched) && (signupForm.email.$pristine || signupForm.email.$invalid) && (signupForm.email.$error.required)">{{'Required' | translate }}</span>
+                                    <span class="error" ng-show="(signupForm.$submitted || signupForm.email.$touched) && (signupForm.email.$pristine || signupForm.email.$invalid) && (signupForm.email.$error.email)">{{'Enter valid email' | translate }}</span>
+                                    <span class="error" ng-show="emailErr">{{emailErr}}</span>
+                                </div>
+                            </div>
+                            <div class="form-group" ng-class="{ 'has-error' : (signupForm.$submitted || signupForm.password.$touched) && (signupForm.password.$pristine || signupForm.password.$invalid)}">
+                            	<div class="col-xs-12">
+                                    <label>{{'Create a Password' | translate}}</label>
+                                    <input type="password" class="form-control" placeholder="{{'Password' | translate}}" name="password" ng-model="user.password" ng-required="true" ng-minlength="6" ng-maxlength="40">
+                                    <span class="error" ng-show="(signupForm.$submitted || signupForm.password.$touched) && (signupForm.password.$pristine || signupForm.password.$invalid) && (signupForm.password.$error.required)">{{ 'Required' | translate }}</span>
+                                    <span class="error" ng-show="(signupForm.$submitted || signupForm.password.$touched) && (signupForm.password.$pristine || signupForm.password.$invalid) && (signupForm.password.$error.minlength)">{{ 'Minimum length is 6' | translate }}</span>
+                                    <span class="error" ng-show="(signupForm.$submitted || signupForm.password.$touched) && (signupForm.password.$pristine || signupForm.password.$invalid) && (signupForm.password.$error.maxlength)">{{ 'Maximum length is 20' | translate }}</span>
+                                    <span class="error" ng-show="passwordErr">{{passwordErr}}</span>
+                                </div>
+                            </div>
+                            <div class="form-group" ng-class="{ 'has-error' : (signupForm.$submitted || signupForm.confirmPassword.$touched) && (signupForm.confirmPassword.$pristine || signupForm.confirmPassword.$invalid)}">
+                            	<div class="col-xs-12">
+                                    <label>{{'Confirm a Password' | translate}}</label>
+                                    <input type="password" class="form-control" placeholder="{{'Confirm Password' | translate}}" name="confirmPassword" ng-model="user.confirm_password" ng-pattern="user.password" ng-required="true" ng-minlength="6" ng-maxlength="40">
+                                    <span class="error" ng-show="(signupForm.$submitted || signupForm.confirmPassword.$touched) && (signupForm.confirmPassword.$pristine || signupForm.confirmPassword.$invalid) && (signupForm.confirmPassword.$error.required)">{{'Required'| translate}}</span>
+                                    <span class="error" ng-show="(signupForm.$submitted || signupForm.confirmPassword.$touched) && (signupForm.confirmPassword.$pristine || signupForm.confirmPassword.$invalid) && (signupForm.confirmPassword.$error.minlength)">{{'Minimum length is 6'| translate}}</span>
+                                    <span class="error" ng-show="(signupForm.$submitted || signupForm.confirmPassword.$touched) && (signupForm.confirmPassword.$pristine || signupForm.confirmPassword.$invalid) && (signupForm.confirmPassword.$error.maxlength)">{{'Maximum length is 20'| translate }}</span>
+                                    <span class="error" ng-show="confirmPasswordErr">{{confirmPasswordErr}}</span>
+                                    <span class="error" ng-show="signupForm.confirmPassword.$error.pattern">{{'Password Mismatch' | translate }}</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <label>{{'Enter Captcha' | translate}}</label>
+                                    <div class="normal-captcha text-18 form-control">
+                                        <simple-captcha valid="captchaValid" form={{signupForm}}></simple-captcha>
+                                    </div>
+                                    <span class="error" ng-show="(signupForm.$submitted || signupForm.normalcapcha1.$touched) && (signupForm.normalcapcha1.$pristine || signupForm.normalcapcha1.$invalid)">
+                                        <span ng-if="!captchaValid && signupForm.normalcapcha1.$error.required">{{'Required'| translate }}</span>
+                                    </span>
+                                        <span class="error" ng-show="(signupForm.$submitted || signupForm.normalcapcha2.$touched) && (signupForm.normalcapcha2.$pristine || signupForm.normalcapcha2.$invalid)">
+                                        <span ng-if="!captchaValid && signupForm.normalcapcha2.$error.required">{{'Required'| translate }}</span>
+                                    </span>
+                                    <span class="error" ng-if="!captchaValid && (!signupForm.normalcapcha1.$error.required && !signupForm.normalcapcha2.$error.required)">{{"Incorrect Captcha" | translate}}</span>  
+                                </div>
+                            </div>
+                    </div>
+                    <div class="form-footer clearfix">
+                        <input type="hidden" name="user_type"  ng-value="user_type"/>
+                        <div ng-if="widgetLink == ''">
+                            <button class="btn btn-info btn-animate" type="submit" ng-disabled="disable_submit">{{'Join Now' | translate }}</button>
+                        </div>
+                        <div ng-if="widgetLink !== ''">
+                            <div>
+                                <button class="btn btn-info btn-block btn-animate" type="submit" ng-disabled="disable_submit">{{'Join Now' | translate }}</button>
+                            </div>
+                        </div>
+                    </div>                    
+                </form>
+                <div class="register-member">
+                    <p>{{'Already a member?' | translate}} <a href="/app/users/login">{{'Login here' | translate}}</a></p>
+                    <p><a target="_blank" href="pages/10/term-and-conditions">{{'By signing up you agree to our terms and conditions.' | translate}}</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

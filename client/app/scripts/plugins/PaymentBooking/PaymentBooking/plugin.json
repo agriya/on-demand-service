@@ -1,0 +1,10 @@
+{
+	"name": "PaymentBooking", 
+	"class": "fa fa-2x fa-ticket",
+	"description": "Payment Booking",
+	"dependencies": "",
+	"module_id": "",
+	"module_hash": "",
+	"display_order": "",
+	"plugin_name":"PaymentBooking/PaymentBooking"
+}

@@ -1,0 +1,10 @@
+{
+	"name": "PayPal", 
+	"class": "fa fa-2x fa-paypal",
+	"description": "PayPal",
+	"dependencies": "",
+	"module_id": "",
+	"module_hash": "",
+	"display_order": "",
+	"plugin_name":"PayPal/PayPal"
+}

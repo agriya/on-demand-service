@@ -1,0 +1,48 @@
+<section class="edit-profile account-payout">
+    <div class="container">
+        <div class="profile-content">
+            <h3 class="page-head clearfix">
+                <div class="pull-left">{{'Account - Payout Details'| translate}}</div>
+                <div class="pull-right"><a href="users/user_profile" class="btn btn-info back-btn"> <span><i class="fa fa-chevron-left fa-fw"></i></span></a></div>
+            </h3>
+            <div class="form-content">
+                <form enctype="multipart/form-data" name="userprofileEdit" ng-submit="model.userDescription(userprofileEdit.$valid)" novalidate>
+                    <div class="form-body">                       
+                        <div class="personal-info">
+                                <!--<div class="col-md-5">
+                                    <h3>{{'Description - Details'| translate}}</h3>
+                                </div>-->                               
+                            <div class="location-info">
+                                <div class="form-group" ng-class="{ 'has-error' : (userprofileEdit.$submitted || userprofileEdit.desc_title.$touched) && (userprofileEdit.desc_title.$pristine || userprofileEdit.desc_title.$invalid) && (userprofileEdit.desc_title.$error.required)}">
+                                    <input type="text" class="form-control" name="desc_title" id="desc_title" placeholder="{{'Bank Account Number &#42;'| translate}}"
+                                        ng-model="model.user_profile.listing_title" ng-required="active"/>
+                                    <span class="error" ng-show="(userprofileEdit.$submitted || userprofileEdit.desc_title.$touched) && (userprofileEdit.desc_title.$pristine || userprofileEdit.desc_title.$invalid) && (userprofileEdit.desc_title.$error.required)">{{'Required'| translate }} </span>
+                                    <span class="error" ng-show="(userprofileEdit.$submitted || userprofileEdit.desc_title.$touched) && (userprofileEdit.desc_title.$pristine || userprofileEdit.desc_title.$invalid) && (userprofileEdit.desc_title.$error.minlength)">{{'Minimum length is 3'| translate}}</span>
+                                    <span class="error" ng-show="(userprofileEdit.$submitted || userprofileEdit.desc_title.$touched) && (userprofileEdit.desc_title.$pristine || userprofileEdit.desc_title.$invalid) && (userprofileEdit.desc_title.$error.maxlength)">{{'Maximum length is 50'| translate}}</span>
+                                </div>
+
+                                <div class="form-group" ng-class="{ 'has-error' : (userprofileEdit.$submitted || userprofileEdit.desc_add.$touched) && (userprofileEdit.desc_add.$pristine || userprofileEdit.desc_add.$invalid) && (userprofileEdit.desc_add.$error.required)}">
+                                    <input type="text" class="form-control" name="desc_add" id="desc_add" placeholder="{{'Sort Code &#42;'| translate}}" ng-model="model.user_profile.listing_description"
+                                        ng-required="active" />
+                                    <span class="error" ng-show="(userprofileEdit.$submitted || userprofileEdit.desc_add.$touched) && (userprofileEdit.desc_add.$pristine || userprofileEdit.desc_add.$invalid) && (userprofileEdit.desc_add.$error.required)">
+                                            {{'Required'| translate }} </span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="flat_rate" id="flat_rate" placeholder="{{'Name of the Account holder &#42;'| translate}}" ng-model="model.user_profile.flat_rate"
+                                />
+                            </div>
+                        </div>                        
+                        <div class="professional-info">                            
+                            <button class="btn btn-info btn-animate" type="submit">{{'Save'| translate }}</button>
+                        </div>
+                        <div class="secure-info">
+                            <span class="border"><i class="fa fa-lock fa-fw fa-lg"></i></span> 
+                            <span> All data is securely transferred using SSL Technology.</span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

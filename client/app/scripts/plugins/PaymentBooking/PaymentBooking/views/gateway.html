@@ -1,0 +1,162 @@
+<div class="container appoinments">
+    
+    <div class="media" ng-if="!class_showing">
+        <div class="navbar-left">
+            <a href="" title="{{appointmentInfo.provider_user.user_profile.first_name}} {{appointmentInfo.provider_user.user_profile.last_name}}">
+                <img ng-src="{{appointmentInfo.providerImage}}" class="img-circle img-thumbnail">
+            </a>
+        </div>    
+        <div class="media-body">
+            <dl class="dl-horizontal">
+                <dt>{{'Review your booking details for' | translate}}</dt>
+                <dd>{{appointmentInfo.provider_user.user_profile.first_name}} {{appointmentInfo.provider_user.user_profile.last_name}}</dd>
+                <dt>{{'Booking for' | translate}}</dt>
+                <dd><span>{{appointmentInfo.appointment_from_date | date : 'dd-MM-yyyy'}}</span> <span ng-if="appointmentInfo.appointment_to_date != appointmentInfo.appointment_from_date && appointmentInfo.appointment_to_date != null"> - {{appointmentInfo.appointment_to_date | date : 'dd-MM-yyyy'}}</span>
+                    <span ng-if="appointmentInfo.appointment_from_time != null && appointmentInfo.appointment_from_time != undefined"> ({{appointmentInfo.appointment_from_time}}<span ng-if="appointmentInfo.appointment_to_time != null">-{{appointmentInfo.appointment_to_time}}</span>)</span>
+                </dd>
+            </dl>
+            <span ng-if="is_bonus">
+                <dl class="dl-horizontal no-mar">   
+                    <dt>{{'Payment Note' | translate}}</dt>
+                    <dd class="text-b text-20">{{appointmentInfo.bonus_amount_note}}</dd>
+                </dl>   
+             </span>
+            <div class="col-sm-7 col-md-5 col-xs-12 bor-rad-0 no-pad">
+                <dl class="dl-horizontal no-mar bg-success space">
+                    <dt>{{'Total amount to pay' | translate}}</dt>
+                    <dd class="text-b text-20" ng-if="!class_showing">{{Booking_amount | currency : currency_type}}</dd>
+                    <dd class="text-b text-20" ng-if="class_showing">{{$root.settings.PRO_ACCOUNT_FEE | currency : currency_type}}</dd>
+                </dl>            
+                <div ng-if="appointmentInfo.user.affiliate_pending_amount !=0 && appointmentInfo.user.affiliate_pending_amount != null && appointmentInfo.user.affiliate_pending_amount != undefined && affiliate_plugin_enabled === true">
+                    <dl class="dl-horizontal">
+                        <dt><span ng-if="appointmentInfo.user.affiliate_pending_amount > 0">{{'Your current balance affiliate earned amount' | translate}}</span></dt>
+                        <dd class="text-b text-20" ng-if="appointmentInfo.user.affiliate_pending_amount > 0">{{appointmentInfo.user.affiliate_pending_amount | currency: currency_type}}</dd>
+                        <dt ng-if="appointmentInfo.user.affiliate_pending_amount > 0 && total_amount > 0 && total_affiliate_amount <= 0">{{'Total payable amount' | translate}}</dt>
+                        <dd class="text-b text-20" ng-if="appointmentInfo.user.affiliate_pending_amount > 0 && total_amount > 0 && total_affiliate_amount <= 0">{{total_amount |currency : currency_type}}</dd>
+                        <dt ng-if="appointmentInfo.user.affiliate_pending_amount > 0 && total_affiliate_amount > 0">{{'After this booking your balance affiliate amount' | translate}}</dt>
+                        <dd class="text-b text-20" ng-if="appointmentInfo.user.affiliate_pending_amount > 0 && total_affiliate_amount > 0">{{total_affiliate_amount | currency : currency_type}}</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+    <article id="get-gateways-index" ng-if="total_amount > 0 || class_showing == true">
+        <div class="get-gateways user-dashboard">
+            <div class="ver-space">
+                <div id="paymentgateways-tab-container" class="navbar-btn">
+                    <ul class="nav nav-tabs cur text-center">
+                        <!--Credit Card Tab-->
+                        <li ng-if="paypal_plugin_enabled"  ng-class='{active:paypal_plugin_enabled}' class="col-sm-3 col-xs-12 no-pad">
+                            <a data-target="#creditcard" data-toggle="tab" ng-click="credit_card_enabled = true;paypal_plugin_enabled=false;hideCardDetail()">
+                                <img src="images/card_icon.png" data-target="#creditcard">
+                            </a>
+                        </li>
+                        <!-- paypal tabs -->
+                        <li ng-if="paypal_plugin_enabled" class="col-sm-3 col-xs-12 no-pad">
+                            <a data-target="#Paypal" data-toggle="tab" ng-click="credit_card_enabled = false;paypal_plugin_enabled=true;">
+                                <img src="images/paypal.png" data-target="#Paypal">
+                            </a>
+                        </li>
+                        <!-- zazpay tabs -->
+                        <li ng-repeat="gateway_group in gateway_groups" ng-hide="!gateway_group.gateways.length" ng-class='{active:$first && !paypal_enabled}'>
+                            <a data-target="#{{gateway_group.id}}" data-toggle="tab" ng-click="paneChanged(gateway_group.display_name)">
+                                <img ng-src="{{gateway_group.thumb_url}}" data-target="#{{gateway_group.id}}" />
+                            </a>
+                        </li>
+                        <!-- Wallet tab -->
+                        <li ng-if="wallet_enabled" ng-class='{active:wallet_enabled && !paypal_enabled}'>
+                            <a data-target="#Wallet" data-toggle="tab" ng-click="paneChanged('Wallet')">
+                                <img src="images/wallet-icon.png" data-target="#Wallet"> 
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="tab-content">
+                    <div class="tab-pane panel-body no-pad" ng-class='{active:paypal_plugin_enabled}' id="creditcard">
+                        <div class="js-form js-form navbar-btn">
+                            <h4 class="pad-top-20"> {{"Credit Card Details" | translate}}</h4>
+                        </div>  
+                         <div ng-if="credit_card_details.length > 0" class="row">
+                            <p class="col-sm-12 mar-bot-20"> {{"Please Select Card"| translate}}</p>
+                            <div ng-repeat="card in credit_card_details" class="radio">
+                                <label class="col-sm-1 col-xs-1">
+                                    <input type="radio" ng-model="buyer.selected_card" value="{{card.id}}" name="card" ng-checked="card.id == buyer.selected_card" ng-change="hideCardDetail()">
+                                    <span></span>
+                                </label>
+                                <div class="well col-sm-4 col-xs-11">
+                                    <h4> {{card.name_on_the_card}} </h4>
+                                    <h5>{{card.masked_card_number}}</h5>
+                                    <p>{{'Expires:'|translate}} {{card.credit_card_expire}}</p>
+                                </div>
+                            </div>
+                        </div>  
+                        <a href="#" class="btn btn-link pad-left-0" ng-click="showCardDetail()"> {{"Try Another Card"|translate}}</a>
+                        <form novalidate name="PaymentForm">
+                            <div class="row"  ng-class='{active:paypal_plugin_enabled}' id="showCardDetail">
+                                <div class="col-md-3">
+                                    <div class="form-group" ng-class="{ 'has-error' : (PaymentForm.$submitted || PaymentForm.credit_card_number.$touched) && (PaymentForm.credit_card_number.$pristine || PaymentForm.credit_card_number.$invalid) }">
+                                        <card-number-input ng-model="buyer.credit_card_number" class="form-control" name="credit_card_number" card-type="buyer.cardType" placeholder="{{'Card Number'|translate}}" ng-required="true" ng-focus="clearSelectedCard()" ></card-number-input><span class="{{buyer.cardType}}"><span class="card-type"></span></span>
+                                        <div class="help-block" ng-show="(PaymentForm.$submitted || PaymentForm.credit_card_number.$touched) && (PaymentForm.credit_card_number.$pristine || PaymentForm.credit_card_number.$invalid) && (PaymentForm.credit_card_number.$error.required)">{{'Required'|translate}}</div>
+                                        <div class="help-block" ng-show="(PaymentForm.$submitted || PaymentForm.credit_card_number.$touched) && (PaymentForm.credit_card_number.$pristine || PaymentForm.credit_card_number.$invalid) && (PaymentForm.credit_card_number.$error.parse)">{{'Please enter valid credit card number'|translate}}</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group" ng-class="{ 'has-error' : (PaymentForm.$submitted || PaymentForm.credit_card_expired.$touched) && (PaymentForm.credit_card_expired.$pristine || PaymentForm.credit_card_expired.$invalid) }">
+                                        <card-expiry-input class="form-control" name="credit_card_expired" ng-model="buyer.credit_card_expired" placeholder="{{'MM / YYYY'|translate}}" ng-required="true" ng-focus="clearSelectedCard()"></card-expiry-input>
+                                        <div class="help-block" ng-show="(PaymentForm.$submitted || PaymentForm.credit_card_expired.$touched) && (PaymentForm.credit_card_expired.$pristine || PaymentForm.credit_card_expired.$invalid) && (PaymentForm.credit_card_expired.$error.required)">{{'Required'|translate}}</div>
+                                        <div class="help-block" ng-show="(PaymentForm.$submitted || PaymentForm.credit_card_expired.$touched) && (PaymentForm.credit_card_expired.$pristine || PaymentForm.credit_card_expired.$invalid) && (PaymentForm.credit_card_expired.$error.parse)">{{'Please enter valid expiry date'|translate}}</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 pr25">
+                                    <div class="form-group" ng-class="{ 'has-error' : (PaymentForm.$submitted || PaymentForm.credit_card_name_on_card.$touched) && (PaymentForm.credit_card_name_on_card.$pristine || PaymentForm.credit_card_name_on_card.$invalid) }"> <input name="credit_card_name_on_card" ng-model="buyer.credit_card_name_on_card" class="form-control" id="SudopayCreditCardNameOnCard" type="text" class="card_name" placeholder="{{'Name on Card'|translate}}" ng-required="true" ng-focus="clearSelectedCard()"/>
+                                        <div class="help-block"
+                                            ng-show="(PaymentForm.$submitted || PaymentForm.credit_card_name_on_card.$touched) && (PaymentForm.credit_card_name_on_card.$pristine || PaymentForm.credit_card_name_on_card.$invalid) && (PaymentForm.credit_card_name_on_card.$error.required)">{{'Required'|translate}}</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group" ng-class="{ 'has-error' : (PaymentForm.$submitted || PaymentForm.credit_card_code.$touched) && (PaymentForm.ccNumcredit_card_codeber.$pristine || PaymentForm.credit_card_code.$invalid) }">
+                                        <card-cvc-input class="form-control" name="credit_card_code" ng-model="buyer.credit_card_code" placeholder="{{'Card Code'|translate}}" ng-required="true" ng-focus="clearSelectedCard()"></card-cvc-input>
+                                        <div class="help-block" ng-show="(PaymentForm.$submitted || PaymentForm.credit_card_code.$touched) && (PaymentForm.credit_card_code.$pristine || PaymentForm.credit_card_code.$invalid) && (PaymentForm.credit_card_code.$error.required)">{{'Required'|translate}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="checkbox-field" ng-if="buyer.selected_card == '' && $scope.buyer.selected_card == undefined && $scope.buyer.selected_card == null">
+                                <label for="remember_card">
+                                    <input type="checkbox" class="hide" ng-model="buyer.remember" id="remember_card">
+                                    <span class="custom-check"></span>    
+                                    <span>{{'Remember card' | translate}}</span>
+                                </label>
+                            </div>
+                            <div class="clearfix top-space"> 
+                                <button type="submit" ng-if="total_amount > 0 || class_showing == true" class="textb btn btn-info" ng-disabled="paynow_is_disabled" ng-click="paypal_paynow(PaymentForm.$valid,'card')" title="{{'Pay Now'|translate}}">{{'Pay Now' | translate}} 
+                                    <span ng-show="paynow_is_disabled"><i class="fa fa-spinner fa-pulse fa-lg"></i></span>
+                                </button>                           
+                            </div>
+                        </form>     
+                    </div>    
+                    <!-- paypal form -->
+                    <div class="tab-pane"  id="Paypal">
+                        <div class="js-form js-form navbar-btn">
+                            <div class="clearfix top-space"> 
+                                <button type="submit" ng-if="total_amount > 0 || class_showing == true" class="textb btn btn-info" ng-disabled="paynow_is_disabled" ng-click="paypal_paynow(true,'paypal')" title="{{'Pay Now'|translate}}">{{'Pay Now' | translate}} 
+                                    <span ng-show="paynow_is_disabled"><i class="fa fa-spinner fa-pulse fa-lg"></i></span>
+                                </button>                          
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </article>
+    <article>
+        <div class="clearfix btn-group" ng-if="total_amount < 1"> 
+            <button type="button" ng-disabled="paynow_is_disabled" ng-click="paypal_paynow(true,'nopay')" class="textb btn btn-info" title="{{'Book Now'|translate}}">{{'Book Now' | translate}} 
+                <span ng-show="paynow_is_disabled"><i class="fa fa-spinner fa-pulse fa-lg"></i></span>
+            </button>                           
+        </div> 
+    </article>  
+    <div class="mar-bot-20"> 
+        <a target="_blank" class="blackc" href="pages/10/term-and-conditions" title="{{'Terms of Service' | translate}}">{{'By clicking the Pay Now button, you agree to these Terms of Service.' | translate}}</a>
+    </div>
+</div>
+

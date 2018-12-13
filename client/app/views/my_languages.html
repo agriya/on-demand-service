@@ -1,0 +1,32 @@
+<section class="clearfix checklist-content">
+    <div class="container">
+        <div class="page-head">    
+            <h1>{{'My Languages'| translate}}</h1>
+        </div>
+    </div>
+    <div class="container remove-width">
+        <div class="form-content">
+        	<form name="languageUpdate" ng-submit="model.myLanguage(languageUpdate)" novalidate>
+                <div class="form-heading">
+                    <h2><span>{{'Select Your Languages'| translate}}</span></h2>
+                </div>
+                <div class="form-body clearfix">
+                	<div class="form-group col-md-4" ng-repeat="language in languages">
+                        <label class="checkbox-field">
+                            <input class="hide" type="checkbox" checklist-model="user.language_ids" checklist-value="language.id" ng-change="check(language.id, checked)" id="{{language.name}}">
+                            <span class="custom-check check-green"></span>
+                            <span><label for="{{language.name}}">{{language.name | translate }}</label></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-footer">
+                	<div class="row">
+                    	<div class="text-center">
+                			<button class="btn btn-green btn-animate" type="submit">{{'Update'| translate }}</button>
+                		</div>
+                  	</div>
+                </div>
+            </form>
+        </div>
+   	</div>
+</section>

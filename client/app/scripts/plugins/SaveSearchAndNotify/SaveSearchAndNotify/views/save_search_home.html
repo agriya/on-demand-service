@@ -1,0 +1,133 @@
+<div class="edit-profile container user-dashboard" style="margin-bottom:300px;">
+    <div class="hor-space-10">
+        <h3>{{'Pick up where you left off'|translate}} </h3>
+    </div>
+    <div class="row hor-space-10">
+        <div class="col-md-8 col-sm-12 col-xs-12 panel-info bor-rad-0">
+            <h4 class="panel-heading no-mar space row"> {{'Open Searches'|translate}} </h4>
+            <div ng-if="ListSavedSearches.length == 0" class="panel-body">
+                <h5 class="text-15 text-b">{{'You haven\'t saved any searches.'| translate}}</h5>
+                <h6 class="text-15">{{'When you start a new search, remember to select "Save Search" to find it here.' |translate}}</h6>
+            </div>    
+            <div ng-repeat="search in ListSavedSearches" ng-show="ListSavedSearches.length > 0" class="panel-body mar-bot-20">
+                <div class="row mar-bot-20">
+                    <div class="col-md-7">
+                        <a href="users?user_search_id={{search.id}}"> <h4 class="text-primary no-mar text-20"> {{search.name}} </h4> </a>
+                        <span class="text-12"> {{'Saved' | translate}} {{search.created_at| timeago}}</span>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group has-feedback speciality">
+                            <label> {{'Email notifications:'| translate}} </label>
+                            <select ng-model="search.notification_type_id" class="form-control" ng-change="updateSavedSearches(search.notification_type_id,search.id)">
+                                <option value="2" ng-selected="search.notification_type_id == 2"> {{'Never'| translate}} </option>
+                                <option value="1" ng-selected="search.notification_type_id == 1"> {{'Instantly'| translate}} </option>
+                            </select>    
+                        </div> 
+                    </div>
+                </div>
+                <hr class="no-mar top-space">
+                <div class="row job-board">
+                    <div class="col-xs-12 col-md-3 sub-list">
+                        <button class="btn btn-link bor-rad-0 pointer btn-block mar-5" ng-click="editSavedSearch(search)"> {{'Edit'| translate}}</a>
+                    </div>
+                    <div class="col-xs-12 col-md-3 sub-list">
+                        <a href="users?user_search_id={{search.id}}" class="btn btn-link bor-rad-0 pointer btn-block mar-5"> {{'Search Now'| translate}}</a>
+                    </div>
+                    <div class="col-xs-12 col-md-3 sub-list">
+                        <button class="btn btn-link bor-rad-0 pointer btn-block mar-5" ng-click="deleteSavedSearches(search.id)"> {{'Delete'| translate}}</button>
+                    </div>
+                </div>       
+            </div>
+            <div class="binding-pagination" ng-show="ListSavedSearches.length >= itemsPerPage && ListSavedSearches.length > 0">
+                <div class="pagnation-content">
+                    <div class="clearfix pagnation-inner">
+                        <div class="col-md-12 text-center">
+                            <uib-pagination previous-text="Prev" next-text="Next" total-items="totalRecords" num-pages="lastPage" ng-model="currentPage"
+                                max-size="maxSize" class="pagination-sm" boundary-link-numbers="true" rotate="false" items-per-page="itemsPerPage"
+                                ng-change="paginate(currentPage)"></uib-pagination>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> 
+        <div class="col-md-4 col-xs-12 col-sm-12 well">
+            <h4>{{'Start a new search' | translate}}</h4>
+             <form class="clearfix" name="SearchForm" ng-submit="homesearch(SearchForm.$valid,SearchForm)" novalidate>
+                <div class="form-group speciality"> 
+                    <div class="has-feedback" ng-class="{ 'has-error' : (SearchForm.$submitted || SearchForm.service_id.$touched) && (SearchForm.service_id.$pristine || SearchForm.service_id.$invalid) && (SearchForm.service_id.$error.required)}">                            
+                        <select class="form-control" ng-model="service_id" name="service_id" ng-required="true">
+                            <option value="">{{'-- Select Service --' | translate}}</option>
+                            <option ng-repeat="service in services" value="{{service.id}}">{{service.name | translate}}</option>
+                        </select>                               
+                        <span class="error" ng-show="(SearchForm.$submitted || SearchForm.service_id.$touched) && (SearchForm.service_id.$pristine || SearchForm.service_id.$invalid) && (SearchForm.service_id.$error.required)">{{'Select service'| translate }} </span>
+                    </div>              
+                </div>
+                <div class="form-group insurance">
+                    <div class="has-feedback" ng-class="{ 'has-error' : (SearchForm.$submitted || SearchForm.address.$touched) && (SearchForm.address.$pristine || SearchForm.address.$invalid) && (SearchForm.address.$error.required)}">
+                        <input type="text" g-places-autocomplete  options="options" name="address" ng-required="true" ng-model="address" autocomplete="off" class="form-control" id="address" ng-change="location()" placeholder="{{'Enter your location'| translate}}" ng-required="true">
+                        <span class="error" ng-show="IsAddressPlaceChange == true && ((SearchForm.$submitted || SearchForm.address.$touched) && (SearchForm.address.$pristine || SearchForm.address.$invalid) && (SearchForm.address.$error.required))">{{'Enter Address'| translate }} </span>
+                        <div ng-show="allowedplace" class="error">{{'Enter Allowed Locations' | translate}}</div>
+                        <div ng-show="IsAddressPlaceChange == false" class="error">{{'Please choose address from autocomplete.' | translate}}</div>
+                    </div>
+                </div>
+                <div class="form-group form-btn">
+                    <button class="btn btn-info btn-block btn-sblue btn-animate"  type="submit">{{'Search' | translate }}</button>
+                </div>
+            </form>
+        </div>
+    </div>  
+</div>
+<script type="text/ng-template" id="editSaveSearch.html">
+    <div class="user-dashboard">
+        <div class="modal-content panel-info">
+            <div class="modal-header panel-heading">
+                <div class="col-md-11">
+                    <h4 class="modal-title" id="modal-title">{{'Save Search' | translate}}</h4>
+                </div>
+                <div class="col-md-1 text-right">
+                    <span class="pointer" ng-click="modalClose()"><i class="fa fa-close fa-2x"></i> </span>
+                </div>    
+            </div>
+            <div class="panel-body row">
+                <div class="col-md-7">
+                    <form>
+                        <div class="form-group space">
+                            <label> {{'Name:' | translate}} </label>
+                            <input type="text" class="form-control" placeholder="{{'Enter name'|translate}}" ng-model="edit_search.name">
+                        </div>    
+                        <div class="form-group space">
+                            <h5> {{'Get notified of new matches' |translate}} </h5>
+                            <div class="form-group has-feedback speciality">
+                                <select ng-model="edit_search.notification_type_id" class="form-control">
+                                    <option value="2" ng-selected="edit_search.notification_type_id == 2"> {{'Never'| translate}} </option>
+                                    <option value="1" ng-selected="edit_search.notification_type_id == 1"> {{'Instantly'| translate}} </option>
+                                </select>    
+                            </div> 
+                        </div>
+                    </form>
+                    <div class="row mar-bot-20">
+                        <div class="col-sm-12 col-md-4 col-xs-12">
+                            <button class="btn btn-info btn-block bor-rad-0" ng-click="updateModalSaveSearch()"> {{"Update"| translate}} </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-5">
+                    <h4>{{'Applied Filters' | translate}}</h4>
+                    <dl>
+                        <dt>{{'Service:' | translate }}</dt>
+                        <dd>{{edit_search.service.name | translate}}</dd>
+                        <dt>{{'Location:' | translate }}</dt>
+                        <dd>{{edit_search.address}}</dd>
+                        <dt>{{'Distance:' | translate }}</dt>
+                        <dd>{{edit_search.radius}}</dd>
+                        <span ng-repeat="data in save_search_form_field_submissions">
+                            <dt>{{data.name: | translate}}</dt>
+                            <dd>{{data.value}}</dd>
+                        </span>  
+                    </dl>
+                </div> 
+            </div>
+        </div>   
+    </div>
+</script>
+   

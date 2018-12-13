@@ -1,0 +1,25 @@
+<div class="edit-profile listing-photos">
+    <h3 class="text-center">{{'Email verification' | translate}}</h3>
+    <div class="container description-details" ng-show="email_verified">  
+        <h5 ng-if="show" class="text-b text-center">{{'We send activation email for your registered email. Kindly click the URL in email to verify your email' | translate}}</h5>
+        <div id="tourpackages-carousel">           
+            <form class="form-inline text-center">
+                <div class="form-group">
+                    <div class="input-group">
+                        <input class="form-control" type="text" ng-model="email"  name="phone" readonly>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div ng-if="hide"><button type="button" class="btn btn-info" ng-click="smsResend();showing()">{{'Send verification email' | translate}}</button></div>
+                    <div ng-if="show"><button type="button" class="btn btn-info" ng-disabled="!showing" ng-click="smsResend();show=true;hide=false"><span ng-show="!value">{{'Resend verification email' | translate}}</span><span ng-show="value">{{countDown}}</span></button></div>
+                </div>  
+            </form>               
+        </div>
+        <div class="text-center" ng-hide="email_verified">
+            <h5>{{'Your email is already verified ' | translate}}</h5>
+        </div>
+        <div class="text-center">
+            <a href="users/user_profile?type=personal">{{'Click here to change your email' | translate}}</a>
+        </div>
+    </div>    
+</div>

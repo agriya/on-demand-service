@@ -1,0 +1,7 @@
+<li class="language-select" style="color:white" ng-if="visible">
+    <!--<select ng-model="currentLocaleDisplayName" ng-options="localesDisplayName.name for localesDisplayName in localesDisplayNames" ng-change="changeLanguage(currentLocaleDisplayName)" ng-selected="localesDisplayName.name == currentLocaleDisplayName" class="form-control">
+    </select>-->
+    <select ng-model="currentLocaleDisplayName" ng-change="changeLanguage(currentLocaleDisplayName)" class="form-control">
+        <option ng-repeat="localesDisplayName in localesDisplayNames" value="{{localesDisplayName.name}}"> {{localesDisplayName.name}}</option>
+    </select>
+</li>

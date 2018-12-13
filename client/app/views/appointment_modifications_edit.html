@@ -1,0 +1,67 @@
+<section class="clearfix appmt-form">
+    <div class="container">
+    	<div class="col-md-5 col-md-offset-3 border">
+            <div class="page-head">
+                <h1>{{'Appointment Settings Modification Add'| translate}}</h1>
+            </div>
+            <div class="form-content">
+                <form name="modificationform" method="post" ng-submit="model.appointmentModificationEdit(modificationform)" novalidate>
+                    <div class="form-heading">
+                        <h2><span>{{'Change Your Calendar Settings'| translate}}</span></h2>
+                    </div>
+                    <div class="form-body">
+                        <div class="form-group">
+                            <label>Date</label>
+                            <input class="form-control" ng-model="model.settingValue.unavailable_date" data-date-format="yyyy-MM-dd" readonly data-start-date="{{date|date:'yyyy-MM-dd'}}" data-min-date="{{date|date:'yyyy-MM-dd'}}"  data-autoclose="1" name="type" bs-datepicker type="unavailable_date" required="required">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="checkbox-field1">
+                                <input class="hide" type="checkbox" name="type" ng-model="model.settingValue.type" ng-change="model.ShowHide('type')" ng-checked="model.settingValue.type"/>
+                                <span></span>{{'Make a day off' | translate}}
+                            </label>
+                        </div>
+            
+                        <div class="form-group" ng-hide="model.settingValue.type">
+                             <label>{{'Choose your Available Time' | translate}}</label>
+                            <select class="form-control"  chosen single-backstroke-delete="true" display-disabled-options="true" multiple ng-model="model.settingValue.appt_time" ng-options="time for time in timeSlot">
+                                <option value=""></option>
+                            </select>
+                        <!--
+                            <div class="form-group">
+                                <label class="checkbox-field">
+                                    <input type="checkbox" name="is_two_session" ng-model="model.settingValue.is_two_session" ng-change="model.ShowHide('is_two_session')" ng-checked="model.settingValue.is_two_session === 1"/>
+                                    <span>Practice operates in two sessions</span>
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label>Practice Open</label>
+                                <input class="form-control" size="8" ng-model="model.settingValue.practice_open" name="practice_open" bs-timepicker data-time-type="time" data-default-time="false" data-time-format="HH:mm" data-length="1" data-minute-step="5" data-arrow-behavior="picker" type="text" ng-value="{{model.settingValue.practice_open}}">
+                            </div>
+                            <div ng-show="model.settingValue.is_two_session">
+                                <div class="form-group">
+                                    <label>Lunch At</label>
+                                    <input class="form-control" size="8" ng-model="model.settingValue.lunch_at" name="lunch_at" bs-timepicker data-time-type="time" data-default-time="false" data-time-format="HH:mm" data-length="1" data-minute-step="5" data-arrow-behavior="picker" type="text">
+                                </div>
+                                <div class="form-group">
+                                    <label>Resume At</label>
+                                    <input class="form-control" size="8" ng-model="model.settingValue.resume_at" name="resume_at" bs-timepicker data-time-type="time" data-default-time="false" data-time-format="HH:mm" data-length="1" data-minute-step="5" data-arrow-behavior="picker" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Practice Close</label>
+                                <input class="form-control" size="8" ng-model="model.settingValue.practice_close" name="practice_close" bs-timepicker data-time-type="time" data-default-time="false" data-time-format="HH:mm" data-length="1" data-minute-step="5" data-arrow-behavior="picker" type="text">
+                            </div>
+                        -->
+                        </div>
+                        <!-- Common Setting Completed Here -->
+                    </div>
+                    <div class="form-footer education-btn">
+                        <button class="btn btn-green" type="submit">{{'Update'| translate }}</button>
+                        <a href="appointments/modifications" class="btn btn-red">{{'Back'| translate }}</a>
+                    </div>
+                </form>
+            </div>
+   		</div>
+   	</div>
+</section>

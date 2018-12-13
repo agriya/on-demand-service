@@ -1,0 +1,97 @@
+<section class="edit-profile checklist-content my-services">
+    <div class="container listing-details"  ng-show="auth.category_id != null && auth.category_id != undefined">
+         <div> 
+            <a href="users/listing" class="btn btn-link"> 
+                <span><i class="fa fa-angle-double-left fa-fw"></i> {{'Back to Listing' | translate }}</span>
+            </a>
+        </div>
+        <div class="description-details">   
+            <h3 class="text-center">{{'Listing - Services and Rates' | translate}}</h3> 
+            <div class="block-highlight">  
+                <div class="panel-body">
+                    <h5 class="text-b">{{'How to define the services you offer' | translate }}</h5>  
+                    <ul>
+                        <li>{{'Check those services that you would like to provide' | translate }}</li>
+                        <li>{{'Adjust your rates' | translate }}</li>
+                        <li>{{'Set your cancellation policy' | translate }}</li>
+                    </ul>                    
+                    <p><strong>{{'Pro tip:' | translate }}</strong> {{'Follow our suggested prices (you can always change them later)' | translate }}</p>
+                </div>
+            </div>
+             <div class="my-services-content">    
+                <form name="serviceForm" ng-submit="UpdateService(serviceForm.$valid)" novalidate>  
+                    <fieldset> 
+                            <h5>{{'Services Offered' | translate }}</h5>
+                            <p class="error" ng-show="serviceErrorMsg">{{'Please select any one service to enable couple service' | translate}} </p>
+                            <div ng-repeat="service in services">
+                                <div class="form-group"  >
+                                    <div class="checkbox-field">
+                                        <label for="{{service.name}}">
+                                            <input type="checkbox" ng-model="service.is_checked" id="{{service.name}}" ng-change="checkService(service.id,$index)" >
+                                            <span class="custom-check" ></span>
+                                            <span >{{service.name | translate }}</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div ng-if="service.is_checked && service.id != ConstService.Service_3">
+                                    <div class="form-group" ng-if="userInfo.category.is_enable_common_hourly_rate_for_all_sub_services == 0">
+                                        <span class="text-13"><span class="text-danger">&#42;</span>{{'Flat rate' | translate }} <span ng-show = "$root.settings.CURRENCY_SYMBOL !== ''">({{$root.settings.CURRENCY_SYMBOL}})</span><span ng-show = "$root.settings.CURRENCY_SYMBOL === ''">({{$root.settings.SITE_CURRENCY_CODE}})</span></span>
+                                        <input type="text" min="1.0" class="form-control" id="" name="flat_rate{{service.id}}" ng-model="service.rate" placeholder="{{'Flat rate' | translate }}" ng-pattern="/^[0-9.]*$/" ng-required="true">
+                                        <span class="error" ng-show="(serviceForm.$submitted || serviceForm.flat_rate{{service.id}}.$touched) && (serviceForm.flat_rate{{service.id}}.$pristine || serviceForm.flat_rate{{service.id}}.$invalid) && (serviceForm.flat_rate{{service.id}}.$error.required)">{{'Enter flat rate' | translate }}</span>
+                                        <span class="error" ng-show="(serviceForm.$submitted || serviceForm.flat_rate{{service.id}}.$touched) && (serviceForm.flat_rate{{service.id}}.$pristine || serviceForm.flat_rate{{service.id}}.$invalid) && (serviceForm.flat_rate{{service.id}}.$error.min)">{{'Enter valid flat rate' | translate }}</span>
+                                        <span class="error"  ng-show="(serviceForm.$submitted || serviceForm.flat_rate{{service.id}}.$touched) && (serviceForm.flat_rate{{service.id}}.$pristine || serviceForm.flat_rate{{service.id}}.$invalid) && serviceForm.flat_rate{{service.id}}.$error.pattern">{{'Enter valid flat rate'| translate }}</span>
+                                    </div>
+                                    <div class="form-group" ng-if="userInfo.category.is_enable_common_hourly_rate_for_all_sub_services == 1">
+                                        <span class="text-13"><span class="text-danger">&#42;</span>{{'Hourly rate' | translate }} <span ng-show = "$root.settings.CURRENCY_SYMBOL !== ''">({{$root.settings.CURRENCY_SYMBOL}})</span><span ng-show = "$root.settings.CURRENCY_SYMBOL === ''">({{$root.settings.SITE_CURRENCY_CODE}})</span></span>
+                                        <input type="text" min="1.0" class="form-control" id="" name="flat_rate{{service.id}}" ng-model="service.rate" placeholder="{{'Flat rate' | translate }}" ng-pattern="/^[0-9.]*$/" ng-required="true">
+                                        <span class="error" ng-show="(serviceForm.$submitted || serviceForm.flat_rate{{service.id}}.$touched) && (serviceForm.flat_rate{{service.id}}.$pristine || serviceForm.flat_rate{{service.id}}.$invalid) && (serviceForm.flat_rate{{service.id}}.$error.required)">{{'Enter hourly rate' | translate }}</span>
+                                        <span class="error" ng-show="(serviceForm.$submitted || serviceForm.flat_rate{{service.id}}.$touched) && (serviceForm.flat_rate{{service.id}}.$pristine || serviceForm.flat_rate{{service.id}}.$invalid) && (serviceForm.flat_rate{{service.id}}.$error.min)">{{'Enter valid hourly rate' | translate }}</span>
+                                        <span class="error"  ng-show="(serviceForm.$submitted || serviceForm.flat_rate{{service.id}}.$touched) && (serviceForm.flat_rate{{service.id}}.$pristine || serviceForm.flat_rate{{service.id}}.$invalid) && serviceForm.flat_rate{{service.id}}.$error.pattern">{{'Enter valid hourly rate'| translate }}</span>
+                                    </div>
+                                    <div class="form-group" ng-if="$root.settings.SITE_ENABLED_PLUGINS.indexOf('CancellationPolicies/CancellationPolicies') > -1">
+                                        <span class="bluec text-13">{{'Cancellation policy' | translate }}</span>
+                                        <select class="form-control" style="width:100%" name="policy" ng-model="service.policy_id" ng-options="policy.id as policy.name for policy in policies" ng-selected="policy.id == service.policy_id"></select>
+                                    </div>
+                                    <div class="form-group" ng-if="service.is_show_form === true" ng-repeat="data in form_data">
+                                            <h4 ng-if="service.id == data.foreign_id">{{data.name| translate}}</h4>
+                                        <!--<div class="panel-heading customcls clearfix" ng-repeat="form_field_submissions in form_fields_all track by $index">
+                                            <div ng-repeat="(key, form_field_submiss) in form_field_submissions">
+                                                <div ng-model="form_answwer[$index]" fb-form="{{'default-'+(key+1)}}" fb-default="defaultValue" ></div>
+                                            </div>
+                                        </div>-->
+                                        <div class="clearfix" ng-repeat="form_field_submissions in form_fields">
+                                            <div ng-if="data.id == form_field_submissions.form_field_group_id && service.id == form_field_submissions.foreign_id" name="form_field{{$index}}" ng-model="form_answer[$index]" fb-form="{{'default-'+($index+1)}}" fb-default="defaultValue"></div>
+                                        </div>
+                                    </div>
+
+                                </div>  
+                            </div>
+                             <interview-block ng-if="$root.settings.SITE_ENABLED_PLUGINS.indexOf('Interview/Interview') > -1"> </interview-block>  
+                             <div class="text-center">                    
+                                    <button class="btn btn-info" type="submit" ng-disabled="!tempValue">{{'Save' | translate }}</button>
+                            </div>  
+                        </div>  
+                         
+                    </fieldset>
+                    
+                     
+                </form>         
+            </div>
+        </div>
+         
+    </div> 
+    <div class="description-details" ng-show="auth.category_id == null || auth.category_id == undefined">
+            <form name="categoryServiceForm" ng-submit="getCategory(user.selectedCategory)">
+                <h4 class="mar-bot-20">{{'Please select a category' | translate}} </h4>
+                <ul class="list-unstyled row">
+                    <li ng-repeat="category in categories" class="col-sm-6"> 
+                        <input type="radio" name="category" value="{{category.id}}" ng-model="user.selectedCategory">{{category.name}}
+                    </li>
+                </ul>
+                <p class="error"  ng-show="showServiceCategoryError">{{'Please select Category'}} </p>
+                <div>                    
+                    <button class="btn btn-info" type="submit">{{'Continue' | translate }}</button>
+                </div>    
+            </form>    
+        </div>  
+</section>

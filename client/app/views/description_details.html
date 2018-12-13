@@ -1,0 +1,95 @@
+<section class="edit-profile">
+    <div class="container">
+        <div class="clearfix">
+            <div class="form-content">
+                <form enctype="multipart/form-data" name="userprofileEdit1" ng-submit="checkPlace();userProfile(userprofileEdit1.$valid,userprofileEdit1)" novalidate>
+                    <div class="form-body">
+                        <!--description-->
+                        <div class="listing-details checklist-content my-services">
+                            <div>
+                                <a href="users/listing" class="btn btn-link"> <span><i class="fa fa-angle-double-left fa-fw"></i>{{'Back to Listing' | translate}}</span></a>
+                            </div>
+                            <div class="description-details right-side">
+                                <h3 class="text-center">{{'Your Personalised Profile - Details' | translate}}</h3>
+                                <div class="personal-info">
+                                    <div class="panel-body listing-details block-highlight">
+                                        <h6 class="text-15">{{'How to convince customer that you are the right service provider for their them' | translate}}</h6>
+                                        <ul>
+                                            <li>{{'Create a catchy title for your listing' | translate}}</li>
+                                            <li>{{'Write a description that really describes who you are and reassures owners of your experience' | translate}}
+                                            </li>
+                                            <li>{{'Small details matter: Add additional information that underline your services' | translate}}</li>
+                                        </ul>
+                                        <p>
+                                            <span class="text-b">{{'Pro tip:' | translate}}</span>
+                                            <span>{{'After entering your address, zoom in on the map to your location (your exact location is only shown to owners with confirmed bookings)' | translate}}</span>
+                                        </p>
+                                    </div>
+                                    <div class="location-info">
+                                        <div class="form-group top-space" ng-class="{ 'has-error' : (userprofileEdit1.$submitted || userprofileEdit1.desc_title.$touched) && (userprofileEdit1.desc_title.$pristine || userprofileEdit1.desc_title.$invalid) && (userprofileEdit1.desc_title.$error.required)}">
+                                            <h5>{{'Create a listing title' | translate}}<span class="text-danger">&#42;</span></h5>
+                                            <input type="text" class="form-control" name="desc_title" id="desc_title" placeholder="{{'Example: Reliable and well established service provider in Palma area' | translate}}" ng-model="user_profile.listing_title" ng-required="true" ng-minlength="3" ng-maxlength="50" />
+                                            <span class="error" ng-show="(userprofileEdit1.$submitted || userprofileEdit1.desc_title.$touched) && (userprofileEdit1.desc_title.$pristine || userprofileEdit1.desc_title.$invalid) && (userprofileEdit1.desc_title.$error.required)">{{'Required' | translate }} </span>
+                                            <span class="error" ng-show="(userprofileEdit1.$submitted || userprofileEdit1.desc_title.$touched) && (userprofileEdit1.desc_title.$pristine || userprofileEdit1.desc_title.$invalid) && (userprofileEdit1.desc_title.$error.minlength)">{{'Minimum length is 3'| translate}}</span>
+                                            <span class="error" ng-show="(userprofileEdit1.$submitted || userprofileEdit1.desc_title.$touched) && (userprofileEdit1.desc_title.$pristine || userprofileEdit1.desc_title.$invalid) && (userprofileEdit1.desc_title.$error.maxlength)">{{'Maximum length is 50'| translate}}</span>
+                                        </div>
+                                        <div class="form-group top-space" ng-class="{ 'has-error' : (userprofileEdit1.$submitted || userprofileEdit1.desc_add.$touched) && (userprofileEdit1.desc_add.$pristine || userprofileEdit1.desc_add.$invalid) && (userprofileEdit1.desc_add.$error.required)}">
+                                            <h5>{{'Add a Description' | translate}} <span class="text-danger">&#42;</span></h5>
+                                            <p class="text-b">{{'My experience above my service (Write a minimum of 600 characters).' | translate}}
+                                            </p>
+                                            <textarea class="form-control" name="desc_add" id="desc_add" placeholder="{{'Example: I have been help others since an early age...' | translate}}" ng-model="user_profile.listing_description" ng-required="true" ng-minlength="1"></textarea>
+                                            <span class="error" ng-show="(userprofileEdit1.$submitted || userprofileEdit1.desc_add.$touched) && (userprofileEdit1.desc_add.$pristine || userprofileEdit1.desc_add.$invalid) && (userprofileEdit1.desc_add.$error.required)">{{'Required'| translate }} </span>
+                                            <span class="error" ng-show="(userprofileEdit1.$submitted || userprofileEdit1.desc_add.$touched) && (userprofileEdit1.desc_add.$pristine || userprofileEdit1.desc_add.$invalid) && (userprofileEdit1.desc_add.$error.minlength)">{{'Minimum length is 1'| translate}}</span>
+                                        </div>
+                                        <div class="form-group top-space" ng-class="{ 'has-error' : (userprofileEdit1.$submitted || userprofileEdit1.listing_address.$touched) && (userprofileEdit1.listing_address.$pristine || userprofileEdit1.listing_address.$invalid) && (userprofileEdit1.listing_address.$error.required)}">
+                                            <h5>{{'Location Info' | translate}}</h5>
+                                            <input type="text" g-places-autocomplete  options="options" name="listing_address" ng-required="true" ng-model="user_profile.listing_address" autocomplete="off" class="form-control" id="inputLocation" ng-change="location()" placeholder="{{'Search for an address'| translate}}" ng-required="true" ng-focus="makePlaceTrue()">
+                                            <span class="error" ng-show="IsplaceChange == true && ((userprofileEdit1.$submitted || userprofileEdit1.listing_address.$touched) && (userprofileEdit1.listing_address.$pristine || userprofileEdit1.listing_address.$invalid) && (userprofileEdit1.listing_address.$error.required))"> {{'Enter Address' | translate }} </span>
+                                            <div ng-show="allowedplace" class="error">{{'Enter Allowed Locations' | translate}}</div>
+                                            <div ng-show="IsplaceChange == false" class="error">{{'Please choose address from autocomplete.' | translate}}</div>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" id="address1" placeholder="{{'Street address, P.O. box, building/appartment name, floor, area, etc.'| translate}}" name="address1" ng-model="user_profile.listing_address1">
+                                        </div>
+                                        <div class="form-group" ng-class="{ 'has-error' : (userprofileEdit1.$submitted || userprofileEdit1.listing_city_id.$touched) && (userprofileEdit1.listing_city_id.$pristine || userprofileEdit1.listing_city_id.$invalid) && (userprofileEdit1.listing_city_id.$error.required)}">
+                                            <input type="text" autocomplete="off" class="form-control" id="listing_city_id" placeholder="{{'City' | translate}}" name="listing_city_id"
+                                                ng-required="true" ng-model="user_profile.listing_city.name">
+                                            <span class="error" ng-show="(userprofileEdit1.$submitted || userprofileEdit1.listing_city_id.$touched) && (userprofileEdit1.listing_city_id.$pristine || userprofileEdit1.listing_city_id.$invalid) && (userprofileEdit1.listing_city_id.$error.required)">{{'Choose City' | translate }} </span>
+                                        </div>
+                                        <div class="form-group" ng-class="{ 'has-error' : (userprofileEdit1.$submitted || userprofileEdit1.listing_state_id.$touched) && (userprofileEdit1.listing_state_id.$pristine || userprofileEdit1.listing_state_id.$invalid) && (userprofileEdit1.listing_state_id.$error.required)}">
+                                            <input type="text" class="form-control" name="listing_state_id" id="listing_state_id" ng-model="user_profile.listing_state.name"
+                                                placeholder="{{'State' | translate}}" ng-required="true">
+                                            <span class="error" ng-show="(userprofileEdit1.$submitted || userprofileEdit1.listing_state_id.$touched) && (userprofileEdit1.listing_state_id.$pristine || userprofileEdit1.listing_state_id.$invalid) && (userprofileEdit1.listing_state_id.$error.required)">{{'Enter State' | translate }} </span>
+                                        </div>
+                                        <div class="form-group" ng-class="{ 'has-error' : (userprofileEdit1.$submitted || userprofileEdit1.listing_country_id.$touched) && (userprofileEdit1.listing_country_id.$pristine || userprofileEdit1.listing_country_id.$invalid) && (userprofileEdit1.listing_country_id.$error.required)}">
+                                            <!--<input type="text" autocomplete="off" class="form-control" name="listing_country_id" id="listing_country_id" placeholder="{{'Country'| translate}}"
+                                                ng-required="true" ng-model="user_profile.listing_country.name">-->
+                                            <select class="form-control" style="width:100%" name="listing_country_id" ng-model="selectedListingCountry" ng-options="country.iso2 as country.name for country in countries" ng-selected="selectedListingCountry == country.iso2" placeholder="{{'Country' | translate}}" ng-required="active" >
+                                                <option value="">{{'Please Select Country'|translate}}</option>
+                                            </select>
+                                            <span class="error" ng-show="(userprofileEdit1.$submitted || userprofileEdit1.listing_country_id.$touched) && (userprofileEdit1.listing_country_id.$pristine || userprofileEdit1.listing_country_id.$invalid) && (userprofileEdit1.listing_country_id.$error.required)">{{'Enter Country'| translate }} </span>
+                                        </div>
+                                        <div class="form-group" ng-class="{ 'has-error' : (userprofileEdit.$submitted || userprofileEdit.postal_code.$touched) && (userprofileEdit.postal_code.$pristine || userprofileEdit.postal_code.$invalid) && (userprofileEdit.postal_code.$error.required)}">
+                                            <!--<input type="text" class="form-control" name="postal_code" id="postal_code" placeholder="{{'Postal Code'| translate}}" ng-model="model.user_profile.postal_code" ng-required="true" ng-minlength="3"/>-->
+                                            <input type="text" class="form-control" name="postal_code" id="postal_code" ng-model="user_profile.listing_postal_code" placeholder="{{'Postal Code'| translate}}" ng-required="active" />
+                                            <span class="error" ng-show="(userprofileEdit1.$submitted || userprofileEdit.postal_code.$touched) && (userprofileEdit1.postal_code.$pristine || userprofileEdit1.postal_code.$invalid) && (userprofileEdit1.postal_code.$error.required)">{{'Enter Postal Code' | translate }} </span>
+                                        </div>
+                                        <div class="form-group top-space" ng-repeat="data in form_field_group">
+                                            <h5> {{data.text| translate}}</h5>
+                                        <div class="panel-heading customcls clearfix no-pad" ng-repeat="form_field_submissions in form_fields_all">
+                                           <div ng-model="form_answwer[$index]" fb-form="{{'default-'+($index+1)}}" fb-default="defaultValue" ng-if="form_field_submissions.form_field_group_id == data.group_id"></div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button class="btn btn-info btn-animate" type="submit">{{'Save' | translate }}</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

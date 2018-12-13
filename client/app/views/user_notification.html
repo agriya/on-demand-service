@@ -1,0 +1,61 @@
+<section class="edit-profile notifications-page">
+    <div class="container">
+        <div class="profile-content">
+            <form name="userNotification" ng-submit="userNotifications(user_profile)" novalidate>               
+                <h3 class="clearfix page-head">
+                    <div class="pull-left">
+                        <a href="users/user_profile" class="btn btn-info back-btn"> <span><i class="fa fa-chevron-left fa-fw"></i></span></a>
+                    </div>
+                    <div class="pull-left"> {{'Account - Notifications' | translate}}</div>
+                    
+                </h3>     
+                <div class="form-body">
+                    <div>
+                        <div class="personal-info">
+                            <div class="form-group">
+                                <label class="checkbox-field">
+                                    <input class="hide" id="is_sms_notification" type="checkbox" name="is_sms_notification" ng-model="user_profile.is_sms_notification">
+                                    <span class="custom-check"></span>
+                                    <span>
+                                        <label for="is_sms_notification">{{'Receive SMS notifications' | translate }}</label>
+                                    </span>
+                                </label>
+                            </div>
+
+                        </div>                        
+                        <!--<div class="personal-info">
+
+                            <div class="form-group">
+                                <label class="checkbox-field">
+                                    <input class="hide" id="is_email_subscribed" type="checkbox" name="is_email_subscribed" ng-model="user_profile.is_email_subscribed">
+                                    <span class="custom-check"></span>
+                                    <span>
+                                    <label for="is_email_subscribed">{{'Receive occasional email updates from ondemandservicemarketplace.com' | translate }}</label>
+                                </span>
+                                </label>
+                            </div>
+
+                        </div>-->
+                        <div class="personal-info" ng-if="push && push_notification">
+                            <div class="form-group">
+                                <label class="checkbox-field">
+                                    <input class="hide" id="is_push_notification_enabled" type="checkbox" name="is_push_notification_enabled" ng-model="user_profile.is_push_notification_enabled" ng-checked="user_profile.is_push_notification_enabled == true">
+                                    <span class="custom-check"></span>
+                                    <span>
+                                        <label for="is_push_notification_enabled">{{'Receive push notifications' | translate }}</label>
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="personal-info">
+                            <div class="form-group">
+                                <button class="btn btn-info btn-animate" type="submit">{{'Save'| translate }}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+<!--page-head clearfix -->

@@ -1,0 +1,10 @@
+{
+	"name": "CancellationPolicies", 
+	"class": "fa fa-2x fa-times",
+	"description": "Cancellation Policies",
+	"dependencies": "",
+	"module_id": "",
+	"module_hash": "",
+	"display_order": "",
+	"plugin_name":"CancellationPolicies/CancellationPolicies"
+}

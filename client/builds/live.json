@@ -1,0 +1,9 @@
+{
+	"db_user": "xxxx",
+	"db_password": "xxxx",
+	"db_name": "on-demand-service-marketplace",
+	"sftp_upload_path": "/home/xxx/html/xxx",
+	"sftp_host": "xxx.com",
+	"sftp_username": "xxxx",
+    "sftp_password": "xxxxxxx"
+}

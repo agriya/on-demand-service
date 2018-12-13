@@ -1,0 +1,105 @@
+<section class="contact_us">
+	<!--- Contact Form -->
+    <div class="container">
+        <div class="user-signup login-page-height">
+        	<div class="page-head">
+                <h2>{{'Contact Us' | translate}}</h2>
+          	</div>
+            <form role="form" class="form-login" name="contactFormAdd" ng-submit="contactFormSubmit(contactFormAdd.$valid);" novalidate>
+            <div class="form-body">
+            	<div class="form-group">
+                	<input type="text" class="form-control" id="firstname" name="firstname" placeholder="{{'First Name' | translate}}" ng-model='contactForm.first_name' ng-required="true" ng-minlength="2" ng-pattern="/^[a-z A-Z]*$/" />
+                  	<div class="error" ng-if="(contactFormAdd.$submitted || contactFormAdd.firstname.$touched) && (contactFormAdd.firstname.$pristine || contactFormAdd.firstname.$invalid) && (contactFormAdd.firstname.$error.required)">
+                        <div ng-message="required">{{'You must enter your first name' | translate}}.</div>
+                    </div>
+                    <div class="error" ng-if="(contactFormAdd.$submitted || contactFormAdd.firstname.$touched) && (contactFormAdd.firstname.$pristine || contactFormAdd.firstname.$invalid) && (contactFormAdd.firstname.$error.minlength)">
+                        <div ng-message="minlength">{{'Minimum length is 2' | translate}}.</div>
+                    </div>
+                    <div class="error" ng-if="(contactFormAdd.$submitted || contactFormAdd.firstname.$touched) && (contactFormAdd.firstname.$pristine || contactFormAdd.firstname.$invalid) && (contactFormAdd.firstname.$error.pattern)">
+                        <div ng-message="required">{{'Enter a valid name without number' | translate}}.</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                	<input type="text" class="form-control" name="lastname" id="lastname" placeholder="{{'Last Name' | translate}}" ng-model='contactForm.last_name' ng-required="true" ng-minlength="2" ng-pattern="/^[a-z A-Z]*$/">
+                 	<div class="error" ng-if="(contactFormAdd.$submitted || contactFormAdd.lastname.$touched) && (contactFormAdd.lastname.$pristine || contactFormAdd.lastname.$invalid) && (contactFormAdd.lastname.$error.required)">
+                        <div ng-message="required">{{'You must enter your last name' | translate}}.</div>
+                    </div>
+                    <div class="error" ng-if="(contactFormAdd.$submitted || contactFormAdd.lastname.$touched) && (contactFormAdd.lastname.$pristine || contactFormAdd.lastname.$invalid) && (contactFormAdd.lastname.$error.minlength)">
+                        <div ng-message="minlength">{{'Minimum length is 2' | translate}}.</div>
+                    </div>
+                    <div class="error" ng-if="(contactFormAdd.$submitted || contactFormAdd.lastname.$touched) && (contactFormAdd.lastname.$pristine || contactFormAdd.lastname.$invalid) && (contactFormAdd.lastname.$error.pattern)">
+                        <div ng-message="minlength">{{'Enter a valid name without number' | translate}}.</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                	<input type="email" class="form-control" name="email" id="email" placeholder="{{'Email' | translate}}" ng-model='contactForm.email' ng-required="true" ng-pattern="/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/">
+                   	<div class="error" ng-if="(contactFormAdd.$submitted || contactFormAdd.email.$touched) && (contactFormAdd.email.$pristine || contactFormAdd.email.$invalid) && (contactFormAdd.email.$error.required)">
+                        <div ng-message="required">{{'You must enter your email' | translate}}.</div>
+                    </div>
+                    <div class="error" ng-if="(contactFormAdd.$submitted || contactFormAdd.email.$touched) && (contactFormAdd.email.$pristine || contactFormAdd.email.$invalid) && (contactFormAdd.email.$error.pattern)">
+                        <div ng-message="email">{{'Enter valid email' | translate}}.</div>
+                    </div>
+                    <div class="error" ng-if="emailErr">
+                        <div>{{emailErr}}.</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                	<input type="number" id="mobile" class="form-control" name="mobile" placeholder="{{'Mobile Number' | translate}}" ng-model='contactForm.telephone' ng-required="true" ng-minlength="8" ng-maxlength="12" ng-pattern="/^[0-9]*$/">
+                    <div class="error" ng-if="(contactFormAdd.$submitted || contactFormAdd.mobile.$touched) && (contactFormAdd.mobile.$pristine || contactFormAdd.mobile.$invalid) && (contactFormAdd.mobile.$error.required)">
+                        <div ng-message="required">{{'You must enter your mobile number' | translate}}.</div>
+                    </div>
+                    <div class="error" ng-if="(contactFormAdd.$submitted || contactFormAdd.mobile.$touched) && (contactFormAdd.mobile.$pristine || contactFormAdd.mobile.$invalid) && (contactFormAdd.mobile.$error.number)">
+                        <div ng-message="number">{{'Enter valid number' | translate}}.</div>
+                    </div>
+        
+                    <div class="error" ng-if="(contactFormAdd.$submitted || contactFormAdd.mobile.$touched) && (contactFormAdd.mobile.$pristine || contactFormAdd.mobile.$invalid) && (contactFormAdd.mobile.$error.minlength)">
+                        <div ng-message="minlength">{{'Minimum length is 8' | translate}}.</div>
+                    </div>
+
+                    <div class="error" ng-if="(contactFormAdd.$submitted || contactFormAdd.mobile.$touched) && (contactFormAdd.mobile.$pristine || contactFormAdd.mobile.$invalid) && (contactFormAdd.mobile.$error.maxlength)">
+                        <div ng-message="minlength">{{'Maximum length is 12' | translate}}.</div>
+                    </div>
+
+                    <div class="error" ng-if="(contactFormAdd.$submitted || contactFormAdd.mobile.$touched) && (contactFormAdd.mobile.$pristine || contactFormAdd.mobile.$invalid) && (contactFormAdd.mobile.$error.pattern)">
+                        <div ng-message="minlength">{{'Enter a valid mobile number without letters' | translate}}.</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                	<input type="text" class="form-control" name="subject" id="subject" ng-model='contactForm.subject' placeholder="{{'Subject' | translate}}" ng-required="true">
+                  	<div class="error" ng-if="(contactFormAdd.$submitted || contactFormAdd.subject.$touched) && (contactFormAdd.subject.$pristine || contactFormAdd.subject.$invalid) && (contactFormAdd.subject.$error.required)">
+                        <div ng-message="required">{{'You must enter your subject' | translate}}.</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                	<textarea id="message" class="form-control" name="message" placeholder="{{'Message' | translate}}" ng-model='contactForm.message' ng-required="true"></textarea>
+                  	<div class="error" ng-if="(contactFormAdd.$submitted || contactFormAdd.message.$touched) && (contactFormAdd.message.$pristine || contactFormAdd.message.$invalid) && (contactFormAdd.message.$error.required)">
+                        <div ng-message="required">{{'You must enter your message' | translate}}.</div>
+                    </div>
+                </div>
+                 <div class="form-group text-left">
+                    <div class="normal-captcha text-18 form-control">
+                        <simple-captcha valid="captchaValid" form={{contactFormAdd}}></simple-captcha>
+                    </div>
+                    <span class="error" ng-show="(contactFormAdd.$submitted || contactFormAdd.normalcapcha1.$touched) && (contactFormAdd.normalcapcha1.$pristine || contactFormAdd.normalcapcha1.$invalid)">
+                        <span ng-if="!captchaValid && contactFormAdd.normalcapcha1.$error.required">{{'Required'| translate }}</span>
+                    </span>
+                        <span class="error" ng-show="(contactFormAdd.$submitted || contactFormAdd.normalcapcha2.$touched) && (contactFormAdd.normalcapcha2.$pristine || contactFormAdd.normalcapcha2.$invalid)">
+                        <span ng-if="!captchaValid && contactFormAdd.normalcapcha2.$error.required">{{'Required'| translate }}</span>
+                    </span>
+                    <span class="error" ng-if="!captchaValid && (!contactFormAdd.normalcapcha1.$error.required && !contactFormAdd.normalcapcha2.$error.required)">{{"Incorrect Captcha" | translate}}</span>
+                </div>
+                <div class="form-group">
+                    <multi-upload-image form-name='contactFormAdd' type='Upload' data-method="Company_trade_show" max-size="5" object-name="attachment"></multi-upload-image>
+                    <div class="text-13 text-left">{{'Allowed extensions: jpg, jpeg, gif, png'|translate}}</div>
+                    <div class="error" ng-if="is_photo_required"> {{"Required"|translate}} </div>
+                </div>
+                
+            </div>
+            <div class="form-footer">
+            	<label class="sr-only" for="submit2">{{'Submit' | translate}}</label>
+                <button class="btn btn-info btn-block" type="submit" id="submit2">{{'Submit' | translate}}</button>
+            </div>
+        </form>
+        </div>
+    </div>
+</section>

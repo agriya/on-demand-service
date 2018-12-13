@@ -1,0 +1,10 @@
+{
+	"name": "Referral", 
+	"class": "fa fa-2x fa-tags",
+	"description": "Referral",
+	"dependencies": "",
+	"module_id": "",
+	"module_hash": "",
+	"display_order": "",
+	"plugin_name":"Referral/Referral"
+}

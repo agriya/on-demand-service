@@ -1,0 +1,10 @@
+{
+	"name": "SMS", 
+	"class": "fa fa-2x fa-comments",
+	"description": "SMS Gateway Integration",
+	"dependencies": "",
+	"module_id": "",
+	"module_hash": "",
+	"display_order": "",
+	"plugin_name":"SMS/SMS"
+}

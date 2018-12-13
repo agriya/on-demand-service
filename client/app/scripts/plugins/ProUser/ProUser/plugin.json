@@ -1,0 +1,10 @@
+{
+	"name": "ProUser", 
+	"class": "fa fa-2x fa-user",
+	"description": "ProUser",
+	"dependencies": "",
+	"module_id": "",
+	"module_hash": "",
+	"display_order": "",
+	"plugin_name":"ProUser/ProUser"
+}

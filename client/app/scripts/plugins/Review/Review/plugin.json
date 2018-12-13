@@ -1,0 +1,10 @@
+{
+	"name": "Review", 
+	"class": "fa fa-2x fa-star",
+	"description": "Rating and Review",
+	"dependencies": "",
+	"module_id": "",
+	"module_hash": "",
+	"display_order": "",
+	"plugin_name":"Review/Review"
+}

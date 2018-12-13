@@ -1,0 +1,29 @@
+<div class="container">
+    <div class="user-enquiry">
+        <h3 class="text-center">{{'Send an enquiry' | translate}} </h3>              
+        <div class="media">
+            <div class="media-left">
+                 <a href="users/{{user.id}}/{{user.user_profile.first_name + user.user_profile.last_name}}" title="{{user.user_profile.first_name + user.user_profile.last_name}}">
+                    <img src="{{user.userimage}}" class="img-circle img-responsive img-thumbnail" width="100px" height="100px">
+                </a>
+            </div>
+            <div class="media-body media-middle">
+                <h5>{{'Enquiry for' | translate}} {{servicename}}</h5>
+                <p> {{diffDays + 1}} <temp ng-if="(diffDays+1) > 1">days</temp> <temp ng-if="(diffDays+1) < 2">day</temp> </p>
+                <p>{{from_date}}
+                    <temp ng-if="from_date != to_date"> to {{to_date}}</temp>
+                    <temp ng-if="from_time != undefined || from_time != null">({{from_time}}-{{to_time}})
+                </p>
+            </div>
+        </div> 
+        <div class="user-profile">
+            <div class="form-group">
+                <label>{{'Your Message' | translate}}</label>
+                <textarea class="form-control" ng-model="enquiry_message"></textarea>
+            </div>
+            <div>
+                <button class="btn btn-info" ng-click="sendEnquiry()">{{'Send' | translate}} </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit colors="true" bootstrap="../vendor/autoload.php">
+    <testsuites>
+        <testsuite name="Duende Functioanl Tests">
+            <file>AdminTestCases.php</file>
+            <file>UserTestCases.php</file>
+        </testsuite>
+    </testsuites>
+</phpunit>

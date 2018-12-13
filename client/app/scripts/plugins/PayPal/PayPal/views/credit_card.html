@@ -1,0 +1,72 @@
+<section class="edit-profile account-payout">
+    <div class="container">
+        <div class="profile-content">
+            <h3 class="page-head clearfix">
+                <div class="pull-left"><a href="users/user_profile"><button class="btn btn-info btn-sm back-btn"><span><i class="fa fa-chevron-left fa-fw" aria-hidden="true"></i></span></button></a></div>
+                <div class="pull-left">{{'Account - Saved credit cards'| translate}}</div>
+            </h3>
+            <div ng-show="creditCardLists.length > 0">
+            <div class="">
+                <ul class="list-unstyled">
+                   <li ng-repeat="creditCardList in creditCardLists" class="well">
+                       <a ng-click='CreditCaredDelete(creditCardList.id)' title="{{'Delete' | translate}}" class="del pull-right"><i class="fa fa-times"></i></a>
+                       <h4 class="no-mar">{{creditCardList.name_on_the_card}}</h4>
+                       <h5 class="{{user_profile.cardType}}">{{creditCardList.masked_card_number}}</h5>
+                       <p><b>{{'Expires:' | translate}}</b> {{creditCardList.credit_card_expire}}</p>
+                    </li>
+                </ul>
+            </div>
+            <div class="professional-info">                            
+                <button class="btn btn-info btn-link" ng-click="showing()" type="button"><i class="fa fa-chevron-down fa-fw"></i>{{'Add New Card'| translate }}</button>
+            </div>
+            </div>
+            <div class="form-content" ng-show="show || creditCardLists.length == 0">
+                <form  name="userprofileEdit" ng-submit="userCreditCard(userprofileEdit.$valid,user_profile)" novalidate>
+                    <div class="form-body">                       
+                        <div class="personal-info">                    
+                            <div class="location-info well pa">
+                                <div class="form-group" ng-class="{ 'has-error' : (userprofileEdit.$submitted || userprofileEdit.credit_card_number.$touched) && (userprofileEdit.credit_card_number.$pristine || userprofileEdit.credit_card_number.$invalid) }">
+                                   <!-- <label>{{'Credit'|translate}}/{{'debit card number'|translate}} </label>-->
+                                    <card-number-input ng-model="user_profile.credit_card_number" class="form-control" name="credit_card_number" card-type="user_profile.cardType" placeholder="{{'Card Number'|translate}}" ng-required="true"></card-number-input>
+                                    <span class="{{user_profile.cardType}}"><span class="card-type"></span></span>
+                                    <div class="help-block" ng-show="(userprofileEdit.$submitted || userprofileEdit.credit_card_number.$touched) && (userprofileEdit.credit_card_number.$pristine || userprofileEdit.credit_card_number.$invalid) && (userprofileEdit.credit_card_number.$error.required)">{{'Required'|translate}}</div>
+                                    <div class="help-block" ng-show="(userprofileEdit.$submitted || userprofileEdit.credit_card_number.$touched) && (userprofileEdit.credit_card_number.$pristine || userprofileEdit.credit_card_number.$invalid) && (userprofileEdit.credit_card_number.$error.parse)">{{'Please enter valid credit card number'|translate}}</div>
+                                    <span class="error" ng-if="showing_error">{{showing_value}}</span>
+                                </div>
+                                <div class="form-group" ng-class="{ 'has-error' : (userprofileEdit.$submitted || userprofileEdit.card_name.$touched) && (userprofileEdit.card_name.$pristine || userprofileEdit.card_name.$invalid) && (userprofileEdit.card_name.$error.required)}">
+                                   <!-- <label>{{'Name on card'|translate}}</label>-->
+                                    <input type="text" class="form-control" name="card_name" id="card_name" placeholder="{{'Name on card' | translate}}"
+                                        ng-model="user_profile.name_on_the_card" ng-required="true"/>
+                                    <span class="error" ng-show="(userprofileEdit.$submitted || userprofileEdit.card_name.$touched) && (userprofileEdit.card_name.$pristine || userprofileEdit.card_name.$invalid) && (userprofileEdit.card_name.$error.required)">{{'Required'| translate }} </span>
+                                </div>
+                                    <div class="form-group" ng-class="{ 'has-error' : (userprofileEdit.$submitted || userprofileEdit.credit_card_expired.$touched) && (userprofileEdit.credit_card_expired.$pristine || userprofileEdit.credit_card_expired.$invalid) }">
+                                        <div class="form-group" ng-class="{ 'has-error' : (userprofileEdit.$submitted || userprofileEdit.credit_card_expired.$touched) && (userprofileEdit.credit_card_expired.$pristine || userprofileEdit.credit_card_expired.$invalid) && (userprofileEdit.credit_card_expired.$error.required)}">
+                                            <label>{{'Expiry date'|translate}}</label>
+                                        <card-expiry-input class="form-control" name="credit_card_expired" ng-model="user_profile.credit_card_expired" placeholder="{{'MM / YYYY'|translate}}" ng-required="true"></card-expiry-input>
+                                        <div class="help-block" ng-show="(userprofileEdit.$submitted || userprofileEdit.credit_card_expired.$touched) && (userprofileEdit.credit_card_expired.$pristine || userprofileEdit.credit_card_expired.$invalid) && (userprofileEdit.credit_card_expired.$error.required)">{{'Required'|translate}}</div>
+                                        <div class="help-block" ng-show="(userprofileEdit.$submitted || userprofileEdit.credit_card_expired.$touched) && (userprofileEdit.credit_card_expired.$pristine || userprofileEdit.credit_card_expired.$invalid) && (userprofileEdit.credit_card_expired.$error.parse)">{{'Please enter valid expiry date'|translate}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="location-info well pr no-pad">
+                                <div class="bg"></div>
+                                <div class="form-group col-sm-4 col-sm-offset-8 col-xs-4 col-xs-offset-8" ng-class="{ 'has-error' : (userprofileEdit.$submitted || userprofileEdit.security_code.$touched) && (userprofileEdit.security_code.$pristine || userprofileEdit.security_code.$invalid) && (userprofileEdit.security_code.$error.required)}">
+                                    <label><!--{{'Security code'|translate}}-->(CVV/CVC)</label>
+                                    <input type="password" class="form-control" name="security_code" id="security_code" placeholder="{{''| translate}}"
+                                        ng-model="user_profile.cvv2" ng-minlength="3" ng-maxlength="4" ng-required="true"/>
+                                    <span class="error" ng-show="(userprofileEdit.$submitted || userprofileEdit.security_code.$touched) && (userprofileEdit.security_code.$pristine || userprofileEdit.security_code.$invalid) && (userprofileEdit.security_code.$error.required)">{{'Required'| translate }} </span>
+                                    <span class="error" ng-show="(userprofileEdit.$submitted || userprofileEdit.security_code.$touched) && (userprofileEdit.security_code.$pristine || userprofileEdit.security_code.$invalid) && (userprofileEdit.security_code.$error.minlength)">{{'Minimum length is 3'| translate}}</span>
+                                    <span class="error" ng-show="(userprofileEdit.$submitted || userprofileEdit.security_code.$touched) && (userprofileEdit.security_code.$pristine || userprofileEdit.security_code.$invalid) && (userprofileEdit.security_code.$error.maxlength)">{{'Maximum length is 3'| translate}}</span>
+                                </div>
+                               
+                            </div>
+                        </div>                        
+                        <div class="professional-info text-center">                            
+                            <button class="btn btn-info btn-animate" type="submit" ng-disabled="disable_btn">{{'Add card' | translate }}<span ng-show="disable_btn"><i class="fa fa-spinner fa-pulse fa-lg"></i></span></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

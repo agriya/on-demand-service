@@ -1,0 +1,387 @@
+<section ng-if="user_profile.services_user_count == 0" class="edit-profile my-calendar">  
+    <h4 class="text-center"><a href="user/services" class="blackc">{{'In order to edit your calendar, you must first enable at least one service' | translate}}</a></h4>
+</section>
+
+<section ng-if="user_profile.services_user_count != 0" class="edit-profile my-calendar">  
+    <div class="container">
+        <div class="listing-details"> 
+            <a href="users/listing" class="btn btn-link"> <span><i class="fa fa-angle-double-left fa-fw"></i> {{'Back to Listing' | translate}}</span></a>
+        </div> 
+        <div class="custom_calender">  
+            <h3 class="text-center">{{'My Calendar' | translate}}</h3>            
+            <div class="clearfix">                
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="left-side">
+                            <div class="">
+                                <div class="text-center text-info"><i class="fa fa-calendar fa-4x"></i></div>
+                                <p class="text-b">{{'Updating your calendar regularly is the easiest way to get more bookings!' | translate}}</p>
+                                <p class="last-update">{{'Last updated:' | translate}} <strong>{{appoinment_settings.updated_at}}</strong></p>
+                                <p>{{'Click on any date to mark it as:' | translate}}</p>
+                                 <ul class="list-inline row">
+                                    <li class="col-sm-6"><i class="fa fa-circle-o fa-fw"></i>{{'Available' | translate}}</li>
+                                    <li class="col-sm-6"><i class="fa fa-circle fa-fw"></i>{{'Unavailable' | translate}}</li>
+                                    <li class="col-sm-6"><i class="fa fa-circle fa-fw text-success"></i>{{'Booking Confirmed' | translate}}</li>
+                                    <li class="col-sm-6"><i class="fa fa-circle fa-fw text-yellow"></i>{{'Pending Approval' | translate}}</li> 
+                                </ul>
+                            </div>
+                            <div class="bg-info">
+                                <form>
+                                    <div ng-if="is_time_enabled">
+                                     <label>{{'My Calendar Slot'|translate}}
+                                    <select class="form-control" name="calendar_slot" ng-model="practice.calendar_slot_id" ng-required="true" ng-options="calendar_slot.name as calendar_slot.name+' '+'minutes' for calendar_slot in calendar_slots" ng-selected="practice.calendar_slot_id == calendar_slot.name">	                         
+						             </select>  
+                                    </div>
+                                    <p>{{'Availability Settings' | translate}}</p>
+                                    <div class="clearfix">
+                                        <div class="form-group">
+                                           <span ng-if="is_time_enabled"> 
+                                              <div id="showHide" class="row">  
+                                                <div class="col-md-5 form-group">
+                                                    <label> {{'Start time'|translate}} </label>                                                    
+                                                    <!-- <input type="text" class="form-control input-small openPicker col-md-5" ng-model="practice.start" ng-readonly="true">-->
+                                                    <input type="text" class="form-control" size="8" ng-model="practice.start" name="time" bs-timepicker data-time-format="HH.mm" data-length="1" data-minute-step="{{practice.calendar_slot_id}}" data-arrow-behavior="picker">
+                                                </div> 
+                                                <div class="col-md-5 form-group">
+                                                    <label> {{'End time'|translate}} </label>                                                    
+                                                    <input type="text" class="form-control" size="8" ng-model="practice.end" name="time" bs-timepicker data-time-format="HH.mm" data-length="1" data-minute-step="{{practice.calendar_slot_id}}" data-arrow-behavior="picker">
+                                                </div>
+                                              </div>     
+                                              <p> {{'Common Break Time'| translate}}<span tabindex="-1" class="pointer" uib-popover="{{'Customer cant made any booking on this time.'|translate}}" popover-placement="bottom" popover-trigger="focus"> <i class="fa fa-info-circle" aria-hidden="true"></i></p>
+                                             
+                                             <div class="row">
+                                                 <div ng-repeat="break in common_break">
+                                                     <div style="clear:both">
+                                                        <div class="form-group col-md-5" >
+                                                            <label>{{'Start time'|translate}} </label>
+                                                            <input type="text" class="form-control" size="8" ng-model="break.break_start_time" name="time" bs-timepicker data-time-format="HH.mm" data-length="1" data-minute-step="{{practice.calendar_slot_id}}" data-arrow-behavior="picker" ng-focus="getStartTime(0,$index)">
+                                                        </div>   
+                                                        <div class="form-group col-md-5">
+                                                            <label> {{'End time'|translate}} </label>
+                                                            <input type="text" class="form-control" size="8" ng-model="break.break_end_time" name="time" bs-timepicker data-time-format="HH.mm" data-length="1" data-minute-step="{{practice.calendar_slot_id}}" data-arrow-behavior="picker" ng-focus="getEndTime(0,$index)">
+                                                        </div>
+                                                        <div class="form-group pull-left pad-top" ng-if="common_break.length > 1 && $index != 0">
+                                                            <span class="pointer" ng-click="remove_common_break($index,0)"><i class="fa fa-times fa-fw text-danger" aria-hidden="true"></i></span>
+                                                        </div>
+                                                        <div class="col-md-1 pad-top" ng-if="$index == common_break.length-1">
+                                                            <span class="pointer" ng-click="add_common_break(0)"><i class="fa fa-plus" aria-hidden="true"></i></span>
+                                                        </div>
+                                                     </div>      
+                                                 </div>    
+                                             </div> 
+                                             </span>
+                                            <div class="checkbox-field">
+                                                <label for="servicehour">
+                                                <input type="checkbox" id="servicehour" ng-model="setting.same_for_all_days" ng-change="alldayavailable(same_for_all_days)">
+                                                <span class="custom-check"></span>
+                                                <span> {{'I\'m usually available in all day of the week' | translate}} </span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                <div ng-if="!setting.same_for_all_days" class="calendar-additional-time">
+                                        <div class="checkbox-field bot-space-10">
+                                            <label for="monday">
+                                                <input type="checkbox" id="monday" ng-model="setting.is_monday" ng-checked="appoinment_settings.is_monday_open == 1" ng-change="week_avail(1)">
+                                                <span class="custom-check"></span>
+                                                <span class="text-15"> {{'Monday' | translate}}</span>
+                                            </label>
+                                       </div>
+                                       <div class="row mar-bot-20" ng-show="setting.is_monday && is_time_enabled">
+                                            <div class="form-group col-md-5" >
+                                                <label>{{'Start time'|translate}}</label>
+                                                <input type="text" class="form-control" size="8" ng-model="practice.monday_practice_open" name="time" bs-timepicker data-time-format="HH.mm" data-length="1" data-minute-step="{{practice.calendar_slot_id}}" data-arrow-behavior="picker">
+                                            </div>   
+                                            <div class="form-group col-md-5">
+                                                <label>{{'End time'|translate}}</label>
+                                                <input type="text" class="form-control" size="8" ng-model="practice.monday_practice_close" name="time" bs-timepicker data-time-format="HH.mm" data-length="1" data-minute-step="{{practice.calendar_slot_id}}" data-arrow-behavior="picker">
+                                            </div>
+                                            <p class="hor-space-10"> {{'Additional Break Time'| translate}}</p>
+                                             <div class="">
+                                                 <div ng-repeat="break in monday_common_break">
+                                                     <div style="clear:both">
+                                                        <div class="form-group col-md-5">
+                                                            <label class="right-space-10"> {{'Start time'|translate}} </label>
+                                                            <input type="text" class="form-control" size="8" ng-model="break.break_start_time" name="time" bs-timepicker data-time-format="HH.mm" data-length="1" data-minute-step="{{practice.calendar_slot_id}}" data-arrow-behavior="picker" ng-focus="getStartTime(1,$index)">
+                                                        </div>   
+                                                        <div class="form-group col-md-5">
+                                                            <label> {{'End time'|translate}} </label>
+                                                            <input type="text" class="form-control" size="8" ng-model="break.break_end_time" name="time" bs-timepicker data-time-format="HH.mm" data-length="1" data-minute-step="{{practice.calendar_slot_id}}" data-arrow-behavior="picker" ng-focus="getEndTime(1,$index)">
+                                                        </div>
+                                                        
+                                                        <div class="form-group pull-left pad-top" ng-if="monday_common_break.length > 1 && $index != 0">
+                                                            <span class="pointer" ng-click="remove_common_break($index,1)"><i class="fa fa-times fa-fw text-danger" aria-hidden="true"></i></span>
+                                                        </div>
+                                                        <div class="col-md-1 pad-top" ng-if="$index == monday_common_break.length-1">
+                                                            <span class="pointer" ng-click="add_common_break(1)"> <i class="fa fa-plus" aria-hidden="true"></i></span>
+                                                        </div>
+                                                     </div>      
+                                                 </div>    
+                                             </div>  
+                                       </div>
+                                       <div class="checkbox-field bot-space-10">
+                                            <label for="tuesday">
+                                                <input type="checkbox" id="tuesday" ng-model="setting.is_tuesday" ng-checked="appoinment_settings.is_tuesday_open == 1" ng-change="week_avail(2)">
+                                                <span class="custom-check"></span>
+                                                <span class="text-15">  {{'Tuesday' | translate}}</span>
+                                            </label>
+                                       </div>
+                                       <div class="row mar-bot-20" ng-show="setting.is_tuesday && is_time_enabled">
+                                            <div class="form-group col-md-5" >
+                                                <label>{{'Start time'|translate}}</label>
+                                                <input type="text" class="form-control" size="8" ng-model="practice.tuesday_practice_open" name="time" bs-timepicker data-time-format="HH.mm" data-length="1" data-minute-step="{{practice.calendar_slot_id}}" data-arrow-behavior="picker">
+                                            </div>   
+                                            <div class="form-group col-md-5">
+                                                <label>{{'End time'|translate}}</label>
+                                                <input type="text" class="form-control" size="8" ng-model="practice.tuesday_practice_close" name="time" bs-timepicker data-time-format="HH.mm" data-length="1" data-minute-step="{{practice.calendar_slot_id}}" data-arrow-behavior="picker">
+                                            </div>
+                                             <p class="hor-space-10"> {{'Additional Break Time'| translate}}</p>
+                                             <div class="">
+                                                 <div ng-repeat="break in tuesday_common_break">
+                                                     <div style="clear:both">
+                                                        <div class="form-group col-md-5" >
+                                                            <label> {{'Start time'|translate}} </label>
+                                                            <input type="text" class="form-control" size="8" ng-model="break.break_start_time" name="time" bs-timepicker data-time-format="HH.mm" data-length="1" data-minute-step="{{practice.calendar_slot_id}}" data-arrow-behavior="picker" ng-focus="getStartTime(2,$index)">
+                                                        </div>   
+                                                        <div class="form-group col-md-5">
+                                                            <label> {{'End time'|translate}} </label>
+                                                            <input type="text" class="form-control" size="8" ng-model="break.break_end_time" name="time" bs-timepicker data-time-format="HH.mm" data-length="1" data-minute-step="{{practice.calendar_slot_id}}" data-arrow-behavior="picker" ng-focus="getEndTime(2, $index)">
+                                                        </div>
+                                                        
+                                                        <div class="form-group pull-left pad-top" ng-if="tuesday_common_break.length > 1 && $index != 0">
+                                                            <span class="pointer" ng-click="remove_common_break($index,2)"><i class="fa fa-times fa-fw text-danger" aria-hidden="true"></i></span>
+                                                        </div>
+                                                        <div class="col-md-1 pad-top" ng-if="$index == tuesday_common_break.length-1">
+                                                            <span class="pointer" ng-click="add_common_break(2)"><i class="fa fa-plus" aria-hidden="true"></i></span>
+                                                        </div>
+                                                     </div>      
+                                                 </div>    
+                                             </div>  
+                                       </div>
+                                       <div class="checkbox-field bot-space-10">
+                                            <label for="wednesday">
+                                                <input type="checkbox" id="wednesday" ng-model="setting.is_wednesday" ng-checked="appoinment_settings.is_wednesday_open == 1" ng-change="week_avail(3)">
+                                                <span class="custom-check"></span>
+                                                 <span class="text-15">  {{'Wednesday' | translate}}</span>
+                                            </label>
+                                       </div>
+                                       <div class="row mar-bot-20" ng-show="setting.is_wednesday && is_time_enabled">
+                                            <div class="form-group col-md-5" >
+                                                <label>{{'Start time'|translate}}</label>
+                                                <input type="text" class="form-control" size="8" ng-model="practice.wednesday_practice_open" name="time" bs-timepicker data-time-format="HH.mm" data-length="1" data-minute-step="{{practice.calendar_slot_id}}" data-arrow-behavior="picker">
+                                            </div>   
+                                            <div class="form-group col-md-5">
+                                                <label>{{'End time'|translate}}</label>
+                                                <input type="text" class="form-control" size="8" ng-model="practice.wednesday_practice_close" name="time" bs-timepicker data-time-format="HH.mm" data-length="1" data-minute-step="{{practice.calendar_slot_id}}" data-arrow-behavior="picker">
+                                            </div>
+                                             <p class="hor-space-10"> {{'Additional Break Time'| translate}}</p>
+                                             <div class="">
+                                                 <div ng-repeat="break in wednesday_common_break">
+                                                     <div style="clear:both">
+                                                        <div class="form-group col-md-5" >
+                                                            <label> Start time </label>
+                                                            <input type="text" class="form-control" size="8" ng-model="break.break_start_time" name="time" bs-timepicker data-time-format="HH.mm" data-length="1" data-minute-step="{{practice.calendar_slot_id}}" data-arrow-behavior="picker" ng-focus="getStartTime(3, $index)">
+                                                        </div>   
+                                                        <div class="form-group col-md-5">
+                                                            <label> {{'End time'|translate}} </label>
+                                                            <input type="text" class="form-control" size="8" ng-model="break.break_end_time" name="time" bs-timepicker data-time-format="HH.mm" data-length="1" data-minute-step="{{practice.calendar_slot_id}}" data-arrow-behavior="picker" ng-focus="getEndTime(3, $index)">
+                                                        </div>
+                                                        
+                                                        <div class="form-group pull-left pad-top" ng-if="wednesday_common_break.length > 1 && $index != 0">
+                                                            <span class="pointer" ng-click="remove_common_break($index,3)"><i class="fa fa-times fa-fw text-danger" aria-hidden="true"></i></span>
+                                                        </div>
+                                                        <div class="col-md-1 pad-top" ng-if="$index == wednesday_common_break.length-1">
+                                                            <span class="pointer" ng-click="add_common_break(3)"><i class="fa fa-plus" aria-hidden="true"></i></span>
+                                                        </div>
+                                                     </div>      
+                                                 </div>    
+                                             </div>  
+                                       </div>
+                                       <div class="checkbox-field bot-space-10">
+                                            <label for="thursday">
+                                                <input type="checkbox" id="thursday" ng-model="setting.is_thursday" ng-checked="appoinment_settings.is_thursday_open == 1" ng-change="week_avail(4)">
+                                                <span class="custom-check"></span>
+                                                <span class="text-15">{{'Thursday' | translate}}</span>
+                                            </label>
+                                       </div>
+                                       <div class="row mar-bot-20" ng-show="setting.is_thursday && is_time_enabled">
+                                            <div class="form-group col-md-5" >
+                                                <label>{{'Start time'|translate}}</label>
+                                                <input type="text" class="form-control" size="8" ng-model="practice.thursday_practice_open" name="time" bs-timepicker data-time-format="HH.mm" data-length="1" data-minute-step="{{practice.calendar_slot_id}}" data-arrow-behavior="picker">
+                                            </div>   
+                                            <div class="form-group col-md-5">
+                                                <label>{{'End time'|translate}}</label>
+                                                <input type="text" class="form-control" size="8" ng-model="practice.thursday_practice_close" name="time" bs-timepicker data-time-format="HH.mm" data-length="1" data-minute-step="{{practice.calendar_slot_id}}" data-arrow-behavior="picker">
+                                            </div> 
+                                             <p class="hor-space-10"> {{'Additional Break Time'| translate}}</p>
+                                             <div class="">
+                                                 <div ng-repeat="break in thursday_common_break">
+                                                     <div style="clear:both">
+                                                        <div class="form-group col-md-5" >
+                                                            <label> {{'Start time'|translate}} </label>
+                                                            <input type="text" class="form-control" size="8" ng-model="break.break_start_time" name="time" bs-timepicker data-time-format="HH.mm" data-length="1" data-minute-step="{{practice.calendar_slot_id}}" data-arrow-behavior="picker" ng-focus="getStartTime(4, $index)">
+                                                        </div>   
+                                                        <div class="form-group col-md-5">
+                                                            <label> {{'End time'|translate}}</label>
+                                                            <input type="text" class="form-control" size="8" ng-model="break.break_end_time" name="time" bs-timepicker data-time-format="HH.mm" data-length="1" data-minute-step="{{practice.calendar_slot_id}}" data-arrow-behavior="picker" ng-focus="getEndTime(4, $index)">
+                                                        </div>
+                                                        
+                                                        <div class="form-group pull-left pad-top" ng-if="thursday_common_break.length > 1 && $index != 0">
+                                                            <span class="pointer" ng-click="remove_common_break($index,4)"><i class="fa fa-times fa-fw text-danger" aria-hidden="true"></i></span>
+                                                        </div>
+                                                        <div class="col-md-1 pad-top" ng-if="$index == thursday_common_break.length-1">
+                                                            <span class="pointer" ng-click="add_common_break(4)"><i class="fa fa-plus" aria-hidden="true"></i></span>
+                                                        </div>
+                                                     </div>      
+                                                 </div>    
+                                             </div> 
+                                       </div>
+                                       <div class="checkbox-field bot-space-10">
+                                            <label for="firday">
+                                                <input type="checkbox" id="firday" ng-model="setting.is_friday" ng-checked="appoinment_settings.is_friday_open == 1" ng-change="week_avail(5)">
+                                                <span class="custom-check"></span>
+                                                <span class="text-15">{{'Friday' | translate}}</span>
+                                            </label>
+                                       </div>
+                                       <div class="row mar-bot-20" ng-show="setting.is_friday && is_time_enabled">
+                                            <div class="form-group col-md-5" >
+                                                <label>{{'Start time'|translate}}</label>
+                                                <input type="text" class="form-control" size="8" ng-model="practice.friday_practice_open" name="time" bs-timepicker data-time-format="HH.mm" data-length="1" data-minute-step="{{practice.calendar_slot_id}}" data-arrow-behavior="picker">
+                                            </div>   
+                                            <div class="form-group col-md-5">
+                                                <label>{{'End time'|translate}}</label>
+                                                <input type="text" class="form-control" size="8" ng-model="practice.friday_practice_close" name="time" bs-timepicker data-time-format="HH.mm" data-length="1" data-minute-step="{{practice.calendar_slot_id}}" data-arrow-behavior="picker">
+                                            </div> 
+                                             <p class="hor-space-10"> {{'Additional Break Time'| translate}}</p>
+                                             <div class="">
+                                                 <div ng-repeat="break in friday_common_break">
+                                                     <div style="clear:both">
+                                                        <div class="form-group col-md-5" >
+                                                            <label> {{'Start time'|translate}} </label>
+                                                            <input type="text" class="form-control" size="8" ng-model="break.break_start_time" name="time" bs-timepicker data-time-format="HH.mm" data-length="1" data-minute-step="{{practice.calendar_slot_id}}" data-arrow-behavior="picker" ng-focus="getStartTime(5, $index)">
+                                                        </div>   
+                                                        <div class="form-group col-md-5">
+                                                            <label> {{'End time'|translate}} </label>
+                                                            <input type="text" class="form-control" size="8" ng-model="break.break_end_time" name="time" bs-timepicker data-time-format="HH.mm" data-length="1" data-minute-step="{{practice.calendar_slot_id}}" data-arrow-behavior="picker" ng-focus="getEndTime(5, $index)">
+                                                        </div>
+                                                        
+                                                        <div class="form-group pull-left pad-top" ng-if="friday_common_break.length > 1 && $index != 0">
+                                                            <span class="pointer" ng-click="remove_common_break($index,5)"><i class="fa fa-times fa-fw text-danger" aria-hidden="true"></i></span>
+                                                        </div>
+                                                        <div class="col-md-1 pad-top" ng-if="$index == friday_common_break.length-1">
+                                                            <span class="pointer" ng-click="add_common_break(5)"><i class="fa fa-plus" aria-hidden="true"></i></span>
+                                                        </div>
+                                                     </div>      
+                                                 </div>    
+                                             </div> 
+                                       </div>
+                                       <div class="checkbox-field bot-space-10">
+                                            <label for="saturday">
+                                                <input type="checkbox" id="saturday" ng-model="setting.is_saturday" ng-checked="appoinment_settings.is_saturday_open == 1" ng-change="week_avail(6)">
+                                                <span class="custom-check"></span>
+                                                <span class="text-15">{{'Saturday' | translate}}</span>
+                                            </label>
+                                       </div>
+                                       <div class="row mar-bot-20" ng-show="setting.is_saturday && is_time_enabled">
+                                            <div class="form-group col-md-5" >
+                                                <label>{{'Start time'|translate}}</label>
+                                                <input type="text" class="form-control" size="8" ng-model="practice.saturday_practice_open" name="time" bs-timepicker data-time-format="HH.mm" data-length="1" data-minute-step="{{practice.calendar_slot_id}}" data-arrow-behavior="picker">
+                                            </div>   
+                                            <div class="form-group col-md-5">
+                                                <label>{{'End time'|translate}}</label>
+                                                <input type="text" class="form-control" size="8" ng-model="practice.saturday_practice_close" name="time" bs-timepicker data-time-format="HH.mm" data-length="1" data-minute-step="{{practice.calendar_slot_id}}" data-arrow-behavior="picker">
+                                            </div>
+                                             <p class="hor-space-10"> {{'Additional Break Time'| translate}}</p>
+                                             <div class="">
+                                                 <div ng-repeat="break in saturday_common_break">
+                                                     <div style="clear:both">
+                                                        <div class="form-group col-md-5" >
+                                                            <label> {{'Start time'|translate}} </label>
+                                                            <input type="text" class="form-control" size="8" ng-model="break.break_start_time" name="time" bs-timepicker data-time-format="HH.mm" data-length="1" data-minute-step="{{practice.calendar_slot_id}}" data-arrow-behavior="picker" ng-focus="getStartTime(6, $index)">
+                                                        </div>   
+                                                        <div class="form-group col-md-5">
+                                                            <label> {{'End time'|translate}} </label>
+                                                            <input type="text" class="form-control" size="8" ng-model="break.break_end_time" name="time" bs-timepicker data-time-format="HH.mm" data-length="1" data-minute-step="{{practice.calendar_slot_id}}" data-arrow-behavior="picker" ng-focus="getEndTime(6, $index)">
+                                                        </div>
+                                                        
+                                                        <div class="form-group pull-left pad-top" ng-if="saturday_common_break.length > 1 && $index != 0">
+                                                            <span class="pointer" ng-click="remove_common_break($index,6)"><i class="fa fa-times fa-fw text-danger" aria-hidden="true"></i></span>
+                                                        </div>
+                                                        <div class="col-md-1 pad-top" ng-if="$index == saturday_common_break.length-1">
+                                                            <span class="pointer" ng-click="add_common_break(6)"><i class="fa fa-plus" aria-hidden="true"></i></span>
+                                                        </div>
+                                                     </div>      
+                                                 </div>    
+                                             </div>  
+                                       </div>
+                                       <div class="checkbox-field bot-space-10">
+                                            <label for="sunday">
+                                                <input type="checkbox" id="sunday" ng-model="setting.is_sunday" ng-checked="appoinment_settings.is_sunday_open == 1" ng-change="week_avail(7)">
+                                                <span class="custom-check"></span>
+                                                <span class="text-15">{{'Sunday' | translate}}</span>
+                                            </label>
+                                       </div>
+                                       <div class="row mar-bot-20" ng-show="setting.is_sunday && is_time_enabled">
+                                            <div class="form-group col-md-5" >
+                                                <label>{{'Start time'|translate}}</label>
+                                                <input type="text" class="form-control" size="8" ng-model="practice.sunday_practice_open" name="time" bs-timepicker data-time-format="HH.mm" data-length="1" data-minute-step="{{practice.calendar_slot_id}}" data-arrow-behavior="picker">
+                                            </div>   
+                                            <div class="form-group col-md-5">
+                                                <label>{{'End time'|translate}}</label>
+                                                <input type="text" class="form-control" size="8" ng-model="practice.sunday_practice_close" name="time" bs-timepicker data-time-format="HH.mm" data-length="1" data-minute-step="{{practice.calendar_slot_id}}" data-arrow-behavior="picker">
+                                            </div> 
+                                            <p class="hor-space-10"> {{'Additional Break Time'| translate}}</p>
+                                             <div class="">
+                                                 <div ng-repeat="break in sunday_common_break">
+                                                     <div style="clear:both">
+                                                       <div class="form-group col-md-5" >
+                                                            <label> {{'Start time'|translate}} </label>
+                                                            <input type="text" class="form-control" size="8" ng-model="break.break_start_time" name="time" bs-timepicker data-time-format="HH.mm" data-length="1" data-minute-step="{{practice.calendar_slot_id}}" data-arrow-behavior="picker" ng-focus="getStartTime(7, $index)">
+                                                        </div>   
+                                                        <div class="form-group col-md-5">
+                                                            <label> {{'End time'|translate}} </label>
+                                                            <input type="text" class="form-control" size="8" ng-model="break.break_end_time" name="time" bs-timepicker data-time-format="HH.mm" data-length="1" data-minute-step="{{practice.calendar_slot_id}}" data-arrow-behavior="picker" ng-focus="getEndTime(7, $index)">
+                                                        </div>
+                                                        
+                                                        <div class="form-group pull-left pad-top" ng-if="sunday_common_break.length > 1 && $index != 0">
+                                                            <span class="pointer" ng-click="remove_common_break($index,7)"><i class="fa fa-times fa-fw text-danger" aria-hidden="true"></i></span>
+                                                        </div>
+                                                        <div class="col-md-1 pad-top" ng-if="$index == sunday_common_break.length-1">
+                                                            <span class="pointer" ng-click="add_common_break(7)"><i class="fa fa-plus" aria-hidden="true"></i></span>
+                                                        </div>
+                                                     </div>      
+                                                 </div>    
+                                             </div> 
+                                       </div>
+                                       
+                                </div>    
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-sm-6">   
+                        <form name="userprofileEdit" ng-submit="get_day()" novalidate>
+                            <div class="calendar-body">
+                                <!--<div>
+                                    <multiple-date-picker ng-model="selectedDate" datepicker highlight-days="allowedDays" week-days-off=dayoffs></multiple-date-picker>
+                                </div>
+                                <ul class="list-inline text-right">
+                                    <li><i class="fa fa-circle fa-fw text-info"></i>Booked</li>
+                                    <li class="text-info">Today</li>
+                                </ul>-->
+                                <div ui-calendar="uiConfig.calendar" class="span8 calendar" ng-model="eventSources" id="calendar"></div>
+                                <p class="text-center">{{'You can click above date as available and/or unavailable and press following button' | translate}}</p> 
+                                <div class="text-center">
+                                    <button class="btn btn-info btn-animate" type="submit">{{'Update Calendar' | translate }}</button>
+                                </div>
+                                <div class="text-center" ng-if="is_time_enabled">
+                                <a href="appointments/modifications"><i class="fa fa-cog fa-fw fa-lg"></i> {{'Manage Additional Unavailable Times' | translate}}</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>     
+                </div>
+            </div>
+        </div>
+</section>

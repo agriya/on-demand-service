@@ -1,0 +1,72 @@
+<fieldset> 
+    <h5>{{'Interview' | translate }}</h5>
+      <div class="form-group"  >
+    <div class="checkbox-field">
+        <label for="avail_interview">
+            <input type="checkbox" id="avail_interview" ng-model="interview.interview_available" ng-change="changeInterviewAvailable(interview.interview_available)">
+            <span class="custom-check"></span>
+            <span> {{'I\'m available for interview' | translate}} </span>
+        </label>
+    </div>
+      </div>
+    <div ng-if="interview.interview_available" class="hor-space-10 custom_calender">
+        <div class="form-group flex-check">
+            <div class="checkbox-field">
+            <label for="skype_interview">
+                <input type="checkbox" id="skype_interview" ng-model="interview.is_skype_interview">
+                <span class="custom-check"></span>
+                <span> {{'I\'m ready for Skype Interview' | translate}} </span>
+            </label>
+            <span ng-if="interview.is_skype_interview">
+                <div class="form-group hor-space-10 no-mar top-space row">
+                    <label class="col-sm-3 text-b"> {{'Skype ID'| translate}} </label>
+                    <div class="col-sm-7">
+                    <input type="text" class="check form-control" ng-model="interview.skype_id" name="skype_id" ng-required="interview.is_skype_interview">
+                    <span class="error" ng-show="(serviceForm.$submitted || serviceForm.skype_id.$touched) && (serviceForm.skype_id.$pristine || serviceForm.skype_id.$invalid) && (serviceForm.skype_id.$error.required)">{{'Enter Skype Id' | translate }}</span>
+                    </div>
+                </div>    
+            </span>
+            </div>
+        </div>
+        <div class="form-group flex-check">
+            <div class="checkbox-field">
+            <label for="phone_interview">
+                <input type="checkbox" id="phone_interview" ng-model="interview.is_phone_interview">
+                <span class="custom-check"></span>
+                <span> {{'I\'m ready for Telephonic Interview' | translate}} </span>
+            </label>
+            <span ng-if="interview.is_phone_interview">
+                <div class="form-group hor-space-10 no-mar top-space row">
+                    <label class="col-sm-3 text-b"> {{'Contact No.'| translate}} </label>
+                    <div class="col-sm-7">
+                        <div class="row">
+                            <input class="check form-control" type="text" ng-model="interview.mobile_code" ng-disabled="true" style="width:20%;float:left">
+                            <input class="check form-control" type="text" ng-model="interview.phone_number" ng-disabled="true" style="float:right;width:80%">
+                        </div>
+                    </div>
+                </div>    
+            </span>
+            </div>
+        </div>      
+        <div class="form-group flex-check">
+            <div class="checkbox-field">
+            <label for="person_interview">
+                <input type="checkbox" id="person_interview" ng-model="interview.is_person_interview">
+                <span class="custom-check"></span>
+                <span> {{'I\'m ready for In Person Interview' | translate}} </span>
+            </label>
+            </div>
+        </div>
+        <div class="form-group flex-check">
+            <span class="text-13"><span class="text-danger">&#42;</span>{{'Rate' | translate }} <span ng-show = "$root.settings.CURRENCY_SYMBOL !== ''">({{$root.settings.CURRENCY_SYMBOL}})</span><span ng-show = "$root.settings.CURRENCY_SYMBOL === ''">({{$root.settings.SITE_CURRENCY_CODE}})</span></span>
+            <input type="text" min="1.0" class="form-control" id="" name="flat_rate_interview" ng-model="interview.rate" placeholder="{{'Hourly rate' | translate }}" ng-pattern="/^[0-9.]*$/" ng-required="interview.interview_available">
+            <span class="error" ng-show="(serviceForm.$submitted || serviceForm.flat_rate_interview.$touched) && (serviceForm.flat_rate_interview.$pristine || serviceForm.flat_rate_interview.$invalid) && (serviceForm.flat_rate_interview.$error.required)">{{'Enter hourly rate' | translate }}</span>
+            <span class="error" ng-show="(serviceForm.$submitted || serviceForm.flat_rate_interview.$touched) && (serviceForm.flat_rate_interview.$pristine || serviceForm.flat_rate_interview.$invalid) && (serviceForm.flat_rate_interview.$error.min)">{{'Enter valid hourly rate' | translate }}</span>
+            <span class="error"  ng-show="(serviceForm.$submitted || serviceForm.flat_rate_interview.$touched) && (serviceForm.flat_rate_interview.$pristine || serviceForm.flat_rate_interview.$invalid) && serviceForm.flat_rate_interview.$error.pattern">{{'Enter valid hourly rate'| translate }}</span>
+        </div>
+        <div class="form-group flex-check" ng-if="$root.settings.SITE_ENABLED_PLUGINS.indexOf('CancellationPolicies/CancellationPolicies') > -1">
+            <span class="bluec text-13">{{'Cancellation policy' | translate }}</span>
+            <select class="form-control" style="width:100%" name="policy" ng-model="interview.policy_id" ng-options="policy.id as policy.name for policy in policies" ng-selected="policy.id == interview.policy_id"></select>
+        </div>       
+    </div>    
+</fieldset>    

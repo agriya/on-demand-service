@@ -1,0 +1,29 @@
+<div class="assessment-details">
+    <div class="container">
+        <div ng-repeat="qu in quizes">
+            <h3 class="text-center">{{qu.name | translate}}</h3>
+            <p ng-bind-html="qu.description | nl2br | translate"></p>
+            <form name="assessment" ng-submit="userSubmit(assessment.$valid)" novalidate> 
+                <ol>
+                    <li ng-repeat="quizing in que">
+                        <p>{{quizing.question | translate}}</p>           
+                        <div ng-repeat="code in quizing.options"  class="form-group">
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="{{quizing.quiz_id}}" id="{{code.name}}" ng-model="code.selected_code" ng-value="{{code.id}}" ng-change="answerChange($parent.$index,$index)" required>                                    <span>{{code.option | translate}}</span> 
+                                </label>    
+                            </div>
+                        </div> 
+                        <span class="error" ng-show="assessment.$submitted && quizing.showNotProvided">{{'It looks like you forgot to answer this question'| translate}}.</span>
+                        <p class="error" ng-show="assessment.$submitted && quizing.showNotCorrect">{{'Please provide correct answer'| translate}}</p>                 
+                    </li>
+                </ol>
+                <div class="text-center"> 
+                    <p class="text-b">{{qu.display_order}} {{'of'| translate}} {{size.length}}</p>
+                    <p ng-show="valid"><button class="btn btn-info btn-lg" type="submit">{{'Next step' | translate}}</button></p>
+                    <p ng-show="click"><button class="btn btn-info btn-lg" type="submit">{{'Finish' | translate}}</button></p>
+                </div>                     
+            </form> 
+        </div>
+    </div>
+</div>

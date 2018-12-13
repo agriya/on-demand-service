@@ -1,0 +1,18 @@
+<h5 ng-if="reviews.length > 0">{{reviews.length}} {{'reviews' | translate}}</h5>
+<div class="reviews border-bottom" ng-repeat="review in reviews" ng-if="reviews.length > 0">
+    <div class="media">
+        <div class="navbar-left text-center">
+            <img ng-src="{{review.review_image}}" class="img-circle img-thumbnail center-block">
+            <p>{{review.user.user_profile.first_name}} {{review.user.user_profile.last_name}}</p>
+        </div>
+        <div class="media-body space">
+            <ul class="list-inline ratings bot-space-10">
+                <li><ng-rate-it ng-model="review.rating" read-only="true"></ng-rate-it></li>
+                <li><span class="no-mar text-muted">{{review.created_at| timeago}}</span></li>
+            </ul>
+                <p>{{review.message}}</p>
+        </div>
+    </div>
+    <!--<p class="text-center"><a href="" class="btn btn-info">view more</a></p>-->
+</div>
+<div ng-if="show_more" class="btn btn-link pull-right" ng-click='paginate_reviews()'>{{'Load more'| translate}} </br></div>

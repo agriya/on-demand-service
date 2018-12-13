@@ -1,0 +1,10 @@
+{
+	"name": "Translations", 
+	"class": "fa fa-2x fa-language",
+	"description": "Translations",
+	"dependencies": "",
+	"module_id": "",
+	"module_hash": "",
+	"display_order": "",
+	"plugin_name":"Translations/Translations"
+}

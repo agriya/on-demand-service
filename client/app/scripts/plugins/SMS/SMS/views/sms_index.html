@@ -1,0 +1,40 @@
+<div class="edit-profile listing-photos">
+        <h3 class="text-center">{{'Mobile number verification'|translate}}</h3>
+       <div class="container description-details mob-verify" ng-show="mobile_verified">  
+        <h5 ng-if="show" class="text-b text-center">{{'We send OTP for your registered mobile number'|translate}} {{phone}}</h5>
+          <div id="tourpackages-carousel">
+            <div class="branch-photos clearfix">
+                <form class="form-inline text-center">
+                    <div class="form-group">
+                            <div class="input-group-addon"><span>{{mobile_code}}</span></div>
+                            <input class="form-control" type="text" ng-model="phone_number"  name="phone_number" readonly>
+                    </div>
+                    <div class="form-group top-space">
+                        <div ng-if="hide"><button type="button" class="btn btn-info" ng-click="smsResend();showing()">{{'Send OTP'|translate}}</button></div>
+                        <div ng-if="show"><button type="button" class="btn btn-info" ng-disabled="!showing" ng-click="smsResend();show=true;hide=false"><span ng-show="!value">{{'Resend OTP'|translate}}</span><span ng-show="value">{{countDown}}</span></button></div> </div> 
+                </form>  
+                <form class="form-normal" name="reviewFrm" ng-if="show" ng-submit="smsVerify(reviewFrm.$valid)" novalidate>
+                    <div class="form-group">                        
+                        <label for="review">{{'Enter OTP'|translate}}:</label>                        
+                        <input type="text" ng-model="sms.otp"  name="rateing" required="true">
+                        <span class="error" ng-show="reviewFrm.$submitted && reviewFrm.rateing.$error.required"> {{'Required'| translate }}
+                        </span>       
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-info">{{'Submit'|translate}}</button>
+                    </div>
+                </form>
+                <!--<div>
+                    <p> or </p>
+                <button type="button" class="btn btn-info" ng-click="smsResend()">{{'Resend OTP'|translate}}</button>
+                </div><br>-->
+            </div><!-- End row -->    
+        </div><!-- End container -->
+ 	</div>
+               <div class="text-center" ng-hide="mobile_verified">
+                  <h5>{{'Your mobile number is already verified' | translate}}</h5>
+                </div>
+                <div class="text-center">
+                    <a href="users/user_profile?type=personal">{{'Click here to change mobile number' |translate}}</a>
+               </div>
+</div>

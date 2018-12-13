@@ -1,0 +1,52 @@
+<!-- TABLE -->
+<div class="appointment-block edit-profile">   
+    <div class="container">       
+        <div role="navigation" class="bot-space-10">
+            <div class="appointment-header clearfix">
+                <h3 class="text-center">{{'Contacts' | translate}}</h3>
+            </div>
+        </div>        
+        <div class="space">
+            <ul class="list-unstyled" ng-repeat="contact in contacts" ng-show="contacts.length > 0">
+                <li>
+                    <div class="well">
+                        <div class="media">
+                            <div class="float-left col-md-2">
+                                <div ng-if="contact.role_id == ConstUserType.ServiceProvider || contact.role_id == ConstUserType.User">
+                                    <a href="users/{{contact.id}}/{{contact.user_profile.first_name + contact.user_profile.last_name| slugify}}">
+                                        <img ng-src={{contact.user_image}} class="img-circle" alt="{{contact.username}}" width="100" height="100">
+                                     </a>    
+                                 </div>
+                                 <div ng-if="contact.role_id == 2">
+                                    <img ng-src={{contact.user_image}} class="img-circle" alt="{{contact.username}}" width="100" height="100">
+                                 </div>
+                            </div>
+                            <div class="float-left col-md-8">
+                                <h4 class="text-b text-20">{{contact.user_profile.first_name}} {{contact.user_profile.last_name}}</h4>
+                                <p><span class="fa fa-envelope fa-fw" aria-hidden="true"></span> {{contact.email}}</p>
+                                <p><i class="fa fa-phone fa-fw" aria-hidden="true"></i> {{contact.mobile_code}} {{contact.phone_number}}</p>
+                                <p><i class="fa fa-map-marker fa-fw" aria-hidden="true"></i> {{contact.address}}</p>
+                            </div> 
+                            <div class="float-right col-md-2 text-center booknow-btn" ng-show="contact.role_id == ConstUserType.ServiceProvider || contact.role_id == ConstUserType.User">
+                                   <a href="users/{{contact.id}}/{{contact.user_profile.first_name + contact.user_profile.last_name| slugify}}" class="btn btn-info"> {{'Book Now'| translate}} </a>
+                            </div>       
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <ul class="list-unstyled space" ng-show="contacts.length <= 0">
+                <li class="text-center"><h5> {{'No contacts found' | translate}} </h5></li>
+            </ul>    
+        </div>
+        <div class="binding-pagination" ng-show="appointments.length >= itemsPerPage">
+            <div class="pagnation-content">
+            <div class="clearfix pagnation-inner">
+            <div class="text-center" >
+                <uib-pagination previous-text="Previous" next-text="Next" total-items="totalRecords" num-pages="lastPage" ng-model="currentPage" max-size="maxSize" class="pagination-sm" boundary-link-numbers="true"
+                rotate="false" items-per-page="itemsPerPage" ng-change="paginate(currentPage)"></uib-pagination>
+            </div>
+        </div>
+     </div>
+ </div>
+    </div>
+</div>

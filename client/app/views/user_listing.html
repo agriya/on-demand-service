@@ -1,0 +1,73 @@
+<section class="edit-profile listing-page">   
+     <div class="container">
+         <div>
+            <h3 class="text-center">{{'Listing'| translate}}</h3> 
+            <div class="row">       
+                <div class="col-sm-6 col-md-7">
+                    <div class="profile-list">
+                        <ul class="list-unstyled">
+                            <li><a href="user/services">{{'Services & rates' | translate}}<span class="pull-right"><i class="fa fa-2x fa-angle-double-right" aria-hidden="true"></i></span></a></li>
+                            <li><a href="photos">{{'Photos' | translate}}<span class="pull-right"><i class="fa fa-2x fa-angle-double-right" aria-hidden="true"></i></span></a></li>
+                            <li><a href="users/description_details">{{'Description' | translate}} & {{'details'| translate}}<span class="pull-right"><i class="fa fa-2x fa-angle-double-right" aria-hidden="true"></i></span></a></li>
+                            <li><a href="user/calendar">{{'Calendar' | translate}}<span class="pull-right"><i class="fa fa-2x fa-angle-double-right" aria-hidden="true"></i></span></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-5">
+                    <div class="well right-side">
+                        <div ng-show="showLoader">
+                                <img ng-src="images/searchloader.gif" width="100" height="100">
+                            </div>
+                         <div ng-hide="showLoader">   
+                        <p class="text-15" ng-hide="listing_status_approved || listing_status_invisible || (update_button == !profile_photo && !listing_status_approved && !listing_status_pending_approval && !listing_status_invisible)" >{{'You have created your listing but haven\'t filled out all necessary fields. Please complete your listing so our team can review it and publish it:' | translate}}
+                        </p>
+                        <ul class="list-unstyled">
+                                    <div ng-if="auth.role_id != ConstUserType.Customer">
+                                        <li>
+                                            <span ng-show="listing_status_ready == !profile_photo && !listing_status_approved && !listing_status_pending_approval && !listing_status_invisible"><b> {{'Your listing status is Ready to publish' | translate}} </b></span>
+                                            <p class="alert alert-danger" ng-show="userProfileData.listing_status_id === 2"><b> {{'Your profile successfully sent for approval. Once site review your profile will be listed in the site.' | translate}}</b></p>
+                                            <span ng-show="userProfileData.listing_status_id === 3"><b> {{'Your listing status is Published' | translate}}</b></span>
+                                            <span ng-show="userProfileData.listing_status_id === 4"><b> {{'Your listing status is Invisible' | translate}}</b></span>
+                                        </li>
+                                        <p class="alert alert-warning" ng-if="userProfileData.listing_status_id === 3">{{'Keeps you hide from the booking list if you press this button.' | translate}}</p>
+                                        <li><span ng-if="update_button == !profile_photo && !listing_status_approved && !listing_status_pending_approval && !listing_status_invisible"><button type="button" class="center-block btn btn-info" ng-click="changeStatus(ConstListingStatus.Approved)"><span ng-show="!auto_approval">{{'Submit for Approval' | translate}}</span>
+                                            <span
+                                                ng-show="auto_approval">{{'Publish this Listing' | translate}}</span>
+                                                </button>
+                                                </span>
+                                                <span ng-if="userProfileData.listing_status_id === 3"><button type="button" class="btn" ng-click="changeStatus(ConstListingStatus.Invisible)">{{'Update as Invisible' | translate}}</button></span>
+                                                <span ng-if="userProfileData.listing_status_id === 4"><button type="button" class="btn btn-info" ng-click="changeStatus(ConstListingStatus.Approved)">{{'Update as Published' | translate}}</button></span>
+                                        </li>
+                                    </div>
+                                    <div class="alert alert-danger" ng-if="auth.role_id != ConstUserType.Customer && (userProfileData.is_online_assessment_test_completed != 1 || userProfileData.is_listing_updated != 1 || userProfileData.services_user_count == 0 || photo || profile_photo)"> {{'You have created your listing but haven\'t filled out all necessary fields. Please complete your listing so our team can review it and publish it:'| translate}}</div>
+                                    <li ng-if="userProfileData.is_listing_updated != 1 && auth.role_id != ConstUserType.Customer" title="{{'It is mandatory to list your service'| translate}}"><a href="users/description_details"><span>{{'The listing details are not complete, please fill them in so we can know more about you.' | translate}}</span></a></li>
+                                    <li ng-if="userProfileData.is_listing_updated == 1 && userProfileData.services_user_count == 0 && auth.role_id != ConstUserType.Customer" title="{{'It is mandatory to list your service'| translate}}"><a href="user/services"><span>{{'The listing details are not complete, please fill them in so we can know more about you.' | translate}}</span></a></li>
+                                    <li ng-if="photo && auth.role_id != ConstUserType.Customer"><a href="photos" title="{{'It is mandatory to list your service'| translate}}"><span>{{'Add 4 pictures of your service' | translate}}</span></a></li>
+                                    <li ng-if="userProfileData.is_online_assessment_test_completed != 1 && $root.settings.SITE_ENABLED_PLUGINS.indexOf('OnlineAssessment/OnlineAssessment') > -1 && auth.role_id != ConstUserType.Customer"><a href="assessment"><span title="{{'It is mandatory to list your service'| translate}}">{{'Take a quick online assessment to enhance your listing and learn important tips and tricks' | translate}}</span></a>
+                                    </li>
+                                    <li ng-if="profile_photo && auth.role_id != ConstUserType.Customer"><a href="users/user_profile" title="{{'It is mandatory to list your service'| translate}}"><span>{{'Add a great profile pic of yourself' | translate}}!</span></a></li>
+                                    </br>
+                                    <div class="alert alert-warning" ng-if="listing_address != false || (userProfileData.pro_account_status_id != ConstProStatus.Approved && auth.role_id != ConstUserType.Customer) || ($root.auth.role_id != ConstUserType.Customer && userProfileData.is_top_listed != 1) || userProfileData.user.is_mobile_number_verified != 1 || userProfileData.user.is_email_confirmed != 1">
+                                    {{'You can do the followings for getting more bookings.'| translate}}</div>
+                                    <li ng-if="listing_address == true && auth.role_id == ConstUserType.ServiceProvider"><a href="contactus?address_verified=1"><span>{{'Send us proof of address (recent utility bill). We can then display an "Address Verified" badge on your listing to help you get more bookings!' | translate}} </span></a></li>
+                                    <li ng-if="listing_address =='pending' && auth.role_id == ConstUserType.ServiceProvider"><a href="#"><span>{{'Address proof submission is under review.' | translate}} </span></a></li>
+                                    <li ng-if="listing_address =='rejected' && auth.role_id == ConstUserType.ServiceProvider"><a href="contactus?address_verified=1"><span>{{'Address proof submission was rejected. Please submit again' | translate}} </span></a></li>
+
+                                    <li ng-if="($root.auth.role_id == ConstUserType.ServiceProvider || $root.auth.role_id == ConstUserType.User) && $root.settings.PRO_ACCOUNT_FEE != '' && $root.settings.SITE_ENABLED_PLUGINS.indexOf('ProUser/ProUser') > -1">
+                                        <a href="become_a_pro_user" ng-if="userProfileData.pro_account_status_id == ConstProStatus.NotPaid"><span>{{'Update your account as PRO account'| translate}}</span></a>
+                                        <a href="" ng-if="userProfileData.pro_account_status_id == ConstProStatus.PaidAndPendingApproval"><span>{{'PRO account upgradation under review'| translate}}</span></a>
+                                    </li>
+                                    <li ng-if="($root.auth.role_id == ConstUserType.ServiceProvider || $root.auth.role_id == ConstUserType.User) && userProfileData.is_top_listed === 0 && $root.settings.SITE_ENABLED_PLUGINS.indexOf('TopUser/TopUser') > -1">
+                                        <a href="become_a_top_user">{{'Become a top listed user'| translate}}</a>
+                                    </li>
+                                    <li ng-if="userProfileData.user.is_mobile_number_verified != 1 && $root.settings.SITE_ENABLED_PLUGINS.indexOf('SMS/SMS') > -1 && userProfileData.user.is_profile_updated == 1"><a href="mobile_number_verification"><span>{{'Please verify your mobile number' | translate}}</span></a></li>
+                                    <li ng-if="userProfileData.user.is_email_confirmed != 1 && userProfileData.user.is_profile_updated == 1"><a href="email_verification"><span>{{'Please verify your email' | translate}}</span></a></li>
+                                </ul>
+                        </div>
+                    </div>
+                </div>  
+            </div>
+        </div>
+     </div>
+</section>
+<!--page-head clearfix -->

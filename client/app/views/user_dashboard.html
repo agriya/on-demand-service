@@ -1,0 +1,232 @@
+<section class="edit-profile user-dashboard">   
+    <div class="container">
+        <div>
+            <h3 class="text-center">{{'Dashboard' | translate}}</h3>
+            <div class="row">
+                <!-- Left side 
+                    ===============-->
+                <div class="col-sm-6 col-md-5 col-xs-12">
+                    <div class="left-side">
+                        <div class="thumbnail space">
+                            <div class="media">
+                                <div class="navbar-left">
+                                    <a href="users/{{user.id}}/{{auth.user_profile.first_name + auth.user_profile.last_name| slugify}}"><div class="media-left" >
+                                        <img ng-src="{{user.profile_image}}" class="img-circle img-thumbnail" width="150" height="150">
+                                    </div></a>
+                                </div>
+                                <div class="media-body media-middle text-center">
+                                    <h5 class="text-20 text-b">{{userProfileData.first_name}} {{userProfileData.last_name}}</h5>
+                                    <a href="users/user_profile" class="text-15">{{'Change Photo' | translate}}</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="well text-center" ng-if="$root.settings.SITE_ENABLED_PLUGINS.indexOf('Referral/Referral') > -1">
+                            <div class="blue-bg oval-social">
+                                <span><i class="fa fa-gift fa-5x"></i></span>
+                                <p class="text-b pad-top-20">{{"AFFLIATE_TEXT_1"|translate:translateData}}</p>
+                                <ul class="list-unstyled">
+                                    <li>{{'1. Invite friends' | translate}}</li>
+                                    <li>{{'2. Your friends get a discount' | translate}} {{$root.settings.AFFILIATE_REFERRAL_AMOUNT_NEW_USER | currency : currency_type}}</li>
+                                    <li>3. {{"AFFLIATE_TEXT_2"|translate:translateData}}</li>
+                                </ul>
+                                <p class="text-b">{{'Share your link' | translate}}</p>
+                                <!--<p class="label label-default" select-on-click>{{referal_link}}</p>-->
+                                <input type="text" ng-model="referal_link" select-on-click readonly/>
+                                <ul class="list-inline">
+                                <li>
+                               <a href="#" class="btn btn-facebook" socialshare socialshare-provider="facebook" socialshare-title="" socialshare-description="{{referal_description}}" socialshare-media=""
+                                 socialshare-via="{{facebook_provider}}" socialshare-display="popup" socialshare-quote="" socialshare-hashtags="" socialshare-caption="" socialshare-mobileiframe="true" socialshare-url="{{referal_link}}">
+                               <i class="fa fa-facebook fa-lg" aria-hidden="true"></i></a>
+                                </li>
+                                 <li>
+                                <a href="#" class="btn btn-twitter" socialshare socialshare-provider="twitter" socialshare-text="{{referal_description}}" socialshare-description="{{referal_description}}" socialshare-hashtags="" socialshare-url="{{referal_link}}"> <i class="fa fa-twitter fa-lg" aria-hidden="true"></i> 
+                                </a>
+                                </li>
+                                 <li><a href="refer_friends"><i class="fa fa-envelope fa-lg"></i></a></li>
+                                 </ul>
+                            </div>
+                            <div class="panel">
+                                <p class="text-success no-mar">{{$root.auth.affiliate_pending_amount | currency : currency_type}}</p>
+                                <p>{{'Current credit balance to spend' | translate}}</p>
+                                <p><a href="refer_friends">{{'See details' | translate}}</a></p>
+                            </div>
+                            <div class="media calendar" ng-if="auth.role_id != ConstUserType.Customer">
+                                <div class="media-left media-middle">
+                                    <i class="fa fa-calendar fa-5x"></i>
+                                </div>
+                                <div class="media-body media-middle text-left">
+                                    <h5 class="text-b text-15">{{'Calendar' | translate}}</h5>
+                                    <p>{{'Make sure your calendar is up to date' | translate}}</p>
+                                    <a href="user/calendar" class="btn btn-info">{{'Update Now' | translate}}</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="well booking-block">
+                            <h5 class="text-b">{{'All your bookings include' | translate}}:</h5>
+                            <ul class="list-unstyled">
+                                <li><i class="fa fa-life-ring fa-fw"></i> <span>{{'24/7 Emergency support & cancellation protection' | translate}}</span></li>
+                                <li><i class="fa fa-umbrella fa-fw"></i> <span>{{'Up to EUR 1.7M liability insurance' | translate}}</span></li>
+                                <li><i class="fa fa-mobile fa-fw"></i> <span>{{'Mobile apps to manage your bookings on the go' | translate}}</span></li>
+                                <li><i class="fa fa-bullhorn fa-fw"></i> <span>{{'Promotion of your home assistant services to customer in your area' | translate}}</span></li>
+                            </ul>
+                            <i>{{'Always take payment through site and never accept cash' | translate}}</i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right side 
+                    ================-->
+                <div class="col-sm-6 col-md-7 col-xs-12">
+                    <div class="right-side">
+                        <div class="panel panel-info" ng-hide="auth.role_id == ConstUserType.Customer && !profile_photo && userProfileData.user.is_mobile_number_verified == 1  && userProfileData.user.is_email_confirmed == 1">
+                            <div class="panel-heading">
+                                <i class="fa fa-bell fa-lg fa-fw"></i>{{'Alerts' | translate}}
+                            </div>
+                            <div ng-show="showLoader">
+                                <img ng-src="images/searchloader.gif" width="100" height="100">
+                            </div>
+                            <div class="panel-body" ng-hide="showLoader">
+                                <div ng-if="auth.role_id != ConstUserType.Customer">
+                                <p ng-hide="listing_status_approved || listing_status_invisible || (update_button == !profile_photo && !listing_status_approved && !listing_status_pending_approval && !listing_status_invisible)">{{'You are just a fews steps away from having your profile published' | translate}}!</p>
+                                </div>
+                                 <ul class="list-unstyled">
+                                    <div ng-if="auth.role_id != ConstUserType.Customer">
+                                        <li>
+                                            <span ng-show="listing_status_ready == !profile_photo && !listing_status_approved && !listing_status_pending_approval && !listing_status_invisible"><b> {{'Your listing status is Ready to publish' | translate}} </b></span>
+                                            <p class="alert alert-danger" ng-show="userProfileData.listing_status_id === 2"><b> {{'Your profile successfully sent for approval. Once site review your profile will be listed in the site.' | translate}}</b></p>
+                                            <span ng-show="userProfileData.listing_status_id === 3"><b> {{'Your listing status is Published' | translate}}</b></span>
+                                            <span ng-show="userProfileData.listing_status_id === 4"><b> {{'Your listing status is Invisible' | translate}}</b></span>
+                                        </li>
+                                        <p class="alert alert-warning" ng-if="userProfileData.listing_status_id === 3">{{'Keeps you hide from the booking list if you press this button.' | translate}}</p>
+                                        <li><span ng-if="update_button == !profile_photo && !listing_status_approved && !listing_status_pending_approval && !listing_status_invisible"><button type="button" class="center-block btn btn-info" ng-click="changeStatus(ConstListingStatus.Approved)"><span ng-show="!auto_approval">{{'Submit for Approval' | translate}}</span>
+                                            <span
+                                                ng-show="auto_approval">{{'Publish this Listing' | translate}}</span>
+                                                </button>
+                                                </span>
+                                                <span ng-if="userProfileData.listing_status_id === 3"><button type="button" class="btn" ng-click="changeStatus(ConstListingStatus.Invisible)">{{'Update as Invisible' | translate}}</button></span>
+                                                <span ng-if="userProfileData.listing_status_id === 4"><button type="button" class="btn btn-info" ng-click="changeStatus(ConstListingStatus.Approved)">{{'Update as Published' | translate}}</button></span>
+                                        </li>
+                                    </div>
+                                    <div class="alert alert-danger" ng-if="auth.role_id != ConstUserType.Customer && (userProfileData.is_online_assessment_test_completed != 1 || userProfileData.is_listing_updated != 1 || userProfileData.services_user_count == 0 || photo || profile_photo)"> {{'You have created your listing but haven\'t filled out all necessary fields. Please complete your listing so our team can review it and publish it:'| translate}}</div>
+                                    <li ng-if="userProfileData.is_listing_updated != 1 && auth.role_id != ConstUserType.Customer" title="{{'It is mandatory to list your service'| translate}}"><a href="users/description_details"><span>{{'The listing details are not complete, please fill them in so we can know more about you.' | translate}}</span></a></li>
+                                    <li ng-if="userProfileData.is_listing_updated == 1 && userProfileData.services_user_count == 0 && auth.role_id != ConstUserType.Customer" title="{{'It is mandatory to list your service'| translate}}"><a href="user/services"><span>{{'The listing details are not complete, please fill them in so we can know more about you.' | translate}}</span></a></li>
+                                    <li ng-if="photo && auth.role_id != ConstUserType.Customer"><a href="photos" title="{{'It is mandatory to list your service'| translate}}"><span>{{'Add 4 pictures of your service' | translate}}</span></a></li>
+                                    <li ng-if="userProfileData.is_online_assessment_test_completed != 1 && $root.settings.SITE_ENABLED_PLUGINS.indexOf('OnlineAssessment/OnlineAssessment') > -1 && auth.role_id != ConstUserType.Customer"><a href="assessment"><span title="{{'It is mandatory to list your service'| translate}}">{{'Take a quick online assessment to enhance your listing and learn important tips and tricks' | translate}}</span></a>
+                                    </li>
+                                    <li ng-if="profile_photo && auth.role_id != ConstUserType.Customer"><a href="users/user_profile" title="{{'It is mandatory to list your service'| translate}}"><span>{{'Add a great profile pic of yourself' | translate}}!</span></a></li>
+                                    </br>
+                                    <div class="alert alert-warning" ng-if="listing_address != false || (userProfileData.pro_account_status_id != ConstProStatus.Approved && auth.role_id != ConstUserType.Customer) || ($root.auth.role_id != ConstUserType.Customer && userProfileData.is_top_listed != 1) || userProfileData.user.is_mobile_number_verified != 1 || userProfileData.user.is_email_confirmed != 1">
+                                    {{'You can do the followings for getting more bookings.'| translate}}</div>
+                                    <li ng-if="listing_address == true && auth.role_id == ConstUserType.ServiceProvider"><a href="contactus?address_verified=1"><span>{{'Send us proof of address (recent utility bill). We can then display an "Address Verified" badge on your listing to help you get more bookings!' | translate}} </span></a></li>
+                                    <li ng-if="listing_address =='pending' && auth.role_id == ConstUserType.ServiceProvider"><a href="#"><span>{{'Address proof submission is under review.' | translate}} </span></a></li>
+                                    <li ng-if="listing_address =='rejected' && auth.role_id == ConstUserType.ServiceProvider"><a href="contactus?address_verified=1"><span>{{'Address proof submission was rejected. Please submit again' | translate}} </span></a></li>
+
+                                    <li ng-if="($root.auth.role_id == ConstUserType.ServiceProvider || $root.auth.role_id == ConstUserType.User) && $root.settings.PRO_ACCOUNT_FEE != '' && $root.settings.SITE_ENABLED_PLUGINS.indexOf('ProUser/ProUser') > -1">
+                                        <a href="become_a_pro_user" ng-if="userProfileData.pro_account_status_id == ConstProStatus.NotPaid"><span>{{'Update your account as PRO account'| translate}}</span></a>
+                                        <a href="" ng-if="userProfileData.pro_account_status_id == ConstProStatus.PaidAndPendingApproval"><span>{{'PRO account upgradation under review'| translate}}</span></a>
+                                    </li>
+                                    <li ng-if="($root.auth.role_id == ConstUserType.ServiceProvider || $root.auth.role_id == ConstUserType.User) && userProfileData.is_top_listed === 0 && $root.settings.SITE_ENABLED_PLUGINS.indexOf('TopUser/TopUser') > -1">
+                                        <a href="become_a_top_user">{{'Become a top listed user'| translate}}</a>
+                                    </li>
+                                    <li ng-if="userProfileData.user.is_mobile_number_verified != 1 && $root.settings.SITE_ENABLED_PLUGINS.indexOf('SMS/SMS') > -1 && userProfileData.user.is_profile_updated == 1"><a href="mobile_number_verification"><span>{{'Please verify your mobile number' | translate}}</span></a></li>
+                                    <li ng-if="userProfileData.user.is_email_confirmed != 1 && userProfileData.user.is_profile_updated == 1"><a href="email_verification"><span>{{'Please verify your email' | translate}}</span></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading space">
+                                <h5 class="text-b text-16 no-mar"><i class="fa fa-calendar fa-lg"></i> {{'Upcoming' | translate}}</h5>
+                            </div>
+                            <ul class="list-unstyled no-mar" ng-repeat="booking in appointments" ng-show="appointments.length > 0">
+                                <li>
+                                    <div class="no-mar space">
+                                        <a href="booking/{{booking.id}}">
+                                        <div class="row text-center">
+                                            <div class="col-md-2 col-sm-12 col-xs-12">
+                                                <div ng-if="auth.id != booking.provider_user.id">
+                                                        <img ng-src={{booking.provider_image}} class="img-circle" alt="{{booking.User.username}}" width="50" height="50">
+                                                </div>
+                                                <div ng-if="auth.id == booking.provider_user.id">
+                                                    <img ng-src={{booking.user_image}} class="img-circle" alt="{{appointment.provider_user.username}}" width="50" height="50">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 col-sm-12 col-xs-12 no-pad">  
+                                                <div ng-if="auth.id == booking.provider_user.id">
+                                                    <h4 class="text-16 text-n">{{booking.user.user_profile.first_name}} {{booking.user.user_profile.last_name}}</h4>
+                                                </div>
+                                                <div ng-if="auth.id != booking.provider_user.id">
+                                                    <h4 class="text-16 text-n">{{booking.provider_user.user_profile.first_name}} {{booking.provider_user.user_profile.last_name}}</h4>
+                                                </div>                                                  
+                                            </div>
+                                            <div class="col-md-4 col-sm-12 col-xs-12" style="border-left: thin solid #d6d4d4;">
+                                                <h4 class="text-15" ng-if="ConstService.Interview == booking.service_id">{{'Interview' | translate}}</h4>
+                                                <h4 class="text-15" ng-if="ConstService.Interview != booking.service_id && booking.service_id == service.id" ng-repeat="service in services">{{service.name | translate}}</h4>
+                                                <p>{{booking.customer_note}}</p>
+                                            </div>
+                                            <div class="col-md-4 col-sm-12 col-xs-12" style="border-left: thin solid #d6d4d4;">
+                                                <h4 class="text-20 text-b"> {{booking.total_booking_amount| currency : currency_type}}</h4>
+                                                <span class="text-12">{{booking.appointment_from_date | date: 'yyyy-MM-dd'}}<span ng-if="booking.apppointment_to_date != booking.apppointment_from_date "> to {{booking.appointment_from_date | date: 'yyyy-MM-dd'}}</span></span>
+                                            </div>
+                                        </div>
+                                        </a>
+                                    </div>
+                                </li>
+                            </ul>
+                            <ul class="list-unstyled no-mar" ng-show="appointments.length <= 0">
+                                <li class="text-center top-space"><small>{{'No upcoming booking' | translate}}</small></li>
+                            </ul> 
+                        </div>
+                            
+                        <div class="well">
+                            <div class="dark-gray text-center">
+                                <h5><i class="fa fa-line-chart fa-fw"></i>{{'Performance' | translate}}</h5>
+                                <span ng-if = "auth.role_id == ConstUserType.ServiceProvider">
+                                    <p class="no-mar">{{'Total Earned Amount:' | translate}}<span class="text-18 text-b">
+                                        <temp>{{user.user_profile.earned_amount_as_service_provider | currency : currency_type}}</temp>
+                                    </p>
+                                    <p class="no-mar">{{'Available Earned Amount:' | translate}}<span class="text-18 text-b">
+                                        <temp>{{user.available_wallet_amount | currency : currency_type}}</temp>
+                                    </p>
+                                </span>
+                                <span ng-if = "auth.role_id != ConstUserType.ServiceProvider">
+                                    <p class="no-mar">{{'Total Spent Amount:' | translate}}<span class="text-18 text-b">
+                                        <temp>{{user.user_profile.total_spent_amount_as_customer | currency : currency_type}}</temp>
+                                    </p>
+                                </span>
+                                <p><a href="transactions">{{'See All Transactions' | translate}}</a></p>
+                                <ul class="list-unstyled text-left navbar-btn" ng-if = "auth.role_id == ConstUserType.ServiceProvider">
+                                    <li>{{'Completed Bookings:' | translate}} <span tabindex="-1" class="pointer" uib-popover="{{'The more completed bookings you have the better you will rank in search results'| translate}}" popover-placement="bottom" popover-trigger="focus">{{user.user_profile.completed_appointment_count}}</span></li>
+
+                                    <li>{{'Return Customers:' | translate}} <span tabindex="-1" class="pointer" uib-popover="{{'These are the dog owners that have had more than one confirmed booking with you. Having all your customers repeat bookings through DogBuddy has a tremendous impact in your sitter search ranking' | translate}}" popover-placement="bottom" popover-trigger="focus">{{user.user_profile.repeat_client_count}}</span></li>
+                                    <!--<li>{{'New Customer Conversion' | translate}}: <span tabindex="-1" class="pointer" uib-popover="{{'This shows you what percentage of the new customers that have contacted you, have made a successful booking'|translate}}" popover-placement="bottom" popover-trigger="focus"><i class="fa fa-question-circle"></i></span></li>-->
+                                    <li>{{'Response Rate:' | translate}} 
+                                        <span tabindex="-1" class="pointer" uib-popover="{{'This shows the percentage of booking opportunities you respond to. Your goal is 100% and a low response rate penalises you in search results' | translate}}" popover-placement="bottom" popover-trigger="focus">
+                                        <span ng-show="user.user_profile.response_rate != undefined && user.user_profile.response_rate != ''">{{user.user_profile.response_rate}}%</span>
+                                        <span ng-if="user.user_profile.response_rate == undefined||user.user_profile.response_rate == ''">-</span></span></li>
+                                    <li>{{'Response Time:' | translate}} <span tabindex="-1" class="pointer" uib-popover="{{'You should answer all requests within minutes as this increases your chances of getting a confirmed booking'|translate}}" popover-placement="bottom" popover-trigger="focus">{{user.user_profile.response_time_value}} 
+                                        <span class="text-b" ng-show="user.user_profile.response_time_value==null ||user.user_profile.response_time_value == undefined||user.user_profile.response_time_value ==''"> -</span>
+                                    </span>
+                                    </li>
+                                    <li>{{'Review Rating:' | translate}}
+                                    <span tabindex="-1" class="pointer" uib-popover="{{'The more 5-star reviews you have, the more customer will find you in search results. Your reviews appear on your public listing'| translate}}" popover-placement="bottom" popover-trigger="focus">{{user.average_rating_as_service_provider}}
+                                    </span>
+                                    </li>
+                                </ul>
+                                <ul class="list-unstyled text-left navbar-btn" ng-if = "auth.role_id != ConstUserType.ServiceProvider">
+                                    <li>{{'Booking Count:' | translate}} <span tabindex="-1" class="pointer" uib-popover="{{'Total number of bookings count'| translate}}" popover-placement="bottom" popover-trigger="focus">{{user.appointment_count}}</span></li>
+                                </ul>    
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    $(document).ready(function(){       
+        $('[data-toggle="tooltip"]').tooltip()       
+    })   
+</script>

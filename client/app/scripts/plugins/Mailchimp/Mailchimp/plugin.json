@@ -1,0 +1,10 @@
+{
+	"name": "Mailchimp", 
+	"class": "fa fa-2x fa-envelope-square",
+	"description": "Mailchimp",
+	"dependencies": "",
+	"module_id": "",
+	"module_hash": "",
+	"display_order": "",
+	"plugin_name":"Mailchimp/Mailchimp"
+}

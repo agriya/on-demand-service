@@ -1,0 +1,29 @@
+<div class="row">
+	<div class="col-lg-12">
+		<content-top>
+			<div class="content-top clearfix">
+				<h1 class="al-title ng-binding">Reassign Service Provider</h1>
+			</div>
+		</content-top>
+	</div>
+</div>
+<div class="row" id="create-view">
+	<div class="clearfix well-sm panel animated zoomIn">
+		<form class="proj-form" role="form" name="servicelocationFrm" ng-submit="reassignProvider(user,servicelocationFrm.$valid)"
+			novalidate>
+			<div class="form-group">
+                <h4>Current Service Provider : {{appointment.provider_user.user_profile.first_name}} {{appointment.provider_user.user_profile.last_name}}</h4>
+			</div>
+			<div class="row">
+				<div class="form-group col-sm-6">
+                    <h4> New Service Provider :</h4>
+					<input type="text" name="user" ng-model="user.selected" uib-typeahead="user as user.user_profile.first_name+ ' ' +user.user_profile.last_name for user in users | filter:$viewValue | limitTo:10" class="form-control" required>
+					<span class="error" ng-show="(servicelocationFrm.$submitted || servicelocationFrm.user.$touched) && (servicelocationFrm.user.$pristine || servicelocationFrm.user.$invalid) && (servicelocationFrm.user.$error.required)">{{'Select New Service provider'| translate }} </span>
+				</div>
+			</div>
+			<div class="form-group">
+				<button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span> {{'Update'|translate}}</button>
+			</div>
+		</form>
+	</div>
+</div>

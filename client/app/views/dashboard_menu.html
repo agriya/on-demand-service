@@ -1,0 +1,15 @@
+<section class="edit-profile" ng-show="auth.is_profile_updated != 0">
+    <ul class="list-inline">
+        <li class="tempClass"><a href="user_dashboard">{{'Dashboard' | translate}}</a></li>
+        <li class="tempClass"><a href="booking/all">{{'Bookings & messages' | translate}}</a></li>
+        <li class="tempClass" ng-show="auth.role_id != ConstUserType.ServiceProvider"><a href="users">{{'Search' | translate}}</a></li>
+        <li class="tempClass" ng-show="auth.role_id != ConstUserType.Customer"><a href="users/listing">{{'Listing' | translate}}</a></li>
+        <li class="tempClass" ng-show="auth.role_id != ConstUserType.Customer"><a href="user/calendar">{{'Calendar' | translate}}</a></li>
+        <li class="tempClass" ng-show="auth.role_id != ConstUserType.ServiceProvider && $root.settings.SITE_ENABLED_PLUGINS.indexOf('SaveSearchAndNotify/SaveSearchAndNotify') > -1"><a href="saved-searches">{{'Saved searches' | translate}}</a></li>
+        <li class="tempClass" ng-show="auth.role_id != ConstUserType.ServiceProvider && $root.settings.SITE_ENABLED_PLUGINS.indexOf('Request/Request') > -1"><a href="my_jobs">{{'Post a job' | translate}}</a></li>
+        <li class="tempClass" ng-show="auth.role_id != ConstUserType.Customer && $root.settings.SITE_ENABLED_PLUGINS.indexOf('Request/Request') > -1"><a href="jobs">{{'Job board' | translate}}</a></li> 
+        <li class="tempClass"><a href="contacts">{{'Contacts' | translate}}</a></li>
+        <li  class="tempClass" ng-show="auth.blocked_user_count > 0 && $root.settings.SITE_ENABLED_PLUGINS.indexOf('BlockedUser/BlockedUser') > -1"><a href="blocked_users">{{'Blocked User' | translate}}</a></li>      
+        <li class="tempClass"><a href="users/user_profile">{{'Account' | translate}}</a></li>
+    </ul>
+</section>    

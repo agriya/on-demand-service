@@ -1,0 +1,78 @@
+<div class="row">
+	<div class="col-lg-12">
+		<content-top>
+			<div class="content-top clearfix">
+				<h1 class="al-title ng-binding">Transactions</h1>
+				<ul class="breadcrumb al-breadcrumb">
+					<li><a href="#/dashboard">Home</a></li>
+					<li class="ng-binding">Transactions</li>
+				</ul>
+			</div>
+		</content-top>
+	</div>
+</div>
+<div class="row" id="create-view">
+	<div class="clearfix well-sm panel animated zoomIn">
+                        <div class="panel-heading">
+					      <div class="add-wallet-table">
+                                <div class="table-responsive pg-table">
+									<table class="table table-striped no-mar">
+                                        <thead ng-if="transactions.length">
+                                            <tr>
+                                                <th>{{'Date' |translate}}</th>
+												<th>{{'Description'|translate}}</th>
+                                                <th>{{'Amount'|translate}}</th>
+												 <th>{{'Site Commission'|translate}}</th>
+									        </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="transaction in transactions" ng-if="transactions.length">
+                                                <td>{{transaction.created_at | date : 'MMM dd, yyyy'}}</td>
+                                <td class="data-left" ng-if="transaction.transaction_type == ConstTransactionTypes.CompletedAndAmountMovedToWallet">
+									{{transaction.user.user_profile.first_name}} {{transaction.user.user_profile.last_name}} {{'booked'| translate}} {{transaction.other_user.user_profile.first_name}} {{transaction.other_user.user_profile.last_name}} {{'for'| translate}} {{transaction.foreign_transaction.appointment_from_date}} 
+                                    <span ng-if="transaction.foreign_transaction.activity.service.booking_option_id == 3">{{'to'| translate}} {{transaction.foreign_transaction.appointment_to_date}}</span><br>
+                                </td>
+                                <td class="data-left" ng-if="transaction.transaction_type == ConstTransactionTypes.BookingAcceptedAndAmountMovedToEscrow">
+									{{transaction.user.user_profile.first_name}} {{transaction.user.user_profile.last_name}} {{'booked'| translate}} {{transaction.other_user.user_profile.first_name}} 
+                                    {{transaction.other_user.user_profile.last_name}} {{'for'| translate}} {{transaction.foreign.appointment_from_date}} 
+                                    <span ng-if="transaction.foreign.activity.service.booking_option_id == 3">{{'to'| translate}} {{transaction.foreign.appointment_to_date}}</span> ({{'Booking Id'| translate}}: {{transaction.foreign.id}})
+                                    <br>
+                                </td>
+                                <td class="data-left" ng-if="transaction.transaction_type == ConstTransactionTypes.BookingCanceledAndRefunded">{{transaction.other_user.user_profile.first_name}} {{transaction.other_user.user_profile.last_name}} {{'canceled the booking'| translate}} {{'and amount will be refunded to'|translate}} {{transaction.user.user_profile.first_name}} {{transaction.user.user_profile.last_name}} {{'account'| translate}}. ({{'Booking Id'| translate}}: {{transaction.foreign.id}})
+                                </td>
+                                <td class="data-left" ng-if="transaction.transaction_type == ConstTransactionTypes.BookingCanceledAndCreditedCancellationAmount">{{transaction.other_user.user_profile.first_name}} {{transaction.other_user.user_profile.last_name}} {{'booked'| translate}} {{transaction.user.user_profile.first_name}} {{transaction.user.user_profile.last_name}} {{'and canceled the booking'| translate}}. ({{'Booking Id'| translate}}: {{transaction.foreign.id}})  
+                                </td>
+                                <td class="data-left" ng-if="transaction.transaction_type == ConstTransactionTypes.Bonus">{{transaction.user.user_profile.first_name}} {{transaction.user.user_profile.last_name}} {{'paid additional amount to'}} {{transaction.other_user.user_profile.first_name}} {{transaction.other_user.user_profile.last_name}} {{'for'|translate}} 
+                                    {{transaction.foreign_transaction.appointment_from_date}} 
+                                    <span ng-if="transaction.foreign_transaction.activity.service.booking_option_id == 3">{{'to'| translate}} {{transaction.foreign_transaction.appointment_to_date}}</span>
+                                    <br></td>
+                                <td class="data-left" ng-if="transaction.transaction_type == ConstTransactionTypes.PROPayment">{{transaction.other_user.user_profile.first_name}} {{transaction.other_user.user_profile.last_name}} {{'subscribed for PRO user'|translate}}</td>
+                                <td class="data-left" ng-if="transaction.transaction_type == ConstTransactionTypes.TopListed">{{transaction.other_user.user_profile.first_name}} {{transaction.other_user.user_profile.last_name}} {{'subscribed for top listed user'|translate}}</td>
+                                <td>{{transaction.amount}}</td>
+                                <td ng-if="transaction.transaction_type != ConstTransactionTypes.Bonus">{{transaction.site_revenue_from_freelancer}}</td>
+                                <td ng-if="transaction.transaction_type == ConstTransactionTypes.Bonus">{{transaction.site_revenue_from_freelancer + transaction.site_revenue_from_employer}}</td>
+									        </tr>
+                                            <tr ng-if="!transactions.length" class="text-center">
+                                                <td colspan="8" class="text-danger"> {{'No Records Available'|translate}} </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="row">
+                                    <div class="binding-pagination" ng-show="totalRecords >= itemsPerPage">
+                                    <div class="pagnation-content">
+                                        <div class="clearfix pagnation-inner">
+                                            <div class="col-md-12 text-center">
+                                                <uib-pagination previous-text="Prev" next-text="Next" total-items="totalRecords" num-pages="lastPage" ng-model="currentPage"
+                                                    max-size="maxSize" class="pagination-sm" boundary-link-numbers="true" rotate="false" items-per-page="itemsPerPage"
+                                                    ng-change="paginate_transaction(currentPage)"></uib-pagination>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                       </div>
+                </div>
+           

@@ -1,0 +1,19 @@
+<div class="booking-view edit-profile">
+    <div class="container">
+        <div class="row">  
+            <div class="col-sm-8"> 
+            <h2 class="no-mar mar-bot-20">{{'Become a Top Listed Service' | translate}}</h2>                                   
+                <p>{{'Top listed users are the one who will be listed in the very first in the search result.' | translate}}</p>
+                <p>{{'If a user wants to mount themselves in the top rated section, then they have to pay a monthly fee to site. As a result, user can be turned out to be a top rated user with the validity period mentioned and therefore the user will get displayed in the top listed right above the PRO user.' | translate}}</p>                
+            </div>
+            <div class="col-sm-4 text-center">
+                <div class="thumbnail">
+                    <h4>{{'Become a Top Listed Now' | translate}}</h4>
+                    <p class="text-b text-30">{{$root.settings.TOP_LISTED_ACCOUNT_FEE | currency : currency_type}}</p>
+                    <p>{{'Validity:' | translate}} {{$root.settings.TOP_LISTING_EXPIRY_DAYS}} {{'days' | translate}}</p>
+                    <p><a href="payments/top_user/{{$root.auth.id}}"><button type="button" class="text-b btn-block btn btn-info">{{'Pay Now' | translate}}</button></a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

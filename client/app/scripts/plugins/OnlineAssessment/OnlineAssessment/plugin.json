@@ -1,0 +1,10 @@
+{
+	"name": "OnlineAssessment", 
+	"class": "fa fa-2x fa-check",
+	"description": "Online Assessment",
+	"dependencies": "",
+	"module_id": "",
+	"module_hash": "",
+	"display_order": "",
+	"plugin_name":"OnlineAssessment/OnlineAssessment"
+}

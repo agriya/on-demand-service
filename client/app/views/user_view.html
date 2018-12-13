@@ -1,0 +1,316 @@
+<div class="user-view clearfix">    
+    <div class="user-profile">
+        <div class="container">
+            <div class="custom-width">
+                <div class="row">
+                    <div class="col-sm-5 col-xs-12">
+                        <div class="media">
+                            <div class="media-left">
+                                <a href="users/{{user.id}}/{{user.user_profile.first_name + user.user_profile.last_name}}" title="{{user.user_profile.first_name + user.user_profile.last_name}}" class="thumbnail">
+                                    <img ng-if="user.user_avatar_source_id != ConstSocialLogin.Twitter && user.user_avatar_source_id != ConstSocialLogin.Github" ng-src="{{user.userimage}}" title="{{user.user_profile.first_name + user.user_profile.last_name}}" class="" alt="{{user.username}}">
+                                    <img ng-if="user.user_avatar_source_id == ConstSocialLogin.Twitter || user.user_avatar_source_id == ConstSocialLogin.Github" ng-src="{{user.userimage}}" title="{{user.user_profile.first_name + user.user_profile.last_name}}" class="" alt="{{user.username}}" height="{{thumb.medium.height}}" width="{{thumb.medium.width}}">
+                                </a>
+                                <listing-favorites ng-if="$root.settings.SITE_ENABLED_PLUGINS.indexOf('ListingFavorites/ListingFavorites') > -1" class="cur"> </listing-favorites>
+                            </div>
+                            <div class="media-body user-dashboard">
+                                <h3>{{user.user_profile.first_name}} {{user.user_profile.last_name}} <span ng-if="user.user_profile.pro_account_status_id == ConstProStatus.Approved" title="{{'PRO account' | translate}}" class="verified">
+                                    <span class="fa-stack text-12">
+                                        <i class="fa fa-circle fa-stack-2x"></i>
+                                        <i class="fa fa-check fa-stack-1x fa-inverse"></i>
+                                    </span></span>
+                                </h3>
+                                <p>{{user.user_profile.services[0]['name']}}</p>
+                                <ul class="list-inline ratings-block">
+                                    <li> </li>
+                                    <li class="row" ng-if="$root.settings.SITE_ENABLED_PLUGINS.indexOf('Review/Review') > -1"> 
+                                        <ul class="list-inline ratings">
+                                            <li><ng-rate-it ng-model="user.average_rating_as_service_provider" read-only="true"></ng-rate-it></li>
+                                        </ul> 
+                                    </li> 
+                                    <li ng-if="$root.settings.SITE_ENABLED_PLUGINS.indexOf('Review/Review') > -1"><p><span class="small" ng-if="user.review_count_as_service_provider > 0">({{user.review_count_as_service_provider}} reviews) <span></p></li> 
+                                </ul>
+                                <ul class="list-inline text-left social-btn">
+                                    <li>
+                                        <a href="users/{{share_userId}}/{{share_slug}}" socialshare socialshare-provider="facebook" socialshare-title="{{user.user_profile.listing_title}}" socialshare-description="" socialshare-media=""
+                                            socialshare-via="{{facebook_provider}}" socialshare-display="popup" socialshare-quote="" socialshare-hashtags="" socialshare-caption="" socialshare-mobileiframe="true" socialshare-url="{{absUrl}}">
+                                            <button type="button" class="btn btn-facebook"><i class="fa fa-facebook left"></i> {{'Share' | translate}}</button>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="users/{{share_userId}}/{{share_slug}}" socialshare socialshare-provider="twitter" socialshare-text="{{user.user_profile.listing_title}}" socialshare-description="" socialshare-hashtags="" socialshare-url="{{absUrl}}">
+                                            <button type="button" class="btn btn-twitter"><i class="fa fa-twitter left"></i> {{'Tweet' | translate}}</button>
+                                        </a> 
+                                    </li>
+                                    <li>
+                                        <block-user ng-if="$root.settings.SITE_ENABLED_PLUGINS.indexOf('BlockedUser/BlockedUser') && auth.id != share_userId"> </block-user>
+                                    </li>
+                                </ul> 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-7 col-xs-12">
+                        <div class="right-side text-right">
+                            <ul class="list-inline">
+                                <li class="text-center" ng-repeat="service_user in user.service_users" ng-if="ConstService.Interview != service_user.service_id"> 
+                                    <div class=""><i class="fa {{service_user.service.icon_class}} fa-2x"></i></div>
+                                    <h5 class="text-13">{{service_user.service.name | translate}}</h5>
+                                    <p class="text-13 text-b">{{service_user.rate | currency : currency_type}}</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    
+    
+    <!--New Booking-->
+    <div class="container">
+        <div class="custom-width">
+            <div class="row">
+                <div class="col-md-7">
+                    <div class="left-side">
+                        <div id="carousel-example-generic" class="carousel slide" data-ride="carousel" ng-if="user.role_id != ConstUserType.Customer">
+
+                            <!-- Wrapper for slides -->
+                            <div class="carousel-inner img-thumbnail" role="listbox" >
+                                <div uib-carousel active="active" >
+                                    <div uib-slide ng-repeat="photo in photos track by photo.id" index="$index">
+                                        <img ng-src="{{photo.photo_url}}" class="img-responsive center-block">
+                                    </div>
+                                </div>  
+                            </div>
+                            <!-- Controls -->
+                            <a class="left carousel-control" data-target="#carousel-example-generic" role="button" data-slide="prev">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-chevron-left fa-stack-1x fa-inverse"></i>
+                                </span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="right carousel-control" data-target="#carousel-example-generic" role="button" data-slide="next">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-chevron-right fa-stack-1x fa-inverse"></i>
+                                </span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
+                        <div class="clearfix about-user border-bottom" ng-if="user.user_profile.listing_description != (null || undefined)">
+                            <h5 class="text-16">{{'About' | translate}} {{user.user_profile.first_name}} {{user.user_profile.last_name}}</h5>
+                            <p ng-bind-html="user.user_profile.listing_description | nl2br"></p>
+                        </div>
+                         <div class="clearfix about-user border-bottom" ng-show="user.user_profile.cv != null && user.user_profile.cv && user.role_id != ConstUserType.Customer">
+                            <h5 class="text-16">{{'CV' | translate}}</h5>
+                            <p ng-bind-html="user.user_profile.cv | nl2br"></p>
+                        </div>
+                        <div class="clearfix about-user border-bottom" ng-show="user.user_profile.is_available_for_interview == 1 && $root.settings.SITE_ENABLED_PLUGINS.indexOf('Interview/Interview') > -1">
+                            <h5 class="text-16">{{'Interview Information' | translate}}</h5>
+                            <ul class="list-unstyled">
+                                <li> {{'Telephonic Interview'| translate}}
+                                    <i class="fa fa-check" ng-if="user.user_profile.is_available_via_phone_interview == 1" aria-hidden="true"></i>
+                                    <i class="fa fa-times" ng-if="user.user_profile.is_available_via_phone_interview == 0" aria-hidden="true"></i>
+                                </li>  
+                                <li> {{'Skype Interview' | translate}}
+                                    <i class="fa fa-check" ng-if="user.user_profile.is_available_via_skype_interview == 1" aria-hidden="true"></i>
+                                    <i class="fa fa-times" ng-if="user.user_profile.is_available_via_skype_interview == 0" aria-hidden="true"></i>
+                                </li> 
+                                <li> {{'In Person Interview' | translate}}
+                                    
+                                    <i class="fa fa-check" ng-if="user.user_profile.is_available_via_in_person_interview == 1" aria-hidden="true"></i>
+                                    <i class="fa fa-times" ng-if="user.user_profile.is_available_via_in_person_interview == 0" aria-hidden="true"></i>
+                                    <span tabindex="-1" class="pointer" ng-if="user.user_profile.is_available_via_in_person_interview == 1" uib-popover="{{'You can finalize the interview place through messaging system'|translate}}" popover-placement="bottom" popover-trigger="focus"><i class="fa fa-info-circle"></i></span>
+                                </li>   
+                                 <li ng-if="$root.settings.SITE_ENABLED_PLUGINS.indexOf('CancellationPolicies/CancellationPolicies') > -1 && service_user.service_id ==ConstService.Interview" ng-repeat="service_user in user.service_users">{{'Cancellation policy for' | translate}} {{service_user.service.name}}:
+                                     <span class="text-b"><a href="javascript:void(0)" uib-popover="{{service_user.cancellation_policy.name | translate}}: {{service_user.cancellation_policy.description | translate}}" popover-placement="bottom" popover-trigger="focus"> {{service_user.cancellation_policy.name | translate}}</a></span>
+                                </li> 
+                            </ul>
+                        </div>
+                        <div class="credentials-block border-bottom">
+                            <h5>{{'Credentials' | translate}}</h5>
+                            <ul class="list-unstyled">
+                                <li ng-if="user.role_id != ConstUserType.Customer">{{'Address Verified' | translate}} &nbsp;
+                                    <i class="fa fa-check" ng-if="user.user_profile.listing_address_verified_status_id == 3" aria-hidden="true"></i> 
+                                    <i class="fa fa-times" aria-hidden="true" ng-if="user.user_profile.listing_address_verified_status_id != 3"></i>
+                                </li> 
+                                <li ng-if="user.role_id != ConstUserType.Customer">{{'Passed assessment' | translate}} &nbsp;
+                                     <i class="fa fa-check" ng-if="user.user_profile.is_online_assessment_test_completed == 1" aria-hidden="true"></i>
+                                     <i class="fa fa-times" aria-hidden="true" ng-if="user.user_profile.is_online_assessment_test_completed == 0"></i>
+                                 </li>
+                                 <li>{{'Mobile number verified' | translate}} &nbsp;
+                                    <i class="fa fa-check" ng-if="user.is_mobile_number_verified == 1" aria-hidden="true"></i> 
+                                    <i class="fa fa-times" aria-hidden="true" ng-if="user.is_mobile_number_verified == 0"></i>
+                                </li> 
+                                <li>{{'Email verified' | translate}} &nbsp;
+                                    <i class="fa fa-check" ng-if="user.is_email_confirmed == 1" aria-hidden="true"></i> 
+                                    <i class="fa fa-times" aria-hidden="true" ng-if="user.is_email_confirmed == 0"></i>
+                                </li>
+                                <li ng-if="user.user_profile.driving_license_information != null && user.user_profile.driving_license_information != undefined && user.role_id != ConstUserType.Customer">{{'Driving license number:' | translate}}
+                                    <span>{{user.user_profile.driving_license_information}}</span>
+                                </li>
+                            </ul>
+                            <ul class="list-unstyled" ng-if="user.role_id != ConstUserType.Customer">
+                                <li>{{'Repeat clients:' | translate}} <span class="text-b">{{user.user_profile.repeat_client_count}}</span></li>
+                                <li>{{'Completed bookings:' | translate}} <span class="text-b">{{user.user_profile.completed_appointment_count}}</span></li>
+                                <li>{{'Response rate:' | translate}} <span class="text-b">
+                                    <temp ng-show="user.user_profile.response_rate != null && user.user_profile.response_rate != ''">{{user.user_profile.response_rate}}%</temp>
+                                    <temp ng-show="user.user_profile.response_rate == null || user.user_profile.response_rate == ''||user.user_profile.response_rate == undefined">-</temp></span></li>                                    
+                                <li>{{'Response time:' | translate}} <span ng-show="user.user_profile.response_time_value!=null ||user.user_profile.response_time_value != undefined||user.user_profile.response_time_value !=''" class="text-b"> {{user.user_profile.response_time_value}}</span>
+                                    <span class="text-b" ng-show="user.user_profile.response_time_value==null ||user.user_profile.response_time_value == undefined||user.user_profile.response_time_value ==''"> -</span></li>
+                                <li ng-if="$root.settings.SITE_ENABLED_PLUGINS.indexOf('CancellationPolicies/CancellationPolicies') > -1 && service_user.service_id !=ConstService.Interview" ng-repeat="service_user in user.service_users">{{'Cancellation policy for' | translate}} {{service_user.service.name}}:
+                                     <span class="text-b"><a href="javascript:void(0)" uib-popover="{{service_user.cancellation_policy.name | translate}}: {{service_user.cancellation_policy.description | translate}}" popover-placement="bottom" popover-trigger="focus"> {{service_user.cancellation_policy.name | translate}}</a></span>
+                                </li>
+                            </ul>
+                        </div>   
+                        <div class="credentials-block border-bottom" ng-show="user.user_profile.verification_note_by_site != null && user.user_profile.verification_note_by_site != undefined">
+                            <h5>{{'Verification notes by site' | translate}}</h5>
+                            <p ng-bind-html="user.user_profile.verification_note_by_site | nl2br"></p>
+                        </div>                      
+                        <review-show> </review-show>
+                        <div class="credentials-block border-bottom" ng-repeat ="data in form_field_group">
+                            <h5> {{data.text | translate}} </h5>
+                            <ul class="list-unstyled">
+                                <li ng-repeat="field in user.form_field_submission">
+                                    <p ng-show="data.group_id == field.form_field.form_field_group.id"><span class="text-b">{{field.form_field.label_for_search_form | translate}}</span> &nbsp;<span>{{field.response | translate}} </span> </p>
+                                </li> 
+                            </ul>
+                        </div>
+                        <div class="user-map-location" ng-if="user.user_profile.listing_latitude && user.user_profile.listing_longitude">
+                            <h5>{{'Location Map'|translate}}</h5>
+                            <ng-map zoom="12" center="[{{user.user_profile.listing_latitude}}, {{user.user_profile.listing_longitude}}]" class="map-height" on-dragend="getpos($event)">
+                            <marker position="{{user.user_profile.listing_latitude}}, {{user.user_profile.listing_longitude}}" animation="DROP" ></marker>
+                            </ng-map>
+                        </div>
+                        <div class="availability-block border-bottom" ng-if="BookingType.TimeSlot != booking && BookingType.MultiHours != booking && user.role_id != ConstUserType.Customer">
+                            <h5>{{'Availability' | translate}}</h5>
+                            <label ng-click="navigate()" for="Multiple" ng-if="BookingType.MultipleDate == booking">{{'View Availability Calendar' | translate}}</label>
+                            <label ng-click="navigate()" for="Single" ng-if="BookingType.MultipleDate != booking">{{'View Availability Calendar' | translate}}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5 user-dashboard">
+                    <div class="appmt-details" id="Navigatehere" ng-if="user.role_id != ConstUserType.Customer">
+                        <a href="#" id="label_avail" class="navbar-left" ng-show="BookingType.TimeSlot == booking || BookingType.MultiHours == booking">{{'Check Availablity'| translate}}</a>
+                        <h2 class="text-center ">{{'Book Now' | translate}}</h2>
+                        <form name="bookingForm">
+                            <div class="form-group has-feedback" ng-if="!hide_service">
+                                <select class="form-control" style="width:100%" name="serviceId" ng-model="selectedService" ng-options="x.id as (x.slug | translate) for x in services" ng-change="bookingChange(selectedService)" required></select>
+                                <span ng-if="showServiceError" class="error">{{'Please select Service' | translate}}</span>
+                            </div>
+                            <div class="form-group has-feedback" ng-if="get_numberof_items">
+                                <select class="form-control" style="width:100%" name="countId" ng-model="selectedCount" ng-options="count.id as count.text for count in totalCounts" ng-change="countChanged(selectedCount)"></select>
+                            </div> 
+                            <div class="form-group has-feedback" ng-show="BookingType.MultipleDate == booking">
+                                <input class="form-control" date-range-picker class="form-control date-picker" placeholder="{{multiPlaceHolder | translate}}" type="text" ng-model="booking_date.datePicker" options="options" name="daterange" id="Multiple"/>
+                                <span class="form-control-feedback"><i class="fa fa-calendar"></i></span>
+                            </div>
+                            <div class="form-group has-feedback" ng-show="BookingType.SingleDate == booking || BookingType.MultiHours == booking || BookingType.TimeSlot == booking">
+                                <input class="form-control" date-range-picker class="form-control date-picker" placeholder="{{singlePlaceHolder | translate}}" type="text" ng-model="booking_date.datePicker"  name="daterange"  options="options" id="Single"/>
+                                <span class="form-control-feedback"><i class="fa fa-calendar"></i></span>
+                            </div> 
+                            <div class="form-group has-feedback" ng-show="BookingType.MultiHours == booking || BookingType.TimeSlot == booking">
+                                <div class="row form-group has-feedback">
+                                    <div class="col-md-5" ng-if="BookingType.MultiHours == booking || BookingType.TimeSlot == booking">
+                                        <input type="text" class="form-control " size="8" ng-model="booking_time.start" name="time" placeholder="{{timePlaceHolder| translate}}" bs-timepicker data-time-format="HH:mm" data-length="1" data-minute-step="{{calendar_slot}}" data-arrow-behavior="picker" ng-focus="showTimeError = false;getStartTime()" ng-blur="calculateFees()">
+                                    </div>
+                                    <p class="col-md-2 top-space no-mar" ng-show="BookingType.MultiHours == booking"> {{'to' | translate}} </p>   
+                                    <div class="col-md-5" ng-if="BookingType.MultiHours == booking">
+                                            <input type="text" class="form-control " size="8" ng-model="booking_time.end" name="time" placeholder="{{'End time'| translate}}" bs-timepicker data-time-format="HH:mm" data-length="1" data-minute-step="{{calendar_slot}}" data-arrow-behavior="picker" ng-focus="showTimeError = false;getEndTime()" ng-blur="calculateFees()">
+                                    </div>
+                                </div>
+                                <div class="form-group has-feedback" ng-show="BookingType.MultiHours == booking">
+                                    <input class="form-control" date-range-picker class="form-control date-picker" placeholder="{{'End date' | translate}}" type="text" ng-model="close_date"  name="daterange1"  options="options" id="Single"/>
+                                    <span class="form-control-feedback"><i class="fa fa-calendar"></i></span>
+                                </div>        
+                            </div>
+                            <span ng-if="showDateError" class="error">{{'Please select valid date' | translate}}</span>
+                            <span ng-show="showTimeError" class="error">{{'Please select valid time' | translate}}</span>
+                            <div ng-show="showCaluculation && auth.id != viewing_user_id">
+                                <div ng-show="!show_info">
+                                    <h5 ng-show="BookingType.MultipleDate != booking">
+                                        <dl>                                            
+                                            <dt class="pull-left" ng-if="!hide_service">{{flat_rate | currency : currency_type}} / 
+                                                <temp ng-show="BookingType.TimeSlot == booking">{{'slot' | translate}} </temp>
+                                                <temp ng-show="BookingType.SingleDate == booking">{{'per day' | translate}} </temp>
+                                                <temp ng-show="BookingType.MultiHours == booking">{{'hour' | translate}} * {{totalHours}} {{'hour'|translate}}</temp>
+                                                <temp ng-if="get_numberof_items"> * {{booking_count}} </temp></dt>
+                                            <dt class="pull-left" ng-if="hide_service">{{'Interview Fee'| translate}}</dt> 
+                                            <dd class="pull-right">{{ booking_amount | currency : currency_type}}</dd>
+                                        </dl>
+                                    </h5>
+                                    <h5 ng-show="BookingType.MultipleDate == booking">  
+                                        <p class="pull-left"> {{flat_rate | currency : currency_type}} / {{'per day' | translate}} x {{diffDays}} {{'days' | translate}} <temp ng-if="get_numberof_items"> * {{booking_count}} </temp></p>
+                                        <span class="pull-right">{{ booking_amount | currency : currency_type}}</span>
+                                    </h5>
+                                    <h5 ng-show="site_commision > 0" style="clear:both">  
+                                        <p class="pull-left"> {{"Site Commision" | translate}} </p>
+                                        <span class="pull-right">{{ site_commision | currency : currency_type}}</span>
+                                    </h5>
+                                    <div class="pad-top-20">
+                                        <hr width="100%">
+                                    </div>  
+                                    <dl>
+                                        <dt class="pull-left"> <strong> {{'Total' | translate}} </strong> </dt> 
+                                        <dd class="pull-right text-b text-success">{{booking_amount + site_commision | currency : currency_type}}</dd>
+                                    </dl>
+                                </div>
+                                <div ng-show="show_info">
+                                    <p> {{'You already have enough amount in your referral balance. So you no need to pay anything for this booking. System will automatically deduct booking amount from your referral balance.'| translate}}</p>  
+                                </div>         
+                            </div>
+                            <div class="clearfix" style="clear:both" ng-show="auth.id != viewing_user_id">
+                                <p ng-if="!hide_service">
+                                    <a ng-if="isAuth" ng-click="booknow('Book')" ng-disabled="bookingForm.$invalid || is_disabled" class="btn btn-info">{{'Book Now' | translate}}</a>
+                                    <a ng-if="!isAuth" href="users/login" class="btn btn-info">{{'Book Now' | translate}}</a>
+                                    <a ng-disabled="bookingForm.$invalid || is_disabled" ng-if="isAuth && user.user_profile.is_available_for_interview == 1 && $root.settings.SITE_ENABLED_PLUGINS.indexOf('Interview/Interview') > -1" ng-click="hideService()" class="btn btn-info">{{'Book for Interview' | translate}}</a>
+                                </p>
+                                <p ng-if="hide_service">
+                                    <a ng-if="isAuth" ng-click="booknow('Book')" ng-disabled="bookingForm.$invalid || is_disabled" class="btn btn-info">{{'Proceed' | translate}}</a>
+                                    <a ng-if="isAuth" ng-click="enableService()" ng-disabled="bookingForm.$invalid || is_disabled" class="btn btn-info">{{'Cancel' | translate}}</a>
+                                </p>                             
+                                <div ng-if="!hide_service">
+                                    <p class="sep-top reg-or-blk"><span>or</span></p>
+                                    <p>
+                                        <a ng-if="isAuth" ng-disabled="bookingForm.$invalid || is_disabled"ng-click="booknow('Enquiry')" class="btn btn-info">{{'Send Message' | translate}} </a>
+                                        <a ng-if="!isAuth" href="users/login" class="btn btn-info">{{'Send Message' | translate}}</a>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="clearfix">
+                                <div class="col-sm-5 col-xs-12 no-pad" ng-show="auth.id == viewing_user_id">
+                                    <a href="user/calendar" class="btn btn-info btn-block btn-animate"> {{'Update Calendar'| translate}} </a>
+                                </div>
+                                <div class="col-sm-offset-2 col-sm-5 col-xs-12 no-pad" ng-show="auth.id == viewing_user_id">
+                                    <a href="user/services" class="btn btn-info btn-animate btn-block"> {{'Update Service'| translate}} </a>
+                                </div>
+                            </div>
+                        </form>      
+                    </div>  
+                    <div class="appmt-details booking-inclue booking-block">
+                        <h5 class="text-16">{{'All service provider bookings include:' | translate}}</h5>
+                        <ul class="list-unstyled">
+                            <li><i class="fa fa-ban fa-lg fa-fw"></i><span>{{'24/7 Emergency support & cancellation protection' | translate}}</span></li>
+                            <li><i class="fa fa-balance-scale fa-lg fa-fw"></i><span>{{'Up to £1.7M pet & liability insurance' | translate}}</span></li>
+                            <li><i class="fa fa-map-marker fa-lg fa-fw"></i><span>{{'Free GPS tracked walks' | translate}}</span></li>
+                            <li><i class="fa fa-video-camera fa-lg fa-fw"></i><span>{{'Photo & video updates' | translate}}</span></li>
+                        </ul>
+                    </div>
+                    <div class="appmt-details booking-inclue">
+                        <h5 class="text-16">{{'FAQ' | translate}}</h5>
+                        <hr widht="100%">
+                        <ul class="list-unstyled">
+                            <li ng-repeat="faq in faqs">
+                                <a href="javascript:void(0)" uib-popover="{{faq.faq_answer | translate}}" popover-placement="bottom" popover-trigger="focus">{{faq.faq_question | translate}}</a> 
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div id="weekCalendar" class="availability-block border-bottom" ng-if="BookingType.TimeSlot == booking || BookingType.MultiHours == booking && user.role_id != ConstUserType.Customer">
+                <h5>{{'Availability' | translate}}</h5>
+                <div ui-calendar="uiConfig.calendar" class="span8 calendar" ng-model="eventSources" id="user_view_calendar"></div>
+            </div>
+        </div>
+    </div>
+</div>
+  

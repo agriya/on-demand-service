@@ -1,0 +1,11 @@
+ON-Demand Service - Change Log
+==============================
+
+1. [Enhancement] - Twilio SMS exception handle
+2. [Bug PHP] -  In Booking form, commission and total amount detail not showing properly- Resolved.
+3. [Enhancement] - "My Jobs" listing page integrated
+4. [Bug CSS] -  Fix design issue on Adding page in admin - Resolved.
+5. [Bug PHP] - In admin user change password page, unable to change user password details - Resolved. 
+6. [Bug PHP] - While uploading image of other than valid extension, should return error message. - Resolved 
+7. [Enhancement] - Need some more language switching option.    
+8. [Bug PHP] - Name column if enter special characters it showing wrong validation - Resolved.

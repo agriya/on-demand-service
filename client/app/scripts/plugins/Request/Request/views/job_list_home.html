@@ -1,0 +1,106 @@
+<section class="edit-profile account-payout">
+    <div class="container user-dashboard">
+        <div class="row top-space">
+            <h2 class="col-md-8 col-sm-8 no-mar mar-bot-20">{{'Reach out to the sitter community' | translate }}</h2>
+            <a href="job-post" class="col-md-4 col-xs-12 col-sm-4"><button class="btn btn-info btn-block mar-bot-20"> {{'Post a new job' | translate}} </button></a>
+             <div class="col-sm-offset-9 col-sm-3 mar-bot-20">
+                <select class="form-control" ng-model="request_status_id" ng-change="getJobList(request_status_id)" ng-options="job.id as job.text for job in jobTypes"></select>
+            </div>
+        </div>
+        <div class="list-inline clearfix job-board panel-info">
+            <h5 class="panel-heading text-20 no-mar">{{job_type | translate }}</h5>
+            <div class="sub-list" ng-repeat="user in jobList">
+                <div class="col-md-8 col-sm-12 mar-bot-20" style="border-right:1px solid #ddd">
+                    <div class="row">
+                        <div class="col-sm-8 col-xs-12">
+                            <div class="media">
+                                <a class="pull-left show" href="users/{{user.user.id}}/{{user.user.user_profile.first_name + user.user.user_profile.last_name | slugify}}">
+                                    <img ng-src="{{user.requestor_image}} " alt="[Images: {{user.user_profile.listing_title}}] " class="img-responsive center-block media-object
+                                    " style="width:125px;height:125px ">
+                                </a>
+                                <div class="media-body">
+                                    <a href="job/{{user.id}}">
+                                    <h4 ng-show="user.job_type_id==JobTypeId.OneTimeJob" class="media-heading">{{user.service.name | translate}} {{'for' | translate}} {{user.appointment_from_date | date: 'EEEE, MMM dd'}}</h4>
+                                    <h4 ng-show="user.job_type_id==JobTypeId.PartTime " class="media-heading">{{"Part Time, starting "| translate}} {{user.appointment.appointment_from_date | date: 'EEEE, MMM dd'}}</h4>
+                                    <h4 ng-show="user.job_type_id==JobTypeId.FullTime " class="media-heading">{{"Full Time, starting "| translate}} {{user.appointment_from_date | date: 'EEEE, MMM dd'}}</h4>
+                                    </a>
+                                    <p> {{user.work_location_address}} </p>
+                                    <ul class="mar-bot-20 no-pad list-inline hidden-xs" ng-if="user.appointment_timing_type_id == AppointmentTimingType.SpecifyTimes">
+                                        <li class="checkbox-field right-space-10 "  ng-repeat="day in user.list_of_days ">
+                                            <label for="{{day.id}}">
+                                                <span class="text-13"> {{day.text | translate}} </span>
+                                                <input type="checkbox" class="hide" id="{{day.id}}" ng-model="day.checked ">
+                                                <span class="custom-check "></span>
+                                            </label>
+                                        </li>
+                                    </ul>
+                                    <p ng-show="user.appointment_timing_type_id==AppointmentTimingType.SpecifyTimes "> {{'various times'| translate}} </p>
+                                    <p ng-show="user.appointment_timing_type_id==AppointmentTimingType.DuringDay "> {{'during the day'| translate}} </p>
+                                    <p ng-show="user.appointment_timing_type_id==AppointmentTimingType.DuringNight "> {{'evening or night-time'| translate}} </p>
+                                </div>
+                            </div>
+                            <ul class="mar-bot-20 no-pad list-inline visible-xs" ng-if="user.appointment_timing_type_id == AppointmentTimingType.SpecifyTimes">
+                                <li class="checkbox-field right-space-10"  ng-repeat="day in user.list_of_days">
+                                    <label for="{{day.id}}">
+                                        <span class="text-13"> {{day.text| translate}} </span>
+                                        <input type="checkbox" class="hide" id="{{day.id}}" ng-model="day.checked">
+                                        <span class="custom-check"></span>
+                                    </label>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-4 col-xs-12 text-center">
+                            <h5 class="text-b text-20">{{user.price_per_hour | currency : currency_type}} / {{'hour' | translate}} </h5>
+                        </div>
+                    </div>
+                    <div class="row  mar-bot-20">
+                        <div class="col-sm-12">
+                            <h5 class="text-b text-15"> {{'Updated' | translate}} {{user.created_at | timeago}} {{'by'|translate}} <a href="users/{{user.user.id}}/{{user.user.user_profile.first_name+user.user.user_profile.last_name|slugify}} ">{{user.user.user_profile.first_name}} {{user.user.user_profile.last_name}}</a></h5>
+                            <p> {{user.description|translate}}</p>
+                        </div>
+                    </div>
+                    <hr class="no-mar">
+                    <div class="row pad-top-20">
+                        <div ng-show="RequestStatusId.Open == user.request_status_id">
+                            <span class="col-xs-12 col-sm-3 text-b text-20 text-success"> {{"Open" | translate}} </span>
+                            <span class="col-xs-12 col-sm-3"> <a href="job/{{user.id}}" class="btn btn-link btn-block bor-rad-0"><i class="fa fa-eye-slash" aria-hidden="true"></i> {{'View job'| translate}}</a> </span>
+                            <span class="col-xs-12 col-sm-3"> <a href="job/{{user.id}}/edit" class="btn btn-link btn-block bor-rad-0"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> {{'Edit job'| translate}}</a> </span>
+                            <span class="col-xs-12 col-sm-3"> <button class="btn btn-link btn-block bor-rad-0" ng-click="closeJob(user.id, $index)"><i class="fa fa-ban" aria-hidden="true"></i> {{'Close job'| translate}}</button> </span>
+                        </div>
+                        <div ng-show="RequestStatusId.Closed == user.request_status_id">
+                            <span class="col-xs-12 col-md-6 text-b text-20 text-danger"> {{"Closed" | translate}} </span>
+                            <span class="col-xs-12 col-md-offset-3 col-md-3"> <a href="job/{{user.id}}" class="btn btn-link btn-block bor-rad-0"><i class="fa fa-eye-slash" aria-hidden="true"></i> {{'View job'| translate}}</a> </span>
+                        </div>   
+                    </div> 
+                </div>
+                <div class="col-md-4 col-sm-12 mar-bot-20">
+                    <h5 class="text-16 no-mar"> {{'Interested service providers' | translate}} ({{user.requests_user_count}})</h5>
+                    <ul class="text-center list-inline">
+                        <li ng-repeat="interested_user in user.requests_users | limitTo :6">
+                            <temp ng-if="interested_user.id != 0">    
+                               <a href="users/{{interested_user.user.id}}/{{interested_user.user.user_profile.first_name+interested_user.user.user_profile.last_name}}?request_id={{user.id}}&service_id={{user.service_id}}"> <img src="{{interested_user.interestor_image}}" class="center-block img-responsive" style="width:100%;height:100%" /></a>
+                            </temp>
+                        </li>
+                    </ul>
+                    <h5 class="text-center"> <a href="users?request_id={{user.id}}" ng-show="user.requests_user_count > 0 " style="font-size:small"> {{"See all" | translate}} </a></h5>
+                    <div class="text-center mar-bot-20">
+                        <p>{{'We will automatically close your post if you find a service provider to accept your job.'| translate}} </p>
+                        <a href="#" class="btn-block" ng-click="gotoSearch(user)">{{'Search service provider for this job' | translate}} </a>
+                    </div>
+                </div> 
+            </div>
+        </div>
+        <div ng-show="jobList.length == 0"> <h5 class="space no-mar text-center"> {{'No jobs found' | translate}} </h5>
+        <div class="binding-pagination" ng-show="jobList.length >= itemsPerPage && jobList.length > 0">
+            <div class="pagnation-content">
+                <div class="clearfix pagnation-inner">
+                    <div class="col-md-12 text-center">
+                        <uib-pagination previous-text="Prev" next-text="Next" total-items="totalRecords" num-pages="lastPage" ng-model="currentPage"
+                            max-size="maxSize" class="pagination-sm" boundary-link-numbers="true" rotate="false" items-per-page="itemsPerPage"
+                            ng-change="paginate_search(currentPage)"></uib-pagination>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
